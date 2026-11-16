@@ -1,26 +1,811 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #123B5D;
+  --primary-hover: #0E2E4A;
+  --primary-light: #1D5482;
+  
+  --secondary: #18A999;
+  --secondary-hover: #148C7E;
+  --secondary-light: #3EC0B1;
+  
+  --accent: #F4B942;
+  --accent-hover: #DFA32B;
+  --accent-light: #F8D079;
+  
+  --background: #E6F6F3;
+  --foreground: #17212B;
+  --light-accent: #E6F6F3;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@theme {
+  --font-sans: 'Outfit', var(--font-outfit), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-outfit: 'Outfit', var(--font-outfit), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: #123B5D;
+  --color-primary-hover: #0E2E4A;
+  --color-primary-light: #1D5482;
+
+  --color-secondary: #18A999;
+  --color-secondary-hover: #148C7E;
+  --color-secondary-light: #3EC0B1;
+
+  --color-accent: #F4B942;
+  --color-accent-hover: #DFA32B;
+  --color-accent-light: #F8D079;
+
+  --color-brand-bg: #E6F6F3;
+  --color-brand-text: #17212B;
+  --color-light-accent: #E6F6F3;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Outfit', var(--font-outfit), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
 }
+
+/* Dynamic Font Switching: 
+   Outfit for English / Latin / Numbers + Tiro Devanagari Sanskrit fallback for Devanagari.
+   Since Outfit contains NO Devanagari glyphs, all Nepali characters are flawlessly rendered in
+   Tiro Devanagari Sanskrit, while all English words, acronyms (NPR, VAT, PAN, API), labels,
+   numbers, and badges are rendered in crisp, modern Outfit!
+*/
+html[lang="ne"] body,
+html[data-lang="ne"] body,
+.font-ne {
+  font-family: 'Outfit', var(--font-outfit), var(--font-tiro-devanagari), "Tiro Devanagari Sanskrit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+html[lang="en"],
+html[lang="en"] body,
+html[data-lang="en"],
+html[data-lang="en"] body,
+.font-en,
+.font-outfit {
+  font-family: 'Outfit', var(--font-outfit), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] h4,
+html[lang="en"] h5,
+html[lang="en"] h6,
+html[lang="en"] p,
+html[lang="en"] span,
+html[lang="en"] button,
+html[lang="en"] a,
+html[lang="en"] input,
+html[lang="en"] select,
+html[lang="en"] textarea,
+html[lang="en"] table,
+html[lang="en"] th,
+html[lang="en"] td,
+html[lang="en"] label {
+  font-family: 'Outfit', var(--font-outfit), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* All form inputs, textareas, selects, placeholders, badges, and English labels strictly use Outfit */
+input,
+textarea,
+select,
+input::placeholder,
+textarea::placeholder,
+.font-latin,
+.font-outfit,
+[data-font="outfit"],
+code,
+pre,
+kbd {
+  font-family: var(--font-outfit), "Outfit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Global Cursor Pointer for all clickable elements */
+button,
+[role="button"],
+a,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+select,
+label[for],
+summary,
+.cursor-pointer,
+[onclick] {
+  cursor: pointer !important;
+}
+
+/* Glassmorphism & Modern Utilities */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-dark {
+  background: rgba(18, 59, 93, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glow-teal {
+  box-shadow: 0 0 30px -5px rgba(24, 169, 153, 0.35);
+}
+
+.glow-amber {
+  box-shadow: 0 0 30px -5px rgba(244, 185, 66, 0.35);
+}
+
+.card-hover-effect {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(18, 59, 93, 0.08), 0 8px 10px -6px rgba(18, 59, 93, 0.05);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F7F9FC;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #18A999;
+}
+
+/* ─── Universal Modern Form Select Styling ─── */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748B' stroke-width='2.2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 0.9rem 0.9rem;
+  padding-right: 2.5rem !important;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+select:focus {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2318A999' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+}
+
+select option {
+  background-color: #ffffff;
+  color: #1e293b;
+  padding: 8px 12px;
+  font-weight: 500;
+}
+
+/* ─── Rich Modern Micro-Interactions & Living Animations ─── */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1.5deg);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(-1.5deg);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.animate-ping {
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite !important;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.15);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+}
+
+.animate-float-slow {
+  animation: float-slow 4.5s ease-in-out infinite !important;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 5.5s ease-in-out infinite 1.2s !important;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 7s ease-in-out infinite;
+}
+
+.animate-gradient-flow {
+  background-size: 200% 200%;
+  animation: gradient-flow 8s ease infinite;
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Interactive Card & Button Glow */
+.card-interactive {
+  position: relative;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.card-interactive::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(600px circle at var(--mouse-x, center) var(--mouse-y, center), rgba(24, 169, 153, 0.12), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card-interactive:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 30px -10px rgba(18, 59, 93, 0.12), 0 10px 15px -5px rgba(24, 169, 153, 0.1);
+  border-color: rgba(24, 169, 153, 0.5);
+}
+
+.card-interactive:hover::after {
+  opacity: 1;
+}
+
+/* ─── Cards, Labels, & Widgets Living Micro-Interactions ─── */
+@keyframes heroSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUpFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Explicit Animation Classes with 'both' fill-mode */
+.animate-slide-up {
+  animation: heroSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-slide-down {
+  animation: heroSlideDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: heroFadeIn 0.8s ease-out both;
+}
+
+.animate-scale-up {
+  animation: scaleUpFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in-up {
+  animation: heroSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Staggered delay helpers */
+.delay-50  { animation-delay: 50ms !important; }
+.delay-100 { animation-delay: 100ms !important; }
+.delay-150 { animation-delay: 150ms !important; }
+.delay-200 { animation-delay: 200ms !important; }
+.delay-250 { animation-delay: 250ms !important; }
+.delay-300 { animation-delay: 300ms !important; }
+.delay-400 { animation-delay: 400ms !important; }
+.delay-500 { animation-delay: 500ms !important; }
+.delay-600 { animation-delay: 600ms !important; }
+.delay-700 { animation-delay: 700ms !important; }
+.delay-800 { animation-delay: 800ms !important; }
+
+.delay-1 { animation-delay: 100ms !important; }
+.delay-2 { animation-delay: 200ms !important; }
+.delay-3 { animation-delay: 300ms !important; }
+.delay-4 { animation-delay: 400ms !important; }
+.delay-5 { animation-delay: 500ms !important; }
+.delay-6 { animation-delay: 600ms !important; }
+
+/* Living Badge Pulse */
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(244, 185, 66, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 2px rgba(244, 185, 66, 0.25);
+  }
+}
+
+.animate-badge-pulse {
+  animation: badgePulse 3s ease-in-out infinite;
+}
+
+/* Subtle Shimmer for Badges */
+@keyframes badgeShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.badge-shimmer-gold {
+  background: linear-gradient(90deg, rgba(244, 185, 66, 0.15) 0%, rgba(244, 185, 66, 0.35) 50%, rgba(244, 185, 66, 0.15) 100%);
+  background-size: 200% 100%;
+  animation: badgeShimmer 4s infinite linear;
+}
+
+.badge-shimmer-teal {
+  background: linear-gradient(90deg, rgba(24, 169, 153, 0.12) 0%, rgba(24, 169, 153, 0.28) 50%, rgba(24, 169, 153, 0.12) 100%);
+  background-size: 200% 100%;
+  animation: badgeShimmer 4s infinite linear;
+}
+
+/* Premium Card Elevate with Top Accent Highlight Bar (Cleanly Clipped to Rounded Corners) */
+.card-elevate {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.card-elevate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #18A999 0%, #3EC0B1 50%, #F4B942 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.card-elevate:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 30px -10px rgba(18, 59, 93, 0.14), 0 8px 16px -4px rgba(24, 169, 153, 0.12);
+  border-color: rgba(24, 169, 153, 0.6) !important;
+}
+
+.card-elevate:hover::before {
+  transform: scaleX(1);
+}
+
+/* Tactile Widget & Button Click Feedback */
+.widget-click {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.widget-click:active {
+  transform: scale(0.96) !important;
+}
+
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: translateX(-150%) skewX(-20deg);
+  transition: transform 0.75s ease;
+}
+
+.btn-shimmer:hover::before {
+  transform: translateX(350%) skewX(-20deg);
+}
+
+/* SweetAlert2 Toast & Modal Styling */
+.swal2-container {
+  z-index: 99999 !important;
+}
+
+.mk-swal-toast {
+  font-family: var(--font-outfit), "Outfit", system-ui, sans-serif !important;
+  border-radius: 1rem !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 20px 25px -5px rgba(18, 59, 93, 0.1), 0 8px 10px -6px rgba(18, 59, 93, 0.05) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.mk-swal-toast-title {
+  font-family: var(--font-outfit), "Outfit", system-ui, sans-serif !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: #123B5D !important;
+}
+
+.mk-swal-modal {
+  font-family: var(--font-outfit), "Outfit", system-ui, sans-serif !important;
+  border-radius: 1.5rem !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 0 25px 50px -12px rgba(18, 59, 93, 0.25) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+}
+
+.mk-swal-modal .swal2-title {
+  color: #123B5D !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+}
+
+.mk-swal-modal .swal2-html-container {
+  color: #475569 !important;
+  font-size: 0.875rem !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ADMIN PANEL LIVING MICRO-INTERACTIONS & MOTION SYSTEM
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes adminPageEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-admin-page-in {
+  animation: adminPageEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes adminCardSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-admin-card-1 {
+  animation: adminCardSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 50ms;
+}
+.animate-admin-card-2 {
+  animation: adminCardSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 100ms;
+}
+.animate-admin-card-3 {
+  animation: adminCardSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 150ms;
+}
+.animate-admin-card-4 {
+  animation: adminCardSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 200ms;
+}
+
+@keyframes bellRingWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(14deg); }
+  30% { transform: rotate(-12deg); }
+  45% { transform: rotate(8deg); }
+  60% { transform: rotate(-5deg); }
+  75% { transform: rotate(2deg); }
+}
+
+.bell-hover:hover .bell-icon {
+  animation: bellRingWiggle 0.75s ease-in-out;
+  transform-origin: top center;
+}
+
+/* Premium Admin Card with Elevate & Ambient Hover */
+.admin-card-hover {
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+  overflow: hidden;
+}
+
+.admin-card-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, #18A999, #F4B942);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+}
+
+.admin-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px -8px rgba(18, 59, 93, 0.1), 0 6px 12px -4px rgba(24, 169, 153, 0.06);
+  border-color: rgba(24, 169, 153, 0.45);
+}
+
+.admin-card-hover:hover::before {
+  transform: scaleX(1);
+}
+
+/* Sidebar Nav Item Micro-Slide */
+.admin-nav-item {
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-nav-item:hover {
+  transform: translateX(4px);
+}
+
+.admin-nav-item:active {
+  transform: scale(0.98) translateX(2px);
+}
+
+/* Smooth Table Row Hover */
+.admin-table-row {
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.admin-table-row:hover {
+  background-color: rgba(230, 246, 243, 0.45) !important;
+}
+
+/* Tactile Button Feedback */
+.admin-btn {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.admin-btn:hover {
+  transform: translateY(-1px);
+}
+
+.admin-btn:active {
+  transform: scale(0.97) !important;
+}
+
+/* Dynamic Live Pulsing Dot */
+.admin-live-dot {
+  position: relative;
+  display: inline-flex;
+}
+
+.admin-live-dot::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  background-color: #18A999;
+  opacity: 0.75;
+  animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ─── Premium Modal Backdrop & Dialog Animations ─── */
+@keyframes modalBackdropIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(6px);
+  }
+}
+
+@keyframes modalBackdropOut {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(6px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+@keyframes modalDialogIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.93) translateY(16px);
+  }
+  60% {
+    transform: scale(1.01) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalDialogOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+  }
+}
+
+@keyframes modalContentSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-modal-backdrop-in {
+  animation: modalBackdropIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-modal-backdrop-out {
+  animation: modalBackdropOut 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-modal-dialog-in {
+  animation: modalDialogIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-modal-dialog-out {
+  animation: modalDialogOut 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-modal-item-1 {
+  animation: modalContentSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 40ms;
+}
+
+.animate-modal-item-2 {
+  animation: modalContentSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 80ms;
+}
+
+.animate-modal-item-3 {
+  animation: modalContentSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 130ms;
+}
+
+.animate-modal-item-4 {
+  animation: modalContentSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 180ms;
+}
+
+.animate-modal-item-5 {
+  animation: modalContentSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 220ms;
+}
+
+
