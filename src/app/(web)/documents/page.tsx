@@ -17,6 +17,17 @@ import {
   SlidersHorizontal,
   ArrowUpDown,
   RotateCcw,
+  Landmark,
+  Star,
+  Check,
+  FileCheck,
+  Award,
+  Layers,
+  ShieldCheck,
+  Building2,
+  Scale,
+  Eye,
+  ArrowRight,
 } from 'lucide-react';
 import CustomSelect, { SelectOption } from '@/components/ui/CustomSelect';
 
@@ -271,9 +282,11 @@ function DocumentsContent() {
 
         {/* Count Badge */}
         {!loading && (
-          <div className="text-xs font-semibold text-slate-500 bg-white border border-slate-200/90 rounded-full px-3.5 py-1.5 shadow-2xs self-start sm:self-auto">
-            {isNe ? 'कुल कागजात:' : 'Total Documents:'}{' '}
-            <span className="font-extrabold text-[#123B5D] font-outfit">{filteredDocs.length}</span> / {docs.length}
+          <div className="inline-flex items-center gap-2 text-xs font-medium text-slate-600 bg-teal-50/80 border border-teal-200/80 rounded-full px-4 py-1.5 shadow-2xs self-start sm:self-auto">
+            <span className="h-2 w-2 rounded-full bg-[#18A999]" />
+            <span>{isNe ? 'कुल कागजात:' : 'Total Documents:'}</span>
+            <span className="font-black text-[#123B5D] font-outfit">{filteredDocs.length}</span>
+            <span className="text-slate-400">/ {docs.length}</span>
           </div>
         )}
       </div>
@@ -283,10 +296,10 @@ function DocumentsContent() {
         <div className="flex flex-wrap gap-2">
           <Link
             href="/documents"
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${
+            className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all ${
               !categoryParam
-                ? 'bg-[#123B5D] text-white shadow-sm'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                ? 'bg-gradient-to-r from-[#123B5D] to-[#1a4f7c] text-white shadow-xs'
+                : 'bg-white text-slate-600 border border-slate-200 hover:border-teal-400 hover:text-[#148C7E] shadow-2xs'
             }`}
           >
             {isNe ? 'सबै' : 'All'}
@@ -295,10 +308,10 @@ function DocumentsContent() {
             <Link
               key={c.slug}
               href={`/documents?category=${c.slug}`}
-              className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${
+              className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all ${
                 categoryParam === c.slug
-                  ? 'bg-[#123B5D] text-white shadow-sm'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                  ? 'bg-gradient-to-r from-[#123B5D] to-[#1a4f7c] text-white shadow-xs'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:border-teal-400 hover:text-[#148C7E] shadow-2xs'
               }`}
             >
               {isNe && c.name_np ? c.name_np : c.name}
@@ -307,12 +320,12 @@ function DocumentsContent() {
         </div>
 
         {/* View Mode Toggle (Grid / List) */}
-        <div className="flex items-center gap-1 rounded-xl bg-slate-100 p-1 border border-slate-200 shadow-2xs">
+        <div className="flex items-center gap-1 rounded-2xl bg-slate-100 p-1 border border-slate-200/80 shadow-2xs">
           <button
             type="button"
             onClick={() => setViewMode('grid')}
             aria-label="Grid View"
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'grid'
                 ? 'bg-white text-[#123B5D] shadow-xs'
                 : 'text-slate-500 hover:text-slate-800'
@@ -325,7 +338,7 @@ function DocumentsContent() {
             type="button"
             onClick={() => setViewMode('list')}
             aria-label="List View"
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'list'
                 ? 'bg-white text-[#123B5D] shadow-xs'
                 : 'text-slate-500 hover:text-slate-800'
@@ -474,145 +487,241 @@ function DocumentsContent() {
 
       {/* ── Featured Document Suites Spotlight Banner ── */}
       {(!categoryParam || categoryParam === 'ocr') && !searchQuery && (
-        <div className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#123B5D] via-[#1a4f7c] to-[#148C7E] p-6 sm:p-8 text-white shadow-xl relative">
-          <div className="absolute right-0 top-0 translate-x-6 -translate-y-6 opacity-10 pointer-events-none text-9xl">
-            {featuredSuite === 'annual' ? '📊' : '🏛️'}
-          </div>
+        <div className="mb-8 overflow-hidden rounded-3xl border border-teal-200/90 bg-gradient-to-br from-white via-teal-50/20 to-sky-50/30 p-6 sm:p-8 lg:p-9 shadow-sm relative">
+          {/* Delicate ambient glow backdrops */}
+          <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-teal-100/50 blur-3xl" />
+          <div className="pointer-events-none absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-sky-100/40 blur-3xl" />
 
-          <div className="relative z-10 max-w-3xl">
-            {/* Suite Switcher Tabs */}
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <button
-                type="button"
-                onClick={() => setFeaturedSuite('annual')}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  featuredSuite === 'annual'
-                    ? 'bg-emerald-400 text-slate-900 shadow-md ring-2 ring-emerald-300/50'
-                    : 'bg-white/10 text-teal-100 hover:bg-white/20'
-                }`}
-              >
-                <span>🌟</span>
-                <span>{isNe ? 'वार्षिक विवरण अभिलेख (४-इन-१)' : 'Annual Compliance (4-in-1)'}</span>
-                <span className="text-[10px] bg-slate-900/20 px-1.5 py-0.2 rounded-full font-extrabold uppercase">
-                  {isNe ? 'नयाँ' : 'New'}
-                </span>
-              </button>
+          {/* 2-Column Grid Layout: Left Narrative & Controls, Right Visual Document Stack */}
+          <div className="relative z-10 grid lg:grid-cols-12 gap-8 items-center">
+            {/* Left Column: Narrative, Tabs & CTA */}
+            <div className="lg:col-span-7 xl:col-span-7">
+              {/* Suite Switcher Tabs */}
+              <div className="inline-flex items-center gap-1.5 p-1 rounded-2xl bg-slate-100/90 border border-slate-200/80 mb-4 shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => setFeaturedSuite('annual')}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    featuredSuite === 'annual'
+                      ? 'bg-white text-[#123B5D] shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Star className={`h-3.5 w-3.5 ${featuredSuite === 'annual' ? 'text-amber-500 fill-amber-500' : 'text-amber-400'}`} />
+                  <span>{isNe ? 'वार्षिक विवरण अभिलेख (४-इन-१)' : 'Annual Compliance (4-in-1)'}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-extrabold uppercase ${
+                    featuredSuite === 'annual' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'
+                  }`}>
+                    {isNe ? 'नयाँ' : 'New'}
+                  </span>
+                </button>
 
-              <button
-                type="button"
-                onClick={() => setFeaturedSuite('registration')}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  featuredSuite === 'registration'
-                    ? 'bg-emerald-400 text-slate-900 shadow-md ring-2 ring-emerald-300/50'
-                    : 'bg-white/10 text-teal-100 hover:bg-white/20'
-                }`}
-              >
-                <span>🏛️</span>
-                <span>{isNe ? 'कम्पनी दर्ता (३-इन-१)' : 'Company Registration (3-in-1)'}</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setFeaturedSuite('registration')}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    featuredSuite === 'registration'
+                      ? 'bg-white text-[#123B5D] shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Landmark className={`h-3.5 w-3.5 ${featuredSuite === 'registration' ? 'text-teal-600' : 'text-slate-400'}`} />
+                  <span>{isNe ? 'कम्पनी दर्ता (३-इन-१)' : 'Company Registration (3-in-1)'}</span>
+                </button>
+              </div>
+
+              {featuredSuite === 'annual' ? (
+                <>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 border border-teal-200/90 px-3 py-1 text-[11px] font-bold text-[#148C7E] mb-2.5">
+                    <Award className="h-3.5 w-3.5 text-[#148C7E]" />
+                    <span>{isNe ? 'आधिकारिक कम्प्लायन्स प्याकेज' : 'Official Statutory Compliance Suite'}</span>
+                    <span>•</span>
+                    <span>४-इन-१ पूर्ण प्याकेज</span>
+                  </div>
+
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#123B5D] leading-tight mb-2.5 tracking-tight">
+                    {isNe
+                      ? 'कम्पनी वार्षिक विवरण अभिलेख पूर्ण प्याकेज (४ कागजातहरू)'
+                      : 'Annual Compliance Complete Package (4 Documents Suite)'}
+                  </h2>
+
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-5">
+                    {isNe
+                      ? 'कम्पनी ऐन, २०६३ बमोजिम OCR मा वार्षिक विवरण दाखिला गर्दा आवश्यक पर्ने सम्पूर्ण ४ वटा कागजातहरू एकै फारम भरेर एकसाथ प्राप्त गर्नुहोस्।'
+                      : 'Filing Annual Compliance with the Company Registrar? Generate the official Application, Board Minutes, AGM Minutes, and Section 51 Annual Return with a single form.'}
+                  </p>
+
+                  {/* 4 Checklist Documents */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
+                    <div className="flex items-center gap-2 rounded-xl bg-white border border-slate-200/80 px-3 py-2 text-xs font-semibold text-slate-800 shadow-2xs">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-bold shrink-0">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </span>
+                      <span>१. दर्ता दरखास्त निवेदन</span>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl bg-white border border-slate-200/80 px-3 py-2 text-xs font-semibold text-slate-800 shadow-2xs">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-bold shrink-0">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </span>
+                      <span>२. संचालक समिति बैठक</span>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl bg-white border border-slate-200/80 px-3 py-2 text-xs font-semibold text-slate-800 shadow-2xs">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-bold shrink-0">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </span>
+                      <span>३. वार्षिक साधारण सभा (AGM)</span>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl bg-white border border-slate-200/80 px-3 py-2 text-xs font-semibold text-slate-800 shadow-2xs">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-bold shrink-0">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </span>
+                      <span>४. दफा ५१ को विवरण</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                      href="/documents/annual-compliance-suite/form"
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#148C7E] hover:bg-[#0f6c61] px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-md shadow-teal-700/20 transition-all hover:scale-[1.02] active:scale-95"
+                    >
+                      <FileCheck className="h-4 w-4 text-teal-100" />
+                      <span>{isNe ? '४ वटै कागजात एकसाथ बनाउनुहोस्' : 'Generate 4-in-1 Suite Now'}</span>
+                    </Link>
+                    <span className="text-xs text-slate-400 font-medium">
+                      {isNe ? 'वा तल व्यक्तिगत कागजातहरू छान्नुहोस् ↓' : 'Or select individual documents below ↓'}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 border border-teal-200/90 px-3 py-1 text-[11px] font-bold text-[#148C7E] mb-2.5">
+                    <Award className="h-3.5 w-3.5 text-[#148C7E]" />
+                    <span>{isNe ? 'सिफारिस गरिएको पूर्ण प्याकेज' : 'Recommended Registration Suite'}</span>
+                    <span>•</span>
+                    <span>३-इन-१ पूर्ण प्याकेज</span>
+                  </div>
+
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#123B5D] leading-tight mb-2.5 tracking-tight">
+                    {isNe
+                      ? 'कम्पनी दर्ता पूर्ण प्याकेज (All-in-One Company Suite)'
+                      : 'Complete Company Registration Suite (MOA, AOA & Application)'}
+                  </h2>
+
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-5">
+                    {isNe
+                      ? 'नेपालमा कम्पनी दर्ता गर्दा चाहिने सबै मुख्य कागजातहरू (दर्ता निवेदन, प्रबन्धपत्र MOA र नियमावली AOA) एकै पटक विवरण भरेर एकसाथ प्राप्त गर्नुहोस्।'
+                      : 'Incorporating a Private Limited Company? Generate the official Application to Registrar, Memorandum (MOA), and Articles (AOA) simultaneously with single form entry.'}
+                  </p>
+
+                  {/* Checklist of included documents */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-6">
+                    <div className="flex items-center gap-2 rounded-xl bg-white border border-slate-200/80 px-3 py-2 text-xs font-semibold text-slate-800 shadow-2xs">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-teal-100 text-teal-700 font-bold shrink-0">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </span>
+                      <span>१. दर्ता निवेदन</span>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl bg-white border border-slate-200/80 px-3 py-2 text-xs font-semibold text-slate-800 shadow-2xs">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-teal-100 text-teal-700 font-bold shrink-0">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </span>
+                      <span>२. प्रबन्धपत्र (MOA)</span>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl bg-white border border-slate-200/80 px-3 py-2 text-xs font-semibold text-slate-800 shadow-2xs">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-teal-100 text-teal-700 font-bold shrink-0">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </span>
+                      <span>३. नियमावली (AOA)</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                      href="/company-registration-suite/form"
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#148C7E] hover:bg-[#0f6c61] px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-md shadow-teal-700/20 transition-all hover:scale-[1.02] active:scale-95"
+                    >
+                      <FileCheck className="h-4 w-4 text-teal-100" />
+                      <span>{isNe ? 'सबै कागजात एकसाथ बनाउनुहोस्' : 'Generate All Documents at Once'}</span>
+                    </Link>
+                    <span className="text-xs text-slate-400 font-medium">
+                      {isNe ? 'वा तल व्यक्तिगत कागजातहरू छान्नुहोस् ↓' : 'Or select individual documents below ↓'}
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
 
-            {featuredSuite === 'annual' ? (
-              <>
-                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-400/25 px-3 py-1 text-[11px] font-bold text-emerald-200 border border-emerald-400/30 mb-2 backdrop-blur-xs">
-                  <span>✨ {isNe ? 'प्रमुख फिचर्ड प्याकेज (Featured Suite)' : 'Featured Compliance Suite'}</span>
-                  <span>•</span>
-                  <span>४-इन-१ पूर्ण प्याकेज</span>
+            {/* Right Column: Visual Mockup Showcase */}
+            <div className="lg:col-span-5 xl:col-span-5">
+              <div className="relative mx-auto max-w-sm rounded-2xl border border-slate-200/90 bg-white p-5 shadow-lg shadow-teal-900/5">
+                {/* Official Statutory Header */}
+                <div className="text-center border-b border-slate-100 pb-3">
+                  <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-red-50 text-red-700 text-sm mb-1 shadow-2xs">
+                    <Landmark className="h-4 w-4 text-red-700" />
+                  </div>
+                  <p className="text-[10px] font-bold text-slate-600">नेपाल सरकार • उद्योग मन्त्रालय</p>
+                  <p className="text-xs font-extrabold text-[#123B5D]">कम्पनी रजिष्ट्रारको कार्यालय (OCR)</p>
+                  <p className="text-[9px] text-[#148C7E] font-bold">
+                    {featuredSuite === 'annual' ? 'वार्षिक अभिलेख कागजात प्याकेज' : 'कम्पनी दर्ता संयुक्त लिखतहरू'}
+                  </p>
                 </div>
 
-                <h2 className="text-xl sm:text-2xl font-black font-outfit leading-tight mb-2">
-                  {isNe
-                    ? 'कम्पनी वार्षिक विवरण अभिलेख पूर्ण प्याकेज (४ कागजातहरू)'
-                    : 'Annual Compliance Complete Package (4 Documents Suite)'}
-                </h2>
-
-                <p className="text-xs sm:text-sm text-teal-50/90 leading-relaxed mb-4">
-                  {isNe
-                    ? 'कम्पनी ऐन, २०६३ बमोजिम OCR मा वार्षिक विवरण दाखिला गर्दा आवश्यक पर्ने सम्पूर्ण ४ वटा कागजातहरू (दर्ता निवेदन, सञ्चालक समिति बैठक, साधारण सभा माइन्युट र दफा ५१ को विवरण) एकै फारम भरेर एकसाथ प्राप्त गर्नुहोस्।'
-                    : 'Filing Annual Compliance with the Company Registrar? Generate the official Application to Registrar, Board Meeting Minutes, AGM Minutes, and Section 51 Annual Return with a single form.'}
-                </p>
-
-                {/* 4 Checklist Documents */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-6">
-                  <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-xs font-semibold backdrop-blur-xs border border-white/10">
-                    <span className="text-emerald-300 font-bold">✓</span>
-                    <span>१. दर्ता दरखास्त निवेदन (वार्षिक विवरण अभिलेख)</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-xs font-semibold backdrop-blur-xs border border-white/10">
-                    <span className="text-emerald-300 font-bold">✓</span>
-                    <span>२. संचालक समितिको बैठक (साधारण सभा बोलाउने)</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-xs font-semibold backdrop-blur-xs border border-white/10">
-                    <span className="text-emerald-300 font-bold">✓</span>
-                    <span>३. वार्षिक साधारण सभा (४ वटा निर्णयहरू)</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-xs font-semibold backdrop-blur-xs border border-white/10">
-                    <span className="text-emerald-300 font-bold">✓</span>
-                    <span>४. कम्पनी ऐनको दफा ५१ को विवरण</span>
-                  </div>
+                {/* Verified Stamp Badge */}
+                <div className="absolute -top-3 -right-3 rotate-6 rounded-lg border border-emerald-600 bg-emerald-50 px-2 py-0.5 text-[9px] font-extrabold text-emerald-800 uppercase tracking-wider shadow-xs flex items-center gap-1">
+                  <ShieldCheck className="h-3 w-3 text-emerald-700" />
+                  <span>प्रमाणित प्रारूप</span>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4">
-                  <Link
-                    href="/documents/annual-compliance-suite/form"
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 px-5 py-3 text-xs sm:text-sm font-bold text-slate-900 shadow-lg transition hover:from-emerald-300 hover:to-teal-400 active:scale-95"
-                  >
-                    <span>🚀 {isNe ? '४ वटै कागजात एकसाथ बनाउनुहोस्' : 'Generate 4-in-1 Suite Now'}</span>
-                  </Link>
-                  <span className="text-xs text-teal-100/70 font-medium">
-                    {isNe ? 'वा तल व्यक्तिगत कागजातहरू छान्नुहोस् ↓' : 'Or select individual documents below ↓'}
+                {/* Simulated Stack Rows */}
+                <div className="mt-3.5 space-y-2 text-[11px]">
+                  {featuredSuite === 'annual' ? (
+                    <>
+                      <div className="flex items-center justify-between rounded-lg bg-slate-50/80 px-2.5 py-1.5 border border-slate-100">
+                        <span className="text-slate-600 font-medium">१. दर्ता दरखास्त निवेदन</span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">तयार</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-slate-50/80 px-2.5 py-1.5 border border-slate-100">
+                        <span className="text-slate-600 font-medium">२. सञ्चालक समिति बैठक</span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">तयार</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-slate-50/80 px-2.5 py-1.5 border border-slate-100">
+                        <span className="text-slate-600 font-medium">३. साधारण सभा माइन्युट</span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">तयार</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-slate-50/80 px-2.5 py-1.5 border border-slate-100">
+                        <span className="text-slate-600 font-medium">४. दफा ५१ को विवरण</span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">तयार</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between rounded-lg bg-slate-50/80 px-2.5 py-1.5 border border-slate-100">
+                        <span className="text-slate-600 font-medium">१. दर्ता दरखास्त निवेदन</span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">तयार</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-slate-50/80 px-2.5 py-1.5 border border-slate-100">
+                        <span className="text-slate-600 font-medium">२. प्रबन्धपत्र (MOA)</span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">तयार</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-slate-50/80 px-2.5 py-1.5 border border-slate-100">
+                        <span className="text-slate-600 font-medium">३. नियमावली (AOA)</span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">तयार</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Bottom Trust Microbar */}
+                <div className="mt-3.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500 font-outfit">
+                  <span className="flex items-center gap-1 text-[#148C7E] font-bold">
+                    <Clock className="h-3 w-3" />
+                    <span>Instant PDF</span>
                   </span>
+                  <span>A4 Print-Ready</span>
+                  <span className="font-bold text-[#123B5D]">100% Legal</span>
                 </div>
-              </>
-            ) : (
-              <>
-                <div className="inline-flex items-center gap-2 rounded-full bg-teal-400/20 px-3 py-1 text-[11px] font-bold text-teal-200 border border-teal-400/30 mb-2 backdrop-blur-xs">
-                  <span>🏛️ {isNe ? 'सिफारिस गरिएको' : 'Recommended'}</span>
-                  <span>•</span>
-                  <span>३-इन-१ पूर्ण प्याकेज</span>
-                </div>
-
-                <h2 className="text-xl sm:text-2xl font-black font-outfit leading-tight mb-2">
-                  {isNe
-                    ? 'कम्पनी दर्ता पूर्ण प्याकेज (All-in-One Company Suite)'
-                    : 'Complete Company Registration Suite (MOA, AOA & Application)'}
-                </h2>
-
-                <p className="text-xs sm:text-sm text-teal-50/90 leading-relaxed mb-4">
-                  {isNe
-                    ? 'नेपालमा कम्पनी दर्ता गर्दा चाहिने सबै मुख्य कागजातहरू (दर्ता निवेदन, प्रबन्धपत्र MOA र नियमावली AOA) अब छुट्टाछुट्टै फारम भरिरहनु पर्दैन। एकै पटक विवरण भरेर सबै कागजात एकसाथ प्राप्त गर्नुहोस्।'
-                    : 'Incorporating a Private Limited Company? Generate the official Application to Registrar, Memorandum (MOA), and Articles (AOA) simultaneously with single form entry.'}
-                </p>
-
-                {/* Checklist of included documents */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-6">
-                  <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-xs font-semibold backdrop-blur-xs border border-white/10">
-                    <span className="text-teal-300">✓</span>
-                    <span>१. दर्ता दरखास्त निवेदन</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-xs font-semibold backdrop-blur-xs border border-white/10">
-                    <span className="text-teal-300">✓</span>
-                    <span>२. प्रबन्धपत्र (MOA)</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-xs font-semibold backdrop-blur-xs border border-white/10">
-                    <span className="text-teal-300">✓</span>
-                    <span>३. नियमावली (AOA)</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-4">
-                  <Link
-                    href="/company-registration-suite/form"
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 px-5 py-3 text-xs sm:text-sm font-bold text-slate-900 shadow-lg transition hover:from-emerald-300 hover:to-teal-400 active:scale-95"
-                  >
-                    <span>🚀 {isNe ? 'सबै कागजात एकसाथ बनाउनुहोस्' : 'Generate All Documents at Once'}</span>
-                  </Link>
-                  <span className="text-xs text-teal-100/70 font-medium">
-                    {isNe ? 'वा तल व्यक्तिगत कागजातहरू छान्नुहोस् ↓' : 'Or select individual documents below ↓'}
-                  </span>
-                </div>
-              </>
-            )}
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -637,7 +746,7 @@ function DocumentsContent() {
       {/* Empty state */}
       {!loading && !hasError && filteredDocs.length === 0 && (
         <div className="py-16 text-center text-slate-500 rounded-3xl bg-white border border-slate-200 p-8">
-          <div className="mb-3 text-5xl">🔍</div>
+          <FileText className="h-10 w-10 text-slate-300 mx-auto mb-3" />
           <p className="font-bold text-base text-[#123B5D]">
             {isNe ? 'कुनै कागजात फेला परेन' : 'No documents found'}
           </p>
@@ -662,108 +771,177 @@ function DocumentsContent() {
       {/* Documents Display: Grid or List */}
       {!loading && filteredDocs.length > 0 && (
         viewMode === 'grid' ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {filteredDocs.map((doc) => {
               const docTitle = isNe && doc.name_np ? doc.name_np : doc.name;
               const docDesc = isNe && doc.description_np ? doc.description_np : doc.description;
+              const isSuite = doc.slug.includes('suite');
 
               return (
-                <Link
+                <div
                   key={doc.slug}
-                  href={`/documents/${doc.slug}/form`}
-                  className="group card-hover-effect rounded-2xl border border-slate-200 bg-white p-6 shadow-xs transition hover:border-[#18A999] flex flex-col justify-between"
+                  className={`group relative flex flex-col justify-between rounded-2xl bg-white p-5 transition-all duration-200 shadow-2xs hover:shadow-md hover:-translate-y-0.5 border ${
+                    isSuite
+                      ? 'border-teal-400 ring-2 ring-teal-100/70 bg-gradient-to-b from-teal-50/20 to-white'
+                      : 'border-slate-200/90 hover:border-[#18A999]/80'
+                  }`}
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <p className="text-xs font-semibold uppercase tracking-wide text-[#18A999]">
-                        {doc.department}
-                      </p>
-                      {doc.processing_time && (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
-                          <Clock className="h-3 w-3" />
+                    {/* Minimal Top Meta Row */}
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                        {doc.category?.slug === 'ocr' ? (
+                          <Building2 className="h-4 w-4 text-slate-400" />
+                        ) : doc.category?.slug === 'ird' ? (
+                          <Landmark className="h-4 w-4 text-slate-400" />
+                        ) : (
+                          <Scale className="h-4 w-4 text-slate-400" />
+                        )}
+                        {doc.processing_time && (
                           <span>{formatProcessingTime(doc.processing_time, isNe)}</span>
+                        )}
+                      </div>
+
+                      {isSuite && (
+                        <span className="rounded-md bg-amber-50 border border-amber-200/90 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                          {isNe ? 'संयुक्त प्याकेज' : 'Full Package'}
                         </span>
                       )}
                     </div>
-                    <h2 className="mb-2 font-bold text-[#123B5D] group-hover:text-[#18A999] transition leading-snug">
-                      {docTitle}
-                    </h2>
+
+                    {/* Document Title */}
+                    <Link href={`/documents/${doc.slug}/form`} className="block group-hover:text-[#18A999] transition">
+                      <h2 className="text-base font-bold text-[#123B5D] leading-snug group-hover:text-[#18A999] transition line-clamp-2">
+                        {docTitle}
+                      </h2>
+                    </Link>
+
+                    {/* Clean Description */}
                     {docDesc && (
-                      <p className="mb-4 line-clamp-2 text-xs text-slate-600 leading-relaxed">
+                      <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-500">
                         {docDesc}
                       </p>
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between border-t border-slate-100 pt-3 text-xs">
-                    <div>
-                      <span className="text-[10px] text-slate-400 block font-medium leading-none mb-0.5">
-                        {isNe ? 'शुल्क' : 'Fee'}
+                  {/* Clean Bottom Footer */}
+                  <div className="mt-5 border-t border-slate-100 pt-3.5">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className={`text-base font-bold font-outfit ${Number(doc.price) === 0 ? 'text-emerald-600' : 'text-[#123B5D]'}`}>
+                        {Number(doc.price) === 0 ? (isNe ? 'निःशुल्क (Free)' : 'Free') : formatCurrency(doc.price, isNe)}
                       </span>
-                      <span className="text-base font-bold text-[#123B5D] font-outfit">
-                        {formatCurrency(doc.price, isNe)}
+
+                      <span className="text-[11px] font-medium text-slate-400">
+                        {isNe ? 'A4 ढाँचा' : 'A4 Print Ready'}
                       </span>
                     </div>
 
-                    <span className="inline-flex items-center gap-1 rounded-xl bg-slate-50 border border-slate-200 px-3 py-1.5 text-xs font-bold text-[#123B5D] group-hover:bg-[#18A999] group-hover:text-white group-hover:border-[#18A999] transition">
-                      <span>{isNe ? 'फारम भर्नुहोस्' : 'Fill Form'}</span>
-                      <span>→</span>
-                    </span>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        href={`/documents/${doc.slug}`}
+                        className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2 text-xs font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-50 transition cursor-pointer"
+                      >
+                        <Eye className="h-3.5 w-3.5 text-slate-400" />
+                        <span>{isNe ? 'विवरण' : 'Details'}</span>
+                      </Link>
+                      <Link
+                        href={`/documents/${doc.slug}/form`}
+                        className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#123B5D] hover:bg-[#18A999] py-2 text-xs font-semibold text-white shadow-xs transition cursor-pointer group-hover:shadow-md"
+                      >
+                        <span>{isNe ? 'फारम भर्नुहोस्' : 'Fill Form'}</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredDocs.map((doc) => {
               const docTitle = isNe && doc.name_np ? doc.name_np : doc.name;
               const docDesc = isNe && doc.description_np ? doc.description_np : doc.description;
+              const isSuite = doc.slug.includes('suite');
 
               return (
-                <Link
+                <div
                   key={doc.slug}
-                  href={`/documents/${doc.slug}/form`}
-                  className="group rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs transition-all duration-200 hover:border-[#18A999] hover:shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className={`group rounded-2xl bg-white p-4 sm:p-5 transition-all duration-200 shadow-2xs hover:shadow-md border flex flex-col justify-between ${
+                    isSuite
+                      ? 'border-teal-400 ring-2 ring-teal-100/70 bg-gradient-to-br from-teal-50/20 via-white to-white'
+                      : 'border-slate-200/90 hover:border-[#18A999]/80'
+                  }`}
                 >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="rounded-full bg-teal-50 border border-teal-200/60 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-[#18A999]">
-                        {doc.department}
-                      </span>
-                      {doc.processing_time && (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
-                          <Clock className="h-3 w-3" />
-                          <span>{formatProcessingTime(doc.processing_time, isNe)}</span>
-                        </span>
+                  {/* Top: Icon + Content */}
+                  <div className="flex items-start gap-3.5">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 border border-slate-200/80 text-slate-600 shadow-2xs group-hover:border-teal-300 group-hover:bg-teal-50/50 transition">
+                      {doc.category?.slug === 'ocr' ? (
+                        <Building2 className="h-5 w-5 text-blue-600" />
+                      ) : doc.category?.slug === 'ird' ? (
+                        <Landmark className="h-5 w-5 text-teal-600" />
+                      ) : (
+                        <Scale className="h-5 w-5 text-purple-600" />
                       )}
                     </div>
-                    <h2 className="text-base font-bold text-[#123B5D] group-hover:text-[#18A999] transition leading-snug">
-                      {docTitle}
-                    </h2>
-                    {docDesc && (
-                      <p className="mt-1 line-clamp-1 text-xs text-slate-600 leading-relaxed">
-                        {docDesc}
-                      </p>
-                    )}
-                  </div>
 
-                  <div className="flex items-center justify-between sm:justify-end gap-5 pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                    <div className="text-left sm:text-right">
-                      <span className="text-[11px] text-slate-400 block font-medium">
-                        {isNe ? 'शुल्क' : 'Fee'}
-                      </span>
-                      <span className="text-base font-extrabold text-[#123B5D] font-outfit">
-                        {formatCurrency(doc.price, isNe)}
-                      </span>
+                    <div className="flex-1 min-w-0">
+                      {/* Status / Suite pill */}
+                      <div className="flex items-center gap-2 mb-1">
+                        {doc.processing_time && (
+                          <span className="text-[11px] text-slate-400 font-medium">
+                            {formatProcessingTime(doc.processing_time, isNe)}
+                          </span>
+                        )}
+
+                        {isSuite && (
+                          <span className="rounded-md bg-amber-50 border border-amber-200/90 px-1.5 py-0.2 text-[9.5px] font-bold text-amber-800">
+                            {isNe ? 'संयुक्त प्याकेज' : 'Full Package'}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Document Title */}
+                      <Link href={`/documents/${doc.slug}/form`} className="block">
+                        <h2 className="text-sm sm:text-base font-bold text-[#123B5D] group-hover:text-[#18A999] transition leading-snug line-clamp-1">
+                          {docTitle}
+                        </h2>
+                      </Link>
+
+                      {/* Clean Description */}
+                      {docDesc && (
+                        <p className="mt-1 text-xs text-slate-500 leading-relaxed line-clamp-1">
+                          {docDesc}
+                        </p>
+                      )}
                     </div>
-
-                    <span className="inline-flex items-center gap-1.5 rounded-xl bg-[#123B5D] px-4 py-2 text-xs font-bold text-white transition group-hover:bg-[#18A999] shadow-xs whitespace-nowrap">
-                      <span>{isNe ? 'फारम भर्नुहोस्' : 'Fill Form'}</span>
-                      <span>→</span>
-                    </span>
                   </div>
-                </Link>
+
+                  {/* Bottom: Fee & Actions */}
+                  <div className="flex items-center justify-between gap-3 pt-3 mt-3 border-t border-slate-100">
+                    <span className={`text-base font-bold font-outfit ${Number(doc.price) === 0 ? 'text-emerald-600' : 'text-[#123B5D]'}`}>
+                      {Number(doc.price) === 0 ? (isNe ? 'निःशुल्क (Free)' : 'Free') : formatCurrency(doc.price, isNe)}
+                    </span>
+
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/documents/${doc.slug}`}
+                        className="inline-flex items-center justify-center gap-1 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-50 transition"
+                      >
+                        <Eye className="h-3.5 w-3.5 text-slate-400" />
+                        <span>{isNe ? 'विवरण' : 'Details'}</span>
+                      </Link>
+
+                      <Link
+                        href={`/documents/${doc.slug}/form`}
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-[#123B5D] hover:bg-[#18A999] px-3.5 py-1.5 text-xs font-semibold text-white transition shadow-xs group-hover:shadow-md whitespace-nowrap"
+                      >
+                        <span>{isNe ? 'फारम भर्नुहोस्' : 'Fill Form'}</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </div>

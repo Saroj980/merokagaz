@@ -1,6 +1,6 @@
 'use client';
 
-import React, { use, useState, useEffect, useMemo, Suspense } from 'react';
+import React, { use, useState, useEffect, useMemo, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { api, Document, FormField, formatCurrency } from '@/lib/api';
@@ -26,7 +26,6 @@ import {
   CheckCircle2,
   FileText,
   Clock,
-  Sparkles,
   SplitSquareVertical,
   Eye,
   SlidersHorizontal,
@@ -36,6 +35,11 @@ import {
   UserPlus,
   Trash2,
   ExternalLink,
+  Check,
+  Copy,
+  UserCheck,
+  FileEdit,
+  Info,
 } from 'lucide-react';
 
 interface DocLayoutConfig {
@@ -258,6 +262,10 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
 
   // Multi-document tab switcher for suites
   const [suiteTab, setSuiteTab] = useState<string>('app');
+
+  // Multi-tab wizard step index for fields
+  const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
+  const formSectionRef = useRef<HTMLFormElement>(null);
 
   // Dynamic Present Members Count for Minutes & Resolutions
   const [memberCount, setMemberCount] = useState<number>(1);
@@ -1196,7 +1204,17 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
     });
 
     setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
+    if (Object.keys(errors).length > 0) {
+      const firstErrorKey = Object.keys(errors)[0];
+      const errorGroupIdx = fieldGroups.findIndex((g) =>
+        g.fields.some((f) => f.key === firstErrorKey)
+      );
+      if (errorGroupIdx !== -1) {
+        setActiveTabIndex(errorGroupIdx);
+      }
+      return false;
+    }
+    return true;
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -1501,8 +1519,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
     setFormData(updated);
     setAutoFillNotice(
       isNe
-        ? `🎉 "${sourceName}" बाट ${filledCount} वटा विवरण फारममा स्वतः भरिएका छन्!`
-        : `🎉 ${filledCount} field(s) auto-filled from "${sourceName}"!`
+        ? `"${sourceName}" बाट ${filledCount} वटा विवरण फारममा स्वतः भरिएका छन्!`
+        : `${filledCount} field(s) auto-filled from "${sourceName}"!`
     );
     setTimeout(() => setAutoFillNotice(null), 5000);
   }
@@ -1643,7 +1661,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                   onClick={() => handleFieldChange(f.key, compAddr)}
                   className="inline-flex items-center gap-1 rounded-lg bg-teal-50 border border-teal-200/90 px-2 py-0.5 text-[10.5px] font-semibold text-[#148C7E] hover:bg-teal-100/80 transition cursor-pointer"
                 >
-                  <span>📋 {isNe ? 'कम्पनीको ठेगाना नै प्रयोग गर्नुहोस्' : 'Use Company Address'}</span>
+                  <Building2 className="h-3 w-3" />
+                  <span>{isNe ? 'कम्पनीको ठेगाना नै प्रयोग गर्नुहोस्' : 'Use Company Address'}</span>
                 </button>
               )}
               {canUseSh1 && (
@@ -1652,7 +1671,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                   onClick={() => handleFieldChange(f.key, sh1Addr)}
                   className="inline-flex items-center gap-1 rounded-lg bg-sky-50 border border-sky-200/90 px-2 py-0.5 text-[10.5px] font-semibold text-sky-700 hover:bg-sky-100/80 transition cursor-pointer"
                 >
-                  <span>📋 {isNe ? 'पहिलो शेयरधनीको ठेगाना सरह' : 'Same as Shareholder 1'}</span>
+                  <User className="h-3 w-3" />
+                  <span>{isNe ? 'पहिलो शेयरधनीको ठेगाना सरह' : 'Same as Shareholder 1'}</span>
                 </button>
               )}
             </div>
@@ -1717,7 +1737,7 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
             {isNumbered && (
               <div className="flex flex-wrap items-center justify-between gap-1.5 px-0.5 pb-0.5">
                 <span className="text-[10.5px] font-medium text-teal-700 flex items-center gap-1">
-                  <span>💡</span>
+                  <Info className="h-3.5 w-3.5 text-teal-600 shrink-0" />
                   <span>{isNe ? 'Enter थिच्दा स्वतः अर्को नम्बर (१., २., ३.) आउनेछ' : 'Pressing Enter auto-increments numbering (1., 2., 3.)'}</span>
                 </span>
                 <button
@@ -1733,7 +1753,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                   }}
                   className="inline-flex items-center gap-1 rounded-lg bg-teal-50 border border-teal-200/90 px-2 py-0.5 text-[10.5px] font-bold text-[#148C7E] hover:bg-teal-100 transition cursor-pointer shadow-2xs"
                 >
-                  <span>🔢 {isNe ? '१. २. ढाँचा मिलाउनुहोस्' : 'Auto Number'}</span>
+                  <Hash className="h-3 w-3" />
+                  <span>{isNe ? '१. २. ढाँचा मिलाउनुहोस्' : 'Auto Number'}</span>
                 </button>
               </div>
             )}
@@ -1747,8 +1768,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                 }
               }}
               placeholder={placeholderText || (isNe ? 'विस्तृत विवरण लेख्नुहोस्...' : 'Enter details...')}
-              className={`w-full rounded-xl border bg-[#F7F9FC] px-3.5 py-2.5 text-xs font-outfit text-slate-800 placeholder-slate-400 transition focus:border-[#18A999] focus:bg-white focus:outline-hidden ${
-                hasError ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200'
+              className={`w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-xs sm:text-sm font-outfit text-slate-900 placeholder:text-slate-400 placeholder:font-normal shadow-2xs transition-all hover:border-slate-400 focus:border-[#18A999] focus:outline-none focus:ring-3 focus:ring-[#18A999]/15 ${
+                hasError ? 'border-rose-400 ring-3 ring-rose-100 bg-rose-50/20' : ''
               }`}
             />
           </div>
@@ -1778,8 +1799,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
       case 'phone':
         return (
           <div className="relative">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-xs">
-              <Phone className="h-3.5 w-3.5" />
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <Phone className="h-4 w-4" />
             </span>
             <input
               type="tel"
@@ -1787,8 +1808,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
               onChange={(e) => handleFieldChange(f.key, e.target.value)}
               placeholder={placeholderText || '98XXXXXXXX'}
               autoComplete="off"
-              className={`w-full rounded-xl border bg-[#F7F9FC] pl-9 pr-3 py-2.5 text-xs font-mono text-slate-800 placeholder-slate-400 transition focus:border-[#18A999] focus:bg-white focus:outline-hidden ${
-                hasError ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200'
+              className={`w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 placeholder:font-normal shadow-2xs transition-all hover:border-slate-400 focus:border-[#18A999] focus:outline-none focus:ring-3 focus:ring-[#18A999]/15 ${
+                hasError ? 'border-rose-400 ring-3 ring-rose-100 bg-rose-50/20' : ''
               }`}
             />
           </div>
@@ -1797,8 +1818,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
       case 'email':
         return (
           <div className="relative">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-xs">
-              <Mail className="h-3.5 w-3.5" />
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <Mail className="h-4 w-4" />
             </span>
             <input
               type="email"
@@ -1806,8 +1827,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
               onChange={(e) => handleFieldChange(f.key, e.target.value)}
               placeholder={placeholderText || 'name@domain.com'}
               autoComplete="off"
-              className={`w-full rounded-xl border bg-[#F7F9FC] pl-9 pr-3 py-2.5 text-xs font-outfit text-slate-800 placeholder-slate-400 transition focus:border-[#18A999] focus:bg-white focus:outline-hidden ${
-                hasError ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200'
+              className={`w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-xs sm:text-sm font-outfit text-slate-900 placeholder:text-slate-400 placeholder:font-normal shadow-2xs transition-all hover:border-slate-400 focus:border-[#18A999] focus:outline-none focus:ring-3 focus:ring-[#18A999]/15 ${
+                hasError ? 'border-rose-400 ring-3 ring-rose-100 bg-rose-50/20' : ''
               }`}
             />
           </div>
@@ -1817,8 +1838,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
       case 'date_ad':
         return (
           <div className="relative">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-xs">
-              <Calendar className="h-3.5 w-3.5" />
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <Calendar className="h-4 w-4" />
             </span>
             <input
               type="text"
@@ -1826,8 +1847,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
               onChange={(e) => handleFieldChange(f.key, e.target.value)}
               placeholder={placeholderText || (f.type === 'date_bs' ? '२०८१-०६-१५' : 'YYYY-MM-DD')}
               autoComplete="off"
-              className={`w-full rounded-xl border bg-[#F7F9FC] pl-9 pr-3 py-2.5 text-xs font-mono text-slate-800 placeholder-slate-400 transition focus:border-[#18A999] focus:bg-white focus:outline-hidden ${
-                hasError ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200'
+              className={`w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 placeholder:font-normal shadow-2xs transition-all hover:border-slate-400 focus:border-[#18A999] focus:outline-none focus:ring-3 focus:ring-[#18A999]/15 ${
+                hasError ? 'border-rose-400 ring-3 ring-rose-100 bg-rose-50/20' : ''
               }`}
             />
           </div>
@@ -1837,8 +1858,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
       case 'pan':
         return (
           <div className="relative">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-xs">
-              <CreditCard className="h-3.5 w-3.5" />
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <CreditCard className="h-4 w-4" />
             </span>
             <input
               type="text"
@@ -1846,8 +1867,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
               onChange={(e) => handleFieldChange(f.key, e.target.value)}
               placeholder={placeholderText || (f.type === 'pan' ? '123456789' : '२७-०१-७५-०१२३४')}
               autoComplete="off"
-              className={`w-full rounded-xl border bg-[#F7F9FC] pl-9 pr-3 py-2.5 text-xs font-mono text-slate-800 placeholder-slate-400 transition focus:border-[#18A999] focus:bg-white focus:outline-hidden ${
-                hasError ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200'
+              className={`w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 placeholder:font-normal shadow-2xs transition-all hover:border-slate-400 focus:border-[#18A999] focus:outline-none focus:ring-3 focus:ring-[#18A999]/15 ${
+                hasError ? 'border-rose-400 ring-3 ring-rose-100 bg-rose-50/20' : ''
               }`}
             />
           </div>
@@ -1857,8 +1878,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
         const asciiVal = val ? val.replace(/[०-९]/g, (d) => ({ '०':'0','१':'1','२':'2','३':'3','४':'4','५':'5','६':'6','७':'7','८':'8','९':'9' }[d] || d)) : '';
         return (
           <div className="relative">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-xs">
-              <Hash className="h-3.5 w-3.5" />
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <Hash className="h-4 w-4" />
             </span>
             <input
               type="number"
@@ -1866,8 +1887,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
               onChange={(e) => handleFieldChange(f.key, e.target.value)}
               placeholder={placeholderText || '0'}
               autoComplete="off"
-              className={`w-full rounded-xl border bg-[#F7F9FC] pl-9 pr-3 py-2.5 text-xs font-mono text-slate-800 placeholder-slate-400 transition focus:border-[#18A999] focus:bg-white focus:outline-hidden ${
-                hasError ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200'
+              className={`w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 placeholder:font-normal shadow-2xs transition-all hover:border-slate-400 focus:border-[#18A999] focus:outline-none focus:ring-3 focus:ring-[#18A999]/15 ${
+                hasError ? 'border-rose-400 ring-3 ring-rose-100 bg-rose-50/20' : ''
               }`}
             />
           </div>
@@ -2254,7 +2275,7 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
         <div className="rounded-3xl border border-rose-200 bg-rose-50/80 p-8 shadow-xs">
-          <div className="mb-3 text-4xl">⚠️</div>
+          <AlertCircle className="h-10 w-10 text-amber-500 mx-auto mb-3" />
           <h2 className="text-base font-bold text-rose-800 mb-1">
             {isNe ? 'कागजात फेला परेन' : 'Document Not Found'}
           </h2>
@@ -2304,9 +2325,9 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                 }}
                 className="rounded-xl border-none bg-white px-2.5 py-1 text-xs font-bold text-[#123B5D] shadow-2xs focus:outline-none cursor-pointer"
               >
-                <option value="individual">👤 {user.name} (व्यक्तिगत)</option>
+                <option value="individual">{user.name} (व्यक्तिगत / Personal)</option>
                 {businesses?.map((b) => (
-                  <option key={b.id} value={b.id}>🏢 {b.name} (संस्थागत)</option>
+                  <option key={b.id} value={b.id}>{b.name} (संस्थागत / Corporate)</option>
                 ))}
               </select>
 
@@ -2314,10 +2335,10 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                 type="button"
                 onClick={() => handleAutoFill(selectedAutoFillSource)}
                 title={isNe ? 'आफ्नो प्रोफाइलबाट ठेगाना तथा विवरण स्वतः भर्नुहोस्' : 'Auto-fill form with your saved profile details'}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#123B5D] to-[#18A999] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:opacity-95 transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#123B5D] to-[#148C7E] hover:from-[#0E2E4A] hover:to-[#0f6c61] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition cursor-pointer"
               >
-                <Sparkles className="h-3.5 w-3.5 text-teal-200" />
-                <span>{isNe ? '⚡ स्वतः भर्नुहोस्' : '⚡ Auto-fill'}</span>
+                <UserCheck className="h-3.5 w-3.5 text-teal-200" />
+                <span>{isNe ? 'स्वतः भर्नुहोस्' : 'Auto-fill'}</span>
               </button>
             </div>
           )}
@@ -2327,10 +2348,10 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
             type="button"
             onClick={handleFillDummyData}
             title={isNe ? 'परीक्षणका लागि फारममा नमुना विवरण स्वतः भर्नुहोस्' : 'Automatically fill form with sample data for testing'}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm hover:from-amber-600 hover:to-orange-700 transition-all hover:shadow-md active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition-all active:scale-95 cursor-pointer"
           >
-            <Sparkles className="h-3.5 w-3.5 text-amber-100" />
-            <span>{isNe ? '✨ परीक्षण विवरण भर्नुहोस्' : '✨ Fill Dummy Data'}</span>
+            <FileEdit className="h-3.5 w-3.5 text-slate-300" />
+            <span>{isNe ? 'परीक्षण विवरण भर्नुहोस्' : 'Fill Dummy Data'}</span>
           </button>
 
           {/* View Mode Toggle (Temporarily commented out to avoid confusion)
@@ -2379,7 +2400,7 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-300 bg-amber-50/90 p-4 text-xs font-medium text-amber-900 shadow-xs">
           <div className="flex items-center gap-2.5">
             <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-amber-200 text-amber-800 font-bold text-xs">
-              ✏️
+              <FileText className="h-4 w-4 text-amber-800" />
             </span>
             <div>
               <p className="font-bold text-amber-950">
@@ -2458,11 +2479,11 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
         <div className={`${viewMode === 'split' ? 'lg:col-span-6' : 'col-span-1'} space-y-6`}>
           {/* Profile Auto-Fill Selector Card for Logged-In Users */}
           {isLoggedIn && user ? (
-            <div className="rounded-3xl border border-teal-200/90 bg-gradient-to-br from-white via-teal-50/20 to-sky-50/30 p-5 sm:p-6 shadow-xs">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-teal-100 pb-3.5 mb-4">
+            <div className="rounded-3xl border border-teal-200/70 bg-gradient-to-br from-white via-teal-50/15 to-slate-50/40 p-5 sm:p-6 shadow-xs">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-teal-100/70 pb-3.5 mb-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-[#123B5D] to-[#18A999] text-white shadow-xs">
-                    <Sparkles className="h-4 w-4 text-teal-100" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-[#123B5D] to-[#148C7E] text-white shadow-xs">
+                    <UserCheck className="h-4 w-4 text-teal-100" />
                   </div>
                   <div>
                     <h2 className="text-sm sm:text-base font-bold text-[#123B5D]">
@@ -2480,9 +2501,9 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                   <button
                     type="button"
                     onClick={() => handleAutoFill(selectedAutoFillSource)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#123B5D] to-[#18A999] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:opacity-95 transition cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#123B5D] to-[#148C7E] hover:from-[#0E2E4A] hover:to-[#0f6c61] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition cursor-pointer"
                   >
-                    <Sparkles className="h-3.5 w-3.5 text-teal-200" />
+                    <UserCheck className="h-3.5 w-3.5 text-teal-200" />
                     <span>{isNe ? 'विवरण स्वतः भर्नुहोस्' : 'Auto-Fill Fields'}</span>
                   </button>
                   <Link
@@ -2680,7 +2701,7 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
             <div className="rounded-2xl border border-teal-100 bg-teal-50/60 p-4 text-xs font-medium text-[#123B5D] flex flex-wrap items-center justify-between gap-3 shadow-2xs">
               <div className="flex items-center gap-2.5">
                 <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-teal-100 text-teal-700 font-bold text-xs">
-                  💡
+                  <Info className="h-4 w-4 text-teal-600" />
                 </span>
                 <div>
                   <p className="font-bold text-[#123B5D]">
@@ -2703,203 +2724,415 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
             </div>
           )}
 
-          <form onSubmit={handleSubmit} autoComplete="off" className="space-y-6">
-            {fieldGroups.map((group) => (
-              <div
-                key={group.id}
-                className="relative rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-xs"
-              >
-                <div className="mb-5 flex items-center justify-between border-b border-slate-100 pb-3">
+          <form ref={formSectionRef} onSubmit={handleSubmit} autoComplete="off" className="space-y-6 scroll-mt-24">
+            {/* Multi-Step Form Stepper */}
+            {fieldGroups.length > 1 && (
+              <div className="rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-xs">
+                {/* Top Status Header */}
+                <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-4">
                   <div className="flex items-center gap-2.5">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 border border-teal-100/80 shadow-2xs">
-                      {group.icon}
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 text-[11px] font-bold text-[#148C7E]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#18A999] animate-pulse" />
+                      {isNe
+                        ? `चरण ${toDevanagariDigits(activeTabIndex + 1)} / ${toDevanagariDigits(fieldGroups.length)}`
+                        : `Step ${activeTabIndex + 1} of ${fieldGroups.length}`}
                     </span>
-                    <div>
-                      <h2 className="text-xs font-bold text-[#123B5D] uppercase tracking-wider">
-                        {isNe ? group.titleNe : group.titleEn}
-                      </h2>
-                      <p className="text-[10px] text-slate-400">
-                        {isNe ? group.subtitleNe : group.subtitleEn}
-                      </p>
-                    </div>
+                    <span className="text-xs sm:text-sm font-bold text-[#123B5D] truncate max-w-[200px] sm:max-w-md">
+                      {isNe ? fieldGroups[activeTabIndex]?.titleNe : fieldGroups[activeTabIndex]?.titleEn}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {group.id === 'present_members' && (
-                      <button
-                        type="button"
-                        onClick={handleAddMember}
-                        disabled={memberCount >= 8}
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-[#148C7E] px-3 py-1.5 text-xs font-bold text-white shadow-2xs hover:from-teal-600 hover:to-[#0f6c61] transition disabled:opacity-50 cursor-pointer"
-                      >
-                        <UserPlus className="h-3.5 w-3.5" />
-                        <span>{isNe ? '➕ सदस्य थप्नुहोस्' : '➕ Add Member'}</span>
-                      </button>
-                    )}
-                    <span className="rounded-full bg-teal-50 border border-teal-200 px-2.5 py-0.5 text-[10px] font-bold text-[#148C7E] font-outfit">
-                      {group.id === 'present_members'
-                        ? `${toDevanagariDigits(memberCount)} ${isNe ? 'सदस्यहरू' : 'Members'}`
-                        : `${group.fields.length} ${isNe ? 'फिल्डहरू' : 'Fields'}`}
+                  <div className="flex items-center gap-2.5 shrink-0">
+                    <span className="text-xs font-bold text-slate-600 font-outfit">
+                      {Math.round(((activeTabIndex + 1) / fieldGroups.length) * 100)}% {isNe ? 'सकियो' : 'Completed'}
                     </span>
+                    <div className="w-16 sm:w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-teal-500 to-[#18A999] transition-all duration-300 rounded-full"
+                        style={{ width: `${((activeTabIndex + 1) / fieldGroups.length) * 100}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {group.id === 'present_members' ? (
-                  <div className="space-y-4">
-                    {Array.from({ length: memberCount }).map((_, mIdx) => {
-                      const memberNumber = mIdx + 1;
-                      const nameField = group.fields.find((f) => f.key === `member_${memberNumber}.name`);
-                      const desigField = group.fields.find((f) => f.key === `member_${memberNumber}.designation`);
+                {/* Connected Stepper Flow */}
+                <div className="overflow-x-auto no-scrollbar py-1">
+                  <div className="flex items-start justify-between min-w-[500px] sm:min-w-0 sm:w-full">
+                    {fieldGroups.map((group, idx) => {
+                      const isActive = activeTabIndex === idx;
+                      const isPast = idx < activeTabIndex;
+                      const hasErr = group.fields.some(f => fieldErrors[f.key]);
+                      const isComplete = group.fields.every(f => !f.required || (formData[f.key] && formData[f.key].trim() !== ''));
 
                       return (
-                        <div
-                          key={`member_box_${memberNumber}`}
-                          className="rounded-2xl border border-teal-100/90 bg-gradient-to-b from-teal-50/20 to-white p-4.5 space-y-3.5 shadow-2xs"
-                        >
-                          <div className="flex items-center justify-between border-b border-teal-50 pb-2.5">
-                            <div className="flex items-center gap-2">
-                              <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-teal-100/80 text-[#148C7E] text-[11px] font-bold font-mono">
-                                {toDevanagariDigits(memberNumber)}
-                              </span>
-                              <span className="text-xs font-bold text-[#123B5D]">
-                                {memberNumber === 1
-                                  ? (isNe ? 'सदस्य १ (बैठक अध्यक्ष / एकल सञ्चालक)' : 'Member 1 (Chairperson / Director)')
-                                  : (isNe ? `सदस्य ${toDevanagariDigits(memberNumber)}` : `Member ${memberNumber}`)}
-                              </span>
-                              {memberNumber === 1 && (
-                                <span className="text-[10px] text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-200/60 font-semibold">
-                                  {isNe ? 'बैठक अध्यक्ष' : 'Chairperson'}
-                                </span>
+                        <div key={group.id} className="flex items-start flex-1 last:flex-none">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveTabIndex(idx);
+                            }}
+                            className="flex flex-col items-center text-center group cursor-pointer focus:outline-none w-full max-w-[130px] transition-all"
+                          >
+                            {/* Step Circle */}
+                            <div
+                              className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${
+                                isActive
+                                  ? 'bg-[#123B5D] text-white shadow-md ring-4 ring-teal-100 scale-105'
+                                  : hasErr
+                                  ? 'bg-rose-500 text-white shadow-xs ring-4 ring-rose-100'
+                                  : isComplete
+                                  ? 'bg-[#18A999] text-white shadow-xs ring-4 ring-teal-50 group-hover:scale-105'
+                                  : 'bg-white border-2 border-slate-300 text-slate-500 group-hover:border-teal-400 group-hover:text-slate-800'
+                              }`}
+                            >
+                              {hasErr ? (
+                                <span>!</span>
+                              ) : isComplete && !isActive ? (
+                                <Check className="h-4 w-4 stroke-[2.5]" />
+                              ) : (
+                                <span>{isNe ? toDevanagariDigits(idx + 1) : idx + 1}</span>
                               )}
                             </div>
 
-                            {memberNumber > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveMember(memberNumber)}
-                                className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 px-2.5 py-1 rounded-lg transition cursor-pointer"
-                              >
-                                <Trash2 className="h-3 w-3" />
-                                <span>{isNe ? 'हटाउनुहोस्' : 'Remove'}</span>
-                              </button>
-                            )}
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {(() => {
-                              const resolvedNameField: FormField = nameField || {
-                                key: `member_${memberNumber}.name`,
-                                type: 'text',
-                                label: `Member ${memberNumber} Full Name ${memberNumber === 1 ? '(Chairperson)' : '(Optional)'}`,
-                                label_np: `उपस्थित सदस्य ${toDevanagariDigits(memberNumber)} को पूरा नाम ${memberNumber === 1 ? '(बैठक अध्यक्ष)' : ''}`,
-                                placeholder: isNe ? (memberNumber === 1 ? 'बैठक अध्यक्षको पूरा नाम' : `सदस्य ${toDevanagariDigits(memberNumber)} को पूरा नाम`) : `Member ${memberNumber} full name`,
-                                required: memberNumber === 1,
-                                options: null,
-                                visible_when: null,
-                                validation_rules: null,
-                                nepali_script_required: false,
-                                sort_order: 20 + memberNumber * 2,
-                                group: 'present_members',
-                              };
-
-                              const resolvedDesigField: FormField = desigField || {
-                                key: `member_${memberNumber}.designation`,
-                                type: 'text',
-                                label: `Member ${memberNumber} Designation (पद)`,
-                                label_np: `सदस्य ${toDevanagariDigits(memberNumber)} को पद (Designation)`,
-                                placeholder: memberNumber === 1 ? 'उदा: सञ्चालक / प्रोप्राइटर' : 'उदा: सञ्चालक',
-                                required: memberNumber === 1,
-                                options: null,
-                                visible_when: null,
-                                validation_rules: null,
-                                nepali_script_required: false,
-                                sort_order: 21 + memberNumber * 2,
-                                group: 'present_members',
-                              };
-
-                              return (
-                                <>
-                                  <div className="space-y-1.5">
-                                    <label className="flex items-center justify-between text-xs font-bold text-slate-700">
-                                      <span className="flex items-center gap-1.5">
-                                        <span>
-                                          {isNe && resolvedNameField.label_np
-                                            ? resolvedNameField.label_np
-                                            : resolvedNameField.label}
-                                        </span>
-                                        {resolvedNameField.required && <span className="text-rose-500 font-bold">*</span>}
-                                      </span>
-                                    </label>
-                                    {renderFieldInput(resolvedNameField)}
-                                    {fieldErrors[resolvedNameField.key] && (
-                                      <p className="text-[11px] font-semibold text-rose-600 animate-in fade-in">
-                                        {fieldErrors[resolvedNameField.key]}
-                                      </p>
-                                    )}
-                                  </div>
-
-                                  <div className="space-y-1.5">
-                                    <label className="flex items-center justify-between text-xs font-bold text-slate-700">
-                                      <span className="flex items-center gap-1.5">
-                                        <span>
-                                          {isNe && resolvedDesigField.label_np
-                                            ? resolvedDesigField.label_np
-                                            : resolvedDesigField.label}
-                                        </span>
-                                        {resolvedDesigField.required && <span className="text-rose-500 font-bold">*</span>}
-                                      </span>
-                                    </label>
-                                    {renderFieldInput(resolvedDesigField)}
-                                    {fieldErrors[resolvedDesigField.key] && (
-                                      <p className="text-[11px] font-semibold text-rose-600 animate-in fade-in">
-                                        {fieldErrors[resolvedDesigField.key]}
-                                      </p>
-                                    )}
-                                  </div>
-                                </>
-                              );
-                            })()}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4.5">
-                    {group.fields.map((f, idx) => {
-                      const isWide =
-                        f.type === 'address' ||
-                        f.type === 'textarea' ||
-                        f.key.toLowerCase().includes('address') ||
-                        (group.fields.length % 2 === 1 && idx === group.fields.length - 1);
-                      const label = isNe && f.label_np ? f.label_np : f.label;
-                      const err = fieldErrors[f.key];
-
-                      return (
-                        <div
-                          key={f.key || idx}
-                          className={`${isWide ? 'col-span-1 md:col-span-2' : 'col-span-1'} space-y-1.5`}
-                        >
-                          <label className="flex items-center justify-between text-xs font-bold text-slate-700">
-                            <span className="flex items-center gap-1.5">
-                              <span>{label}</span>
-                              {f.required && <span className="text-rose-500 font-bold">*</span>}
+                            {/* Step Title Label */}
+                            <span
+                              className={`mt-2 text-xs leading-tight transition-colors line-clamp-2 px-1 ${
+                                isActive
+                                  ? 'font-bold text-[#123B5D]'
+                                  : isComplete
+                                  ? 'font-semibold text-teal-800 group-hover:text-[#123B5D]'
+                                  : 'font-medium text-slate-500 group-hover:text-slate-800'
+                              }`}
+                            >
+                              {isNe ? group.titleNe : group.titleEn}
                             </span>
-                          </label>
 
-                          {renderFieldInput(f)}
+                            {/* Sub-label */}
+                            <span className="text-[10px] mt-0.5">
+                              {hasErr ? (
+                                <span className="text-rose-600 font-bold">{isNe ? 'सच्याउनुहोस्' : 'Fix error'}</span>
+                              ) : isComplete && !isActive ? (
+                                <span className="text-[#148C7E] font-medium">{isNe ? 'सकियो' : 'Done'}</span>
+                              ) : isActive ? (
+                                <span className="text-[#123B5D] font-bold">{isNe ? 'भरिँदैछ' : 'Active'}</span>
+                              ) : (
+                                <span className="text-slate-400 font-medium">{isNe ? `चरण ${toDevanagariDigits(idx + 1)}` : `Step ${idx + 1}`}</span>
+                              )}
+                            </span>
+                          </button>
 
-                          {err && (
-                            <p className="text-[11px] font-semibold text-rose-600 animate-in fade-in">
-                              {err}
-                            </p>
+                          {/* Connecting Line to next step */}
+                          {idx < fieldGroups.length - 1 && (
+                            <div className="flex-1 mx-2 sm:mx-3 h-0.5 self-start mt-4 bg-slate-200 rounded-full overflow-hidden">
+                              <div
+                                className={`h-full transition-all duration-300 ${
+                                  isComplete || isPast ? 'bg-[#18A999]' : 'bg-transparent'
+                                }`}
+                              />
+                            </div>
                           )}
                         </div>
                       );
                     })}
                   </div>
-                )}
+                </div>
               </div>
-            ))}
+            )}
+
+            {/* Active Group Form Card */}
+            {(() => {
+              const group = fieldGroups[activeTabIndex] || fieldGroups[0];
+              if (!group) return null;
+
+              return (
+                <div
+                  key={group.id}
+                  className="relative rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-xs"
+                >
+                  <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-teal-50 border border-teal-200/90 text-[#18A999] shadow-2xs">
+                        {group.icon}
+                      </span>
+                      <div>
+                        <h2 className="text-sm sm:text-base font-extrabold text-[#123B5D] tracking-tight">
+                          {isNe ? group.titleNe : group.titleEn}
+                        </h2>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          {isNe ? group.subtitleNe : group.subtitleEn}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {group.id === 'present_members' && (
+                        <button
+                          type="button"
+                          onClick={handleAddMember}
+                          disabled={memberCount >= 8}
+                          className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-[#148C7E] px-3 py-1.5 text-xs font-bold text-white shadow-2xs hover:from-teal-600 hover:to-[#0f6c61] transition disabled:opacity-50 cursor-pointer"
+                        >
+                          <UserPlus className="h-3.5 w-3.5" />
+                          <span>{isNe ? 'सदस्य थप्नुहोस्' : 'Add Member'}</span>
+                        </button>
+                      )}
+                      <span className="rounded-full bg-teal-50 border border-teal-200 px-2.5 py-0.5 text-[10px] font-bold text-[#148C7E] font-outfit">
+                        {group.id === 'present_members'
+                          ? `${isNe ? toDevanagariDigits(memberCount) : memberCount} ${isNe ? 'सदस्यहरू' : 'Members'}`
+                          : `${isNe ? toDevanagariDigits(group.fields.length) : group.fields.length} ${isNe ? 'फिल्डहरू' : 'Fields'}`}
+                      </span>
+                    </div>
+                  </div>
+
+                  {group.id === 'present_members' ? (
+                    <div className="space-y-4">
+                      {Array.from({ length: memberCount }).map((_, mIdx) => {
+                        const memberNumber = mIdx + 1;
+                        const nameField = group.fields.find((f) => f.key === `member_${memberNumber}.name`);
+                        const desigField = group.fields.find((f) => f.key === `member_${memberNumber}.designation`);
+
+                        return (
+                          <div
+                            key={`member_box_${memberNumber}`}
+                            className="rounded-2xl border border-teal-100/90 bg-gradient-to-b from-teal-50/20 to-white p-4.5 space-y-3.5 shadow-2xs"
+                          >
+                            <div className="flex items-center justify-between border-b border-teal-50 pb-2.5">
+                              <div className="flex items-center gap-2">
+                                <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-teal-100/80 text-[#148C7E] text-[11px] font-bold font-mono">
+                                  {isNe ? toDevanagariDigits(memberNumber) : memberNumber}
+                                </span>
+                                <span className="text-xs font-bold text-[#123B5D]">
+                                  {memberNumber === 1
+                                    ? (isNe ? 'सदस्य १ (बैठक अध्यक्ष / एकल सञ्चालक)' : 'Member 1 (Chairperson / Director)')
+                                    : (isNe ? `सदस्य ${toDevanagariDigits(memberNumber)}` : `Member ${memberNumber}`)}
+                                </span>
+                                {memberNumber === 1 && (
+                                  <span className="text-[10px] text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-200/60 font-semibold">
+                                    {isNe ? 'बैठक अध्यक्ष' : 'Chairperson'}
+                                  </span>
+                                )}
+                              </div>
+
+                              {memberNumber > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveMember(memberNumber)}
+                                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 px-2.5 py-1 rounded-lg transition cursor-pointer"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                  <span>{isNe ? 'हटाउनुहोस्' : 'Remove'}</span>
+                                </button>
+                              )}
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {(() => {
+                                const resolvedNameField: FormField = nameField || {
+                                  key: `member_${memberNumber}.name`,
+                                  type: 'text',
+                                  label: `Member ${memberNumber} Full Name ${memberNumber === 1 ? '(Chairperson)' : '(Optional)'}`,
+                                  label_np: `उपस्थित सदस्य ${toDevanagariDigits(memberNumber)} को पूरा नाम ${memberNumber === 1 ? '(बैठक अध्यक्ष)' : ''}`,
+                                  placeholder: isNe ? (memberNumber === 1 ? 'बैठक अध्यक्षको पूरा नाम' : `सदस्य ${toDevanagariDigits(memberNumber)} को पूरा नाम`) : `Member ${memberNumber} full name`,
+                                  required: memberNumber === 1,
+                                  options: null,
+                                  visible_when: null,
+                                  validation_rules: null,
+                                  nepali_script_required: false,
+                                  sort_order: 20 + memberNumber * 2,
+                                  group: 'present_members',
+                                };
+
+                                const resolvedDesigField: FormField = desigField || {
+                                  key: `member_${memberNumber}.designation`,
+                                  type: 'text',
+                                  label: `Member ${memberNumber} Designation (पद)`,
+                                  label_np: `सदस्य ${toDevanagariDigits(memberNumber)} को पद (Designation)`,
+                                  placeholder: memberNumber === 1 ? 'उदा: सञ्चालक / प्रोप्राइटर' : 'उदा: सञ्चालक',
+                                  required: memberNumber === 1,
+                                  options: null,
+                                  visible_when: null,
+                                  validation_rules: null,
+                                  nepali_script_required: false,
+                                  sort_order: 21 + memberNumber * 2,
+                                  group: 'present_members',
+                                };
+
+                                return (
+                                  <>
+                                    <div className="space-y-1.5">
+                                      <label className="flex items-center justify-between text-xs font-bold text-slate-700">
+                                        <span className="flex items-center gap-1.5">
+                                          <span>
+                                            {isNe && resolvedNameField.label_np
+                                              ? resolvedNameField.label_np
+                                              : resolvedNameField.label}
+                                          </span>
+                                          {resolvedNameField.required && <span className="text-rose-500 font-bold">*</span>}
+                                        </span>
+                                      </label>
+                                      {renderFieldInput(resolvedNameField)}
+                                      {fieldErrors[resolvedNameField.key] && (
+                                        <p className="text-[11px] font-semibold text-rose-600 animate-in fade-in">
+                                          {fieldErrors[resolvedNameField.key]}
+                                        </p>
+                                      )}
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                      <label className="flex items-center justify-between text-xs font-bold text-slate-700">
+                                        <span className="flex items-center gap-1.5">
+                                          <span>
+                                            {isNe && resolvedDesigField.label_np
+                                              ? resolvedDesigField.label_np
+                                              : resolvedDesigField.label}
+                                          </span>
+                                          {resolvedDesigField.required && <span className="text-rose-500 font-bold">*</span>}
+                                        </span>
+                                      </label>
+                                      {renderFieldInput(resolvedDesigField)}
+                                      {fieldErrors[resolvedDesigField.key] && (
+                                        <p className="text-[11px] font-semibold text-rose-600 animate-in fade-in">
+                                          {fieldErrors[resolvedDesigField.key]}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </>
+                                );
+                              })()}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4.5">
+                      {group.fields.map((f, idx) => {
+                        const isWide =
+                          f.type === 'address' ||
+                          f.type === 'textarea' ||
+                          f.key.toLowerCase().includes('address') ||
+                          (group.fields.length % 2 === 1 && idx === group.fields.length - 1);
+                        const label = isNe && f.label_np ? f.label_np : f.label;
+                        const err = fieldErrors[f.key];
+
+                        return (
+                          <div
+                            key={f.key || idx}
+                            className={`${isWide ? 'col-span-1 md:col-span-2' : 'col-span-1'} space-y-1.5`}
+                          >
+                            <label className="flex items-center justify-between text-xs font-bold text-slate-700">
+                              <span className="flex items-center gap-1.5">
+                                <span className="text-[#123B5D]">{label}</span>
+                                {f.required ? (
+                                  <span className="text-rose-500 font-bold" title={isNe ? 'अनिवार्य' : 'Required'}>*</span>
+                                ) : (
+                                  <span className="text-[10px] font-normal text-slate-400">
+                                    ({isNe ? 'ऐच्छिक' : 'Optional'})
+                                  </span>
+                                )}
+                              </span>
+                              {f.key.toLowerCase().includes('date_bs') && (
+                                <span className="text-[10px] text-teal-700 font-semibold font-mono bg-teal-50 px-2 py-0.5 rounded-md border border-teal-200/60">
+                                  वि.सं. (B.S.)
+                                </span>
+                              )}
+                            </label>
+
+                            {renderFieldInput(f)}
+
+                            {err && (
+                              <p className="flex items-center gap-1 text-[11px] font-semibold text-rose-600 animate-in fade-in pt-0.5">
+                                <span className="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0" />
+                                <span>{err}</span>
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Multi-Step Wizard Navigation Controls */}
+                  <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 border-t border-slate-100">
+                    {/* Previous Button */}
+                    {activeTabIndex > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTabIndex((prev) => Math.max(0, prev - 1));
+                          formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }}
+                        className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-xs transition cursor-pointer w-full sm:w-auto justify-center"
+                      >
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>{isNe ? 'अघिल्लो चरण' : 'Previous Step'}</span>
+                      </button>
+                    ) : (
+                      <div className="hidden sm:block" />
+                    )}
+
+                    {/* Step indicator on mobile */}
+                    <span className="text-xs text-slate-400 font-medium">
+                      {isNe
+                        ? `चरण ${toDevanagariDigits(activeTabIndex + 1)} / ${toDevanagariDigits(fieldGroups.length)}`
+                        : `Step ${activeTabIndex + 1} of ${fieldGroups.length}`}
+                    </span>
+
+                    {/* Next Step or Submit Button */}
+                    {activeTabIndex < fieldGroups.length - 1 ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTabIndex((prev) => Math.min(fieldGroups.length - 1, prev + 1));
+                          formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }}
+                        className="inline-flex items-center gap-2 rounded-2xl bg-[#18A999] hover:bg-[#148C7E] px-6 py-2.5 text-xs font-bold text-white shadow-md shadow-teal-500/20 transition cursor-pointer w-full sm:w-auto justify-center"
+                      >
+                        <span>{isNe ? 'पछिल्लो चरणमा जानुहोस्' : 'Next Step'}</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="btn-shimmer widget-click inline-flex items-center gap-2 rounded-2xl bg-[#18A999] hover:bg-[#148C7E] px-7 py-3 text-xs font-bold text-white shadow-md shadow-teal-500/25 transition cursor-pointer disabled:opacity-60 w-full sm:w-auto justify-center"
+                      >
+                        <span>
+                          {submitting
+                            ? isNe
+                              ? editOrderNo ? 'विवरण अद्यावधिक हुँदैछ...' : 'अर्डर सिर्जना हुँदैछ...'
+                              : editOrderNo ? 'Updating Details...' : 'Creating Order...'
+                            : editOrderNo
+                            ? isNe
+                              ? 'विवरण अद्यावधिक गरी डाउनलोडमा फर्कनुहोस्'
+                              : 'Save & Return to Download'
+                            : isNe
+                            ? 'अगाडि बढ्नुहोस् (भुक्तानी तथा डाउनलोड)'
+                            : 'Proceed to Checkout & Download'}
+                        </span>
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Quick Final Submit Option when on earlier tabs */}
+            {fieldGroups.length > 1 && activeTabIndex < fieldGroups.length - 1 && (
+              <div className="flex items-center justify-between px-2 pt-1 text-xs text-slate-500">
+                <span>
+                  {isNe
+                    ? 'सबै चरणहरू भरी सकेपछि सिधै सुरक्षित गर्न सक्नुहुन्छ:'
+                    : 'You can submit whenever ready:'}
+                </span>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="font-bold text-[#18A999] hover:text-[#148C7E] hover:underline cursor-pointer"
+                >
+                  {isNe ? 'सबै विवरण सुरक्षित गरी अगाडि बढ्नुहोस् →' : 'Save & Proceed Directly →'}
+                </button>
+              </div>
+            )}
 
             {/* Security Assurance Card */}
             <div className="flex items-center gap-3 rounded-2xl bg-teal-50/70 p-4 text-[11px] text-[#123B5D] border border-teal-100 shadow-2xs">
@@ -2910,28 +3143,6 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                   : 'Your information is fully encrypted and utilized solely for generating this verified legal document.'}
               </span>
             </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={submitting}
-              className="btn-shimmer widget-click flex w-full items-center justify-center gap-2 rounded-2xl bg-[#18A999] py-3.5 text-xs font-bold text-white shadow-md shadow-teal-500/25 transition-all hover:bg-[#148C7E] disabled:opacity-60 cursor-pointer"
-            >
-              <span>
-                {submitting
-                  ? isNe
-                    ? editOrderNo ? 'विवरण अद्यावधिक हुँदैछ...' : 'अर्डर सिर्जना हुँदैछ...'
-                    : editOrderNo ? 'Updating Details...' : 'Creating Order...'
-                  : editOrderNo
-                  ? isNe
-                    ? 'विवरण अद्यावधिक गरी डाउनलोडमा फर्कनुहोस्'
-                    : 'Save & Return to Download'
-                  : isNe
-                  ? 'अगाडि बढ्नुहोस् (भुक्तानी तथा डाउनलोड)'
-                  : 'Proceed to Checkout & Download'}
-              </span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
           </form>
 
           <div className="text-center pt-2">

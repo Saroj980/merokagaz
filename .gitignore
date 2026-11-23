@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+merokagaz-build.zip
+deploy_ready/
+package_deploy/
+standalone_clean/

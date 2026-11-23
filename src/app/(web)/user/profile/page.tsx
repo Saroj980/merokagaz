@@ -31,7 +31,7 @@ import {
   RefreshCw,
   LogOut,
   Calendar,
-  Sparkles,
+  ShieldCheck,
   MapPin,
   Home,
   CreditCard,
@@ -1086,9 +1086,9 @@ export default function UserProfilePage() {
 
               {/* Auto-fill Tip */}
               <div className="p-4 rounded-2xl bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200/80 flex items-start gap-3">
-                <Sparkles className="h-5 w-5 text-[#18A999] shrink-0 mt-0.5" />
+                <ShieldCheck className="h-5 w-5 text-[#18A999] shrink-0 mt-0.5" />
                 <div className="text-xs text-[#123B5D] leading-relaxed">
-                  <span className="font-extrabold">{isNe ? '💡 व्यक्तिगत फारम स्वतः भर्ने ग्यारेन्टी:' : '💡 Smart Auto-Fill Guarantee:'}</span>{' '}
+                  <span className="font-extrabold">{isNe ? 'व्यक्तिगत फारम स्वतः भर्ने ग्यारेन्टी:' : 'Smart Auto-Fill Guarantee:'}</span>{' '}
                   {isNe
                     ? 'कुनै पनि कानूनी वा सरकारी कागजात बनाउँदा यो विवरण एकै क्लिकमा स्वतः लोड हुनेछ।'
                     : 'This individual info will instantly auto-fill into any legal document form with a single click.'}
@@ -1185,7 +1185,7 @@ export default function UserProfilePage() {
                 {/* Business Section 1: Official Corporate Identity */}
                 <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs space-y-4">
                   <h3 className="text-sm font-bold text-[#123B5D] flex items-center gap-2">
-                    <span>🏢</span>
+                    <Building2 className="h-4 w-4 text-[#18A999]" />
                     <span>{isNe ? '१. कम्पनी / फर्मको आधिकारिक विवरण (Corporate Info)' : '1. Corporate Info'}</span>
                   </h3>
 
@@ -1274,7 +1274,7 @@ export default function UserProfilePage() {
                 <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-bold text-[#123B5D] flex items-center gap-2">
-                      <span>📍</span>
+                      <MapPin className="h-4 w-4 text-[#18A999]" />
                       <span>{isNe ? '२. कम्पनीको दर्ता भएको रजिष्टर्ड कार्यालय ठेगाना' : '2. Registered Office Address'}</span>
                     </h3>
 
@@ -1387,7 +1387,7 @@ export default function UserProfilePage() {
                 {/* Business Section 3: Authorized Signatory & Capital */}
                 <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs space-y-4">
                   <h3 className="text-sm font-bold text-[#123B5D] flex items-center gap-2">
-                    <span>✍️</span>
+                    <Pencil className="h-4 w-4 text-[#18A999]" />
                     <span>{isNe ? '३. अधिकारप्राप्त हस्ताक्षरकर्ता तथा पूँजी विवरण' : '3. Signatory & Capital'}</span>
                   </h3>
 

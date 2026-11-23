@@ -8,6 +8,18 @@ import { useAuth } from '@/lib/authContext';
 import LanguageToggle from '@/components/LanguageToggle';
 import ScrollReveal from '@/components/ScrollReveal';
 import { api, SiteSettings, CmsContent } from '@/lib/api';
+import {
+  FileText,
+  User,
+  CreditCard,
+  SlidersHorizontal,
+  LogOut,
+  ShieldCheck,
+  CheckCircle2,
+  Phone,
+  Mail,
+} from 'lucide-react';
+import { EsewaLogo, KhaltiLogo, ConnectIpsLogo } from '@/components/PaymentLogos';
 
 /**
  * Public Web Layout
@@ -24,85 +36,87 @@ export default function WebLayout({ children }: { children: React.ReactNode }) {
     api.cms.get().then(c => setCms(c)).catch(() => {});
   }, []);
 
-  const showBanner = settings ? settings.notice_banner_enabled : true;
+  const showBanner = Boolean(settings?.notice_banner_enabled);
   const bannerText = settings
     ? (lang === 'ne' ? settings.notice_banner_text_ne : settings.notice_banner_text_en)
-    : t('topNoticeText');
+    : '';
   const bannerLink = settings?.notice_banner_link || '/documents';
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#E6F6F3] text-[#17212B]">
-      {/* Top Banner Notice */}
-      {showBanner && (
-        <div className="border-b border-teal-100 bg-white/70 px-4 py-1.5 text-center text-xs font-medium text-[#123B5D] backdrop-blur-xs">
-          <div className="mx-auto flex max-w-7xl items-center justify-center gap-2">
-            <span className="inline-flex items-center rounded-full bg-[#18A999] px-2 py-0.5 text-[10px] font-semibold text-white">
-              {t('topNoticeBadge')}
-            </span>
-            <span>{bannerText}</span>
-            <Link href={bannerLink} className="ml-1 font-semibold text-[#18A999] underline hover:text-[#148C7E]">
-              {t('topNoticeLink')}
-            </Link>
-          </div>
+    <div className="flex min-h-screen flex-col bg-[#F8FAFC] text-slate-900 font-sans antialiased">
+      {/* Top Banner Notice - Clean, single-line announcement */}
+      <div className="h-0.5 w-full bg-gradient-to-r from-[#DC2626] via-[#123B5D] to-[#18A999]"></div>
+      <div className="border-b border-slate-200/70 bg-slate-50/90 px-4 py-1.5 text-center text-xs text-slate-700">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 text-[11px] sm:text-xs">
+          <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 border border-teal-200 px-2 py-0.5 text-[10px] font-bold text-[#148C7E]">
+            <ShieldCheck className="h-3 w-3 text-[#148C7E]" />
+            <span>{lang === 'ne' ? 'आधिकारिक प्रारूप' : 'Official Portal'}</span>
+          </span>
+          <span className="text-slate-600 font-medium">
+            {lang === 'ne'
+              ? 'आन्तरिक राजस्व (IRD), कम्पनी रजिष्ट्रार (OCR) तथा वडा कार्यालय मान्य'
+              : 'Statutory document formats accepted across Nepal Government offices'}
+          </span>
+          <Link href="/documents" className="font-semibold text-[#18A999] hover:underline ml-1">
+            {lang === 'ne' ? 'हेर्नुहोस् →' : 'Browse →'}
+          </Link>
         </div>
-      )}
+      </div>
 
-      {/* Main Navbar */}
-      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md transition-all">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          {/* Logo & Brand (Bigger & Crisp) */}
-          <Link href="/" className="group flex items-center gap-3 transition">
-            <div className="relative h-14 w-48 sm:h-16 sm:w-56">
+      {/* Main Navbar - Prominent Logo & Essential Clean Navigation */}
+      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-xs transition-all">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 lg:px-8">
+          {/* Prominent, Sharp Brand Logo */}
+          <Link href="/" className="group flex items-center transition">
+            <div className="relative h-13 w-48 sm:h-15 sm:w-56 md:h-16 md:w-60">
               <Image
                 src="/assets/logo.png"
                 alt="Mero Kagaz मेरो कागज"
                 fill
                 priority
-                className="object-contain object-left transition group-hover:scale-102"
+                className="object-contain object-left transition duration-200 group-hover:opacity-95"
               />
             </div>
           </Link>
 
-          {/* Center Navigation Links (Clean translated labels) */}
-          <nav className="hidden items-center gap-1 lg:flex">
+          {/* Center Navigation Links - Important Government Categories */}
+          <nav className="hidden items-center gap-1 xl:gap-2 lg:flex">
             <Link
-              href="/"
-              className="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-[#123B5D]"
+              href="/documents"
+              className="rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 transition hover:bg-slate-100 hover:text-[#18A999]"
             >
-              {t('navHome')}
-            </Link>
-            <Link
-              href="/documents?category=ird"
-              className="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-[#123B5D]"
-            >
-              {t('navIrd')}
+              {lang === 'ne' ? 'सबै कागजातहरू' : 'All Documents'}
             </Link>
             <Link
               href="/documents?category=ocr"
-              className="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-[#123B5D]"
+              className="rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 transition hover:bg-slate-100 hover:text-[#18A999]"
             >
-              {t('navOcr')}
+              {lang === 'ne' ? 'कम्पनी दर्ता (OCR)' : 'Company OCR'}
             </Link>
             <Link
-              href="/documents"
-              className="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-[#123B5D]"
+              href="/documents?category=ird"
+              className="rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 transition hover:bg-slate-100 hover:text-[#18A999]"
             >
-              {t('navAllDocs')}
+              {lang === 'ne' ? 'कर तथा PAN' : 'Tax & PAN'}
+            </Link>
+            <Link
+              href="/documents?category=ward"
+              className="rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 transition hover:bg-slate-100 hover:text-[#18A999]"
+            >
+              {lang === 'ne' ? 'वडा तथा सम्झौता' : 'Ward & Deeds'}
+            </Link>
+            <Link
+              href="/#how-it-works"
+              className="rounded-lg px-3 py-1.5 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#18A999]"
+            >
+              {lang === 'ne' ? 'कसरी काम गर्छ?' : 'How It Works'}
             </Link>
           </nav>
 
-          {/* Right Action CTAs & Language Switcher */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            {/* Top Right Language Switcher */}
+          {/* Right Actions */}
+          <div className="flex items-center gap-3">
+            {/* Language Toggle */}
             <LanguageToggle />
-
-            {/* Quick Search */}
-            <Link
-              href="/documents"
-              className="hidden items-center gap-1.5 text-xs font-semibold text-slate-600 transition hover:text-[#123B5D] sm:inline-flex"
-            >
-              <span>🔎 {t('navSearch')}</span>
-            </Link>
 
             {/* User Account / Login State */}
             {isLoggedIn ? (
@@ -130,7 +144,7 @@ export default function WebLayout({ children }: { children: React.ReactNode }) {
                       href="/user/dashboard"
                       className="flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 font-medium transition-colors"
                     >
-                      <span>📄</span>
+                      <FileText className="h-3.5 w-3.5 text-slate-400" />
                       <span>{lang === 'ne' ? 'मेरा कागजातहरू' : 'My Documents'}</span>
                     </Link>
 
@@ -138,66 +152,59 @@ export default function WebLayout({ children }: { children: React.ReactNode }) {
                       href="/user/profile"
                       className="flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 font-medium transition-colors"
                     >
-                      <span>👤</span>
+                      <User className="h-3.5 w-3.5 text-slate-400" />
                       <span>{lang === 'ne' ? 'मेरो प्रोफाइल तथा सुरक्षा' : 'Profile & Security'}</span>
                     </Link>
 
                     <Link
-                      href="/business/dashboard"
+                      href="/checkout"
                       className="flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 font-medium transition-colors"
                     >
-                      <span>🏢</span>
-                      <span>{lang === 'ne' ? 'संस्थागत ड्यासबोर्ड' : 'Business Dashboard'}</span>
+                      <CreditCard className="h-3.5 w-3.5 text-slate-400" />
+                      <span>{lang === 'ne' ? 'भुक्तानी विवरण' : 'Payments'}</span>
                     </Link>
-
-                    {isAdmin && (
-                      <Link
-                        href="/admin/dashboard"
-                        className="flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs text-purple-700 hover:bg-purple-50 font-bold transition-colors"
-                      >
-                        <span>⚡</span>
-                        <span>{lang === 'ne' ? 'एडमिन ड्यासबोर्ड' : 'Admin Panel'}</span>
-                      </Link>
-                    )}
                   </div>
 
-                  <div className="border-t border-slate-100 pt-1">
+                  {isAdmin && (
+                    <div className="pt-1 mt-1 border-t border-slate-100">
+                      <Link
+                        href="/admin/dashboard"
+                        className="flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-bold text-[#18A999] hover:bg-teal-50 transition-colors"
+                      >
+                        <SlidersHorizontal className="h-3.5 w-3.5 text-teal-600" />
+                        <span>{lang === 'ne' ? 'प्रशासन प्यानल' : 'Admin Panel'}</span>
+                      </Link>
+                    </div>
+                  )}
+
+                  <div className="pt-1 mt-1 border-t border-slate-100">
                     <button
                       type="button"
-                      onClick={() => logout()}
-                      className="w-full text-left flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors"
+                      onClick={logout}
+                      className="w-full flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs text-red-600 hover:bg-red-50 font-medium transition-colors text-left cursor-pointer"
                     >
-                      <span>🚪</span>
-                      <span>{lang === 'ne' ? 'लगआउट' : 'Sign out'}</span>
+                      <LogOut className="h-3.5 w-3.5 text-rose-600" />
+                      <span>{lang === 'ne' ? 'लगआउट गर्नुहोस्' : 'Sign Out'}</span>
                     </button>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <Link
                   href="/login"
-                  className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-[#123B5D] hover:bg-slate-50 transition-colors shadow-xs"
+                  className="rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:text-[#18A999]"
                 >
-                  {lang === 'ne' ? 'लगइन' : 'Sign in'}
+                  {lang === 'ne' ? 'लगइन' : 'Sign In'}
                 </Link>
                 <Link
-                  href="/register"
-                  className="hidden sm:inline-flex rounded-xl bg-gradient-to-r from-[#123B5D] to-[#18A999] px-3.5 py-2 text-xs font-bold text-white hover:opacity-95 transition-all shadow-xs"
+                  href="/documents"
+                  className="rounded-xl bg-[#18A999] px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-[#148C7E]"
                 >
-                  {lang === 'ne' ? 'दर्ता गर्नुहोस्' : 'Register'}
+                  {lang === 'ne' ? 'सुरु गर्नुहोस्' : 'Get Started'}
                 </Link>
               </div>
             )}
-
-            {/* CTA Button */}
-            <Link
-              href="/documents"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#123B5D] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#0E2E4A] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#18A999] focus:ring-offset-2 sm:text-sm"
-            >
-              <span>{t('navGetStarted')}</span>
-              <span className="text-[#F4B942]">&rarr;</span>
-            </Link>
           </div>
         </div>
       </header>
@@ -319,19 +326,10 @@ export default function WebLayout({ children }: { children: React.ReactNode }) {
                   ? 'नेपालका प्रमुख वालेटहरूबाट तत्काल सुरक्षित भुक्तानी गर्नुहोस्:'
                   : 'Pay instantly and securely via leading Nepal digital wallets:'}
               </p>
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="widget-click inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50/70 px-3 py-1.5 text-xs font-bold text-emerald-700 shadow-2xs transition-all duration-300 hover:scale-105 hover:bg-emerald-100/80 hover:shadow-xs">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                  <span>eSewa</span>
-                </span>
-                <span className="widget-click inline-flex items-center gap-1.5 rounded-xl border border-purple-200 bg-purple-50/70 px-3 py-1.5 text-xs font-bold text-purple-700 shadow-2xs transition-all duration-300 hover:scale-105 hover:bg-purple-100/80 hover:shadow-xs">
-                  <span className="h-1.5 w-1.5 rounded-full bg-purple-500"></span>
-                  <span>Khalti</span>
-                </span>
-                <span className="widget-click inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50/70 px-3 py-1.5 text-xs font-bold text-blue-700 shadow-2xs transition-all duration-300 hover:scale-105 hover:bg-blue-100/80 hover:shadow-xs">
-                  <span className="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
-                  <span>ConnectIPS</span>
-                </span>
+              <div className="flex flex-wrap items-center gap-2 pt-1.5">
+                <EsewaLogo />
+                <KhaltiLogo />
+                <ConnectIpsLogo />
               </div>
             </ScrollReveal>
           </div>
@@ -343,13 +341,13 @@ export default function WebLayout({ children }: { children: React.ReactNode }) {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-slate-500 font-outfit text-[11px]">
                 {settings?.contact_phones && settings.contact_phones.length > 0 && (
                   <div className="flex items-center gap-1.5">
-                    <span className="text-slate-400">📞</span>
+                    <Phone className="h-3 w-3 text-slate-400" />
                     <span>{settings.contact_phones.join(' / ')}</span>
                   </div>
                 )}
                 {settings?.contact_emails && settings.contact_emails.length > 0 && (
                   <div className="flex items-center gap-1.5">
-                    <span className="text-slate-400">✉️</span>
+                    <Mail className="h-3 w-3 text-slate-400" />
                     <a href={`mailto:${settings.contact_emails[0]}`} className="hover:text-[#18A999] transition underline-offset-2 hover:underline">
                       {settings.contact_emails.join(', ')}
                     </a>

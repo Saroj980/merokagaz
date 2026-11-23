@@ -133,13 +133,13 @@ export default function CustomSelect({
       onKeyDown={handleKeyDown}
       className={`relative w-full text-left font-outfit ${isOpen ? 'z-[90]' : 'z-auto'} ${className}`}
     >
-      {/* Trigger Button - Ant Design styled input */}
+      {/* Trigger Button - Professional styled input */}
       <button
         type="button"
         disabled={disabled}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`group flex w-full items-center justify-between gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-normal text-slate-800 shadow-2xs transition-all hover:border-[#18A999] hover:bg-slate-50/40 focus:border-[#18A999] focus:outline-none focus:ring-2 focus:ring-[#18A999]/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400 disabled:opacity-60 cursor-pointer ${
-          isOpen ? 'border-[#18A999] ring-2 ring-[#18A999]/20' : ''
+        className={`group flex w-full items-center justify-between gap-2 rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-xs sm:text-sm font-normal text-slate-800 shadow-2xs transition-all hover:border-[#18A999] hover:bg-slate-50/40 focus:border-[#18A999] focus:outline-none focus:ring-3 focus:ring-[#18A999]/15 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400 disabled:opacity-60 cursor-pointer ${
+          isOpen ? 'border-[#18A999] ring-3 ring-[#18A999]/15' : ''
         } ${buttonClassName}`}
       >
         <div className="flex items-center gap-2 truncate">

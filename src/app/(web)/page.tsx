@@ -6,22 +6,35 @@ import { useLanguage } from '@/lib/i18n';
 import ScrollReveal from '@/components/ScrollReveal';
 import { api, SiteSettings, CmsContent } from '@/lib/api';
 import {
-  Sparkles,
   ShieldCheck,
-  Zap,
-  Stamp,
   Clock,
   ArrowRight,
   Eye,
   CheckCircle2,
-  FileText,
   Building2,
   Scale,
   X,
   ChevronDown,
-  Activity,
   Layers,
   Search,
+  Check,
+  FileCheck,
+  Landmark,
+  FileText,
+  Printer,
+  QrCode,
+  CreditCard,
+  Smartphone,
+  Lock,
+  Download,
+  BadgeCheck,
+  FileEdit,
+  UserCheck,
+  HelpCircle,
+  FileSpreadsheet,
+  Award,
+  Users,
+  AlertCircle,
 } from 'lucide-react';
 
 interface DocumentItem {
@@ -108,8 +121,8 @@ const SAMPLE_DOCUMENTS: DocumentItem[] = [
     feeEn: 'NPR 400',
     estimatedTimeNe: '१० मिनेट',
     estimatedTimeEn: '10 mins',
-    badgeNe: 'प्रमुख फिचर्ड',
-    badgeEn: 'Featured Suite',
+    badgeNe: '४-इन-१ प्याकेज',
+    badgeEn: '4-in-1 Suite',
     popular: true,
     requirementsNe: ['कम्पनी दर्ता नम्बर तथा ठेगाना', 'सञ्चालक बैठक तथा साधारण सभा मिति', 'लेखापरीक्षकको नाम र पुँजी विवरण'],
     requirementsEn: ['Company Registration No & address', 'Meeting dates', 'Auditor & capital details'],
@@ -221,38 +234,54 @@ const SAMPLE_DOCUMENTS: DocumentItem[] = [
   },
 ];
 
-const LIVE_ACTIVITIES = [
-  { cityNe: 'काठमाडौं', cityEn: 'Kathmandu', docNe: 'व्यक्तिगत PAN फारम सिर्जना भयो', docEn: 'Personal PAN Application generated', timeNe: 'भर्खरै', timeEn: 'Just now' },
-  { cityNe: 'पोखरा', cityEn: 'Pokhara', docNe: 'घर बहाल सम्झौता डाउनलोड भयो', docEn: 'House Rent Agreement PDF downloaded', timeNe: '२ मिनेट अगाडि', timeEn: '2m ago' },
-  { cityNe: 'ललितपुर', cityEn: 'Lalitpur', docNe: 'कम्पनी प्रबन्धपत्र (MOA) तयार भयो', docEn: 'Company MOA template customized', timeNe: '५ मिनेट अगाडि', timeEn: '5m ago' },
-  { cityNe: 'विराटनगर', cityEn: 'Biratnagar', docNe: 'व्यवसायिक भ्याट फारम सम्पन्न भयो', docEn: 'Business VAT Form completed', timeNe: '९ मिनेट अगाडि', timeEn: '9m ago' },
-  { cityNe: 'बुटवल', cityEn: 'Butwal', docNe: 'सञ्चालक हेरफेर निर्णय प्रमाणीकरण भयो', docEn: 'Director Resolution verified', timeNe: '१२ मिनेट अगाडि', timeEn: '12m ago' },
-];
-
 const FAQS = [
   {
+    id: 'legal-validity',
+    iconType: 'legal',
     qNe: 'के यी फारमहरू नेपाल सरकारका कार्यालयहरूमा मान्य हुन्छन्?',
     qEn: 'Are these generated forms accepted by Nepal Government offices?',
-    aNe: 'हो, मेरो कागजका सम्पूर्ण फारम तथा ढाँचाहरू आन्तरिक राजस्व विभाग (IRD), कम्पनी रजिष्ट्रारको कार्यालय (OCR) र नेपाल सरकारको प्रचलित कानून अनुसार आधिकारिक ढाँचामा तयार पारिएका हुन्।',
-    aEn: 'Yes, all templates strictly follow standard layouts mandated by the Inland Revenue Department (IRD), Office of the Company Registrar (OCR), and prevailing laws of Nepal.',
+    aNe: 'हो, शतप्रतिशत मान्य हुन्छन्। मेरो कागजका सम्पूर्ण फारम तथा ढाँचाहरू आन्तरिक राजस्व विभाग (IRD), कम्पनी रजिष्ट्रारको कार्यालय (OCR), मुलुकी देवानी संहिता, र स्थानीय वडा कार्यालयका प्रचलित ऐन र मानक अनुसूची अनुसार तयार गरिएका हुन्।',
+    aEn: 'Yes, 100% legally valid. All templates strictly adhere to statutory layouts and schedules mandated by the Inland Revenue Department (IRD), Office of the Company Registrar (OCR), and prevailing laws of Nepal.',
   },
   {
-    qNe: 'फारम भर्न कति समय लाग्छ?',
-    qEn: 'How long does it take to prepare a document?',
-    aNe: 'औसतमा ३ देखि ७ मिनेट मात्र लाग्छ। आवश्यक विवरणहरू टाइप गरेपछि तुरुन्तै शुद्ध नेपाली युनिकोडमा प्रिन्ट-रेडी आधिकारिक PDF तयार हुन्छ।',
-    aEn: 'On average, only 3 to 7 minutes. After entering basic details, a verified print-ready PDF with proper Nepali Unicode typography is generated immediately.',
+    id: 'time-download',
+    iconType: 'time',
+    qNe: 'फारम भर्न कति समय लाग्छ र कसरी प्राप्त हुन्छ?',
+    qEn: 'How long does it take to prepare and download a document?',
+    aNe: 'औसतमा ३ देखि ५ मिनेट मात्र लाग्छ। आवश्यक विवरणहरू टाइप गरेपछि तुरुन्तै शुद्ध कालिमाटी युनिकोडमा प्रिन्ट-रेडी आधिकारिक A4 PDF सिधै कम्प्युटर वा मोबाइलमा डाउनलोड हुन्छ।',
+    aEn: 'On average, only 3 to 5 minutes. After entering basic details, a verified print-ready A4 PDF with standard Nepali Kalimati Unicode typography is generated immediately for download.',
   },
   {
-    qNe: 'के मलाई कुनै एजेन्ट वा दलालको आवश्यकता पर्छ?',
+    id: 'payment-methods',
+    iconType: 'payment',
+    qNe: 'भुक्तानी कुन-कुन माध्यमबाट गर्न सकिन्छ?',
+    qEn: 'Which payment methods are supported?',
+    aNe: 'तपाईंले नेपालका प्रमुख डिजिटल भुक्तानी माध्यमहरू जस्तै eSewa, Khalti, र connectIPS मार्फत सुरक्षित रूपमा तत्काल भुक्तानी गर्न सक्नुहुन्छ। धेरैजसो आधारभूत फारमहरू निःशुल्क उपलब्ध छन्।',
+    aEn: 'We support all major digital payment options including eSewa, Khalti, and connectIPS. Many basic administrative forms are completely free of charge.',
+  },
+  {
+    id: 'no-middlemen',
+    iconType: 'middlemen',
+    qNe: 'के मलाई कुनै एजेन्ट, दलाल वा लेखापढीको आवश्यकता पर्छ?',
     qEn: 'Do I need any middleman or external agent?',
-    aNe: 'बिल्कुल पर्दैन! मेरो कागजको मुख्य उद्देश्य नै नागरिकहरूलाई कुनै मध्यस्थकर्ता बिना घरमै बसेर आफ्नै हातले आधिकारिक सरकारी कागजातहरू तयार गर्न सक्षम बनाउनु हो।',
-    aEn: 'Not at all! Mero Kagaz is purpose-built to eliminate middleman dependencies, allowing citizens to generate official forms directly.',
+    aNe: 'बिल्कुल पर्दैन! मेरो कागजको मुख्य उद्देश्य नै नागरिकहरूलाई कुनै मध्यस्थकर्ता बिना घरमै बसेर आफ्नै हातले आधिकारिक सरकारी कागजातहरू तयार गर्न सक्षम बनाउनु हो, जसले तपाईंको हजारौं रुपैयाँ दलाल शुल्क बचत गर्छ।',
+    aEn: 'Not at all! Mero Kagaz is purpose-built to eliminate middleman dependencies, allowing individuals and businesses to generate official paperwork directly from home.',
   },
   {
+    id: 'data-privacy',
+    iconType: 'privacy',
     qNe: 'के मेरो व्यक्तिगत विवरण र कागजात सुरक्षित रहन्छ?',
     qEn: 'Is my personal information and document data safe?',
-    aNe: 'पूर्ण रूपमा सुरक्षित छ। हामी २५६-बिट आधुनिक इन्क्रिप्सन प्रयोग गर्दछौं र तपाईंको व्यक्तिगत विवरणहरू कुनै पनि तेस्रो पक्षलाई साझा गरिँदैन।',
-    aEn: 'Completely safe. We implement 256-bit encryption and strict privacy policies; your details are never shared with any third party.',
+    aNe: 'पूर्ण रूपमा सुरक्षित छ। हामी बैंक-स्तरको २५६-बिट आधुनिक इन्क्रिप्सन प्रयोग गर्दछौं। तपाईंको व्यक्तिगत विवरणहरू कुनै पनि तेस्रो पक्षलाई साझा गरिँदैन र कागजात उत्पादन प्रयोजनका लागि मात्र प्रयोग हुन्छ।',
+    aEn: 'Completely safe. We implement bank-grade 256-bit encryption and strict privacy protocols. Your details are never shared with any third party.',
+  },
+  {
+    id: 'edit-mistake',
+    iconType: 'edit',
+    qNe: 'फारम भर्दा कुनै विवरण गल्ती भएमा पछि सच्याउन मिल्छ?',
+    qEn: 'Can I edit my document details if I make a mistake?',
+    aNe: 'मिल्छ! फारम भर्दा लाइभ पूर्वावलोकन (Preview) मा विवरण हेर्न सकिन्छ। साथै, डाउनलोड गरिसकेपछि पनि आफ्नो प्रयोगकर्ता ड्यासबोर्ड वा अर्डर पृष्ठबाट विवरण सच्याएर पुनः निःशुल्क डाउनलोड गर्न सकिन्छ।',
+    aEn: 'Yes! You can review details in the live preview before generating. Furthermore, you can edit and re-download your document from your user dashboard at any time.',
   },
 ];
 
@@ -272,29 +301,12 @@ function toEnglishNumber(val?: string | null): string {
   return result;
 }
 
-function toNepaliNumber(val?: string | null): string {
-  if (!val) return '';
-  const asciiToDevanagari: Record<string, string> = {
-    '0': '०', '1': '१', '2': '२', '3': '३', '4': '४',
-    '5': '५', '6': '६', '7': '७', '8': '८', '9': '९',
-  };
-  let result = val.replace(/[0-9]/g, (char) => asciiToDevanagari[char] || char);
-  result = result
-    .replace(/\bMins?\b/gi, 'मिनेट')
-    .replace(/\bHours?\b/gi, 'घन्टा')
-    .replace(/\bDays?\b/gi, 'दिन')
-    .replace(/\bSecs?\b/gi, 'सेकेन्ड')
-    .replace(/\bago\b/gi, 'अघि');
-  return result;
-}
-
 export default function HomePage() {
   const { t, lang } = useLanguage();
   const isNe = lang === 'ne';
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'ird' | 'ocr' | 'legal' | 'ward'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'ocr' | 'ird' | 'legal' | 'ward'>('all');
   const [previewDoc, setPreviewDoc] = useState<DocumentItem | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
@@ -322,7 +334,7 @@ export default function HomePage() {
                 ? 'legal'
                 : 'ird';
 
-            const fee = Number(doc.price) === 0 ? 'निःशुल्क' : `NPR ${Number(doc.price).toLocaleString()}`;
+            const fee = Number(doc.price) === 0 ? 'निःशुल्क' : `रू ${Number(doc.price).toLocaleString()}`;
             const feeEn = Number(doc.price) === 0 ? 'Free' : `NPR ${Number(doc.price).toLocaleString()}`;
 
             return {
@@ -355,8 +367,8 @@ export default function HomePage() {
               feeEn: feeEn,
               estimatedTimeNe: doc.processing_time || '५ मिनेट',
               estimatedTimeEn: doc.processing_time || '5 mins',
-              badgeNe: Number(doc.price) === 0 ? 'निःशुल्क' : 'अत्यावश्यक',
-              badgeEn: Number(doc.price) === 0 ? 'Free' : 'Essential',
+              badgeNe: Number(doc.price) === 0 ? 'निःशुल्क' : (doc.slug.includes('suite') ? 'प्याकेज' : 'आधिकारिक'),
+              badgeEn: Number(doc.price) === 0 ? 'Free' : (doc.slug.includes('suite') ? 'Suite' : 'Official'),
               popular: Boolean(
                 (doc as any).is_popular ??
                 (doc.slug.includes('suite') ||
@@ -375,32 +387,8 @@ export default function HomePage() {
       })
       .catch(() => {});
 
-    api.settings.get()
-      .then((settings) => {
-        if (settings) {
-          setDynamicSettings(settings);
-        }
-      })
-      .catch(() => {});
-
-    api.cms.get()
-      .then((cmsData) => {
-        if (cmsData) {
-          setDynamicCms(cmsData);
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  // Close search suggestions on outside click
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
-        setIsSearchFocused(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    api.settings.get().then(s => s && setDynamicSettings(s)).catch(() => {});
+    api.cms.get().then(c => c && setDynamicCms(c)).catch(() => {});
   }, []);
 
   const allDocs = dynamicDocs.length > 0 ? dynamicDocs : SAMPLE_DOCUMENTS;
@@ -412,594 +400,200 @@ export default function HomePage() {
       const title = isNe ? doc.titleNe : doc.titleEn;
       const desc = isNe ? doc.descriptionNe : doc.descriptionEn;
       const cat = isNe ? doc.categoryLabelNe : doc.categoryLabelEn;
+      const dept = isNe ? (doc.departmentNe || '') : (doc.departmentEn || '');
       const matchesSearch =
         !query ||
         title.toLowerCase().includes(query) ||
         desc.toLowerCase().includes(query) ||
-        cat.toLowerCase().includes(query);
+        cat.toLowerCase().includes(query) ||
+        dept.toLowerCase().includes(query);
       return matchesCategory && matchesSearch;
     });
   }, [allDocs, searchQuery, selectedCategory, isNe]);
 
-  // Suggested documents for search dropdown
-  const suggestedDocs = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return allDocs.slice(0, 4);
-    }
-    return filteredDocs.slice(0, 5);
-  }, [allDocs, searchQuery, filteredDocs]);
+  // Content variables (Authentic Nepali GovTech tone)
+  const heroTrustBadge = isNe
+    ? 'नेपाल सरकारका निकायहरूद्वारा स्वीकृत मानक ढाँचा • १००% कानुनी मान्यता'
+    : 'Nepal Government & Statutory Compliant • 100% Legally Valid';
+  const heroTitle = isNe
+    ? 'सरकारी तथा कानुनी कागजातहरू'
+    : 'Official Nepal Government & Legal Documents';
+  const heroHighlight = isNe
+    ? 'अब आफ्नै हातले सजिलै बनाउनुहोस्'
+    : 'Prepared Easily Without Any Middlemen';
+  const heroSubtitle = isNe
+    ? 'आन्तरिक राजस्व (प्यान/भ्याट दर्ता), कम्पनी रजिष्ट्रार (प्रबन्धपत्र/नियमावली), वडा कार्यालयका सिफारिस तथा घर बहाल सम्झौता जस्ता सरकारी कागजातहरू दलाल वा लेखापढीको महँगो शुल्क बिना शुद्ध कालिमाटी युनिकोडमा ३ देखि ५ मिनेटमै तयार गरी प्रिन्ट-रेडी PDF डाउनलोड गर्नुहोस्।'
+    : 'Generate verified IRD Tax forms (PAN/VAT), OCR Company Registration (MOA/AOA), Ward applications, and Rent Agreements directly in standard Nepali Kalimati Unicode—ready to print and submit.';
 
-  // CMS Content variables (with standard translation fallback)
-  const heroTrustBadge = dynamicCms
-    ? (isNe ? dynamicCms.hero.badge_ne : dynamicCms.hero.badge_en)
-    : t('heroTrustBadge');
-  const heroTitlePrefix = dynamicCms
-    ? (isNe ? dynamicCms.hero.title_prefix_ne : dynamicCms.hero.title_prefix_en)
-    : t('heroTitlePrefix');
-  const heroTitleHighlight = dynamicCms
-    ? (isNe ? dynamicCms.hero.title_highlight_ne : dynamicCms.hero.title_highlight_en)
-    : t('heroTitleHighlight');
-  const heroTitleSuffix = dynamicCms
-    ? (isNe ? dynamicCms.hero.title_suffix_ne : dynamicCms.hero.title_suffix_en)
-    : t('heroTitleSuffix');
-  const heroSubtitle = dynamicCms
-    ? (isNe ? dynamicCms.hero.subtitle_ne : dynamicCms.hero.subtitle_en)
-    : t('heroSubtitle');
-
-  const deptPreTitle = dynamicCms
-    ? (isNe ? dynamicCms.departments.pre_title_ne : dynamicCms.departments.pre_title_en)
-    : t('deptPreTitle');
-  const deptMainTitle = dynamicCms
-    ? (isNe ? dynamicCms.departments.main_title_ne : dynamicCms.departments.main_title_en)
-    : t('deptMainTitle');
-  const deptSubtitle = dynamicCms
-    ? (isNe ? dynamicCms.departments.subtitle_ne : dynamicCms.departments.subtitle_en)
-    : t('deptSubtitle');
-  const deptIrdTitle = dynamicCms
-    ? (isNe ? dynamicCms.departments.ird_title_ne : dynamicCms.departments.ird_title_en)
-    : t('deptIrdTitle');
-  const deptIrdDesc = dynamicCms
-    ? (isNe ? dynamicCms.departments.ird_desc_ne : dynamicCms.departments.ird_desc_en)
-    : t('deptIrdDesc');
-  const deptOcrTitle = dynamicCms
-    ? (isNe ? dynamicCms.departments.ocr_title_ne : dynamicCms.departments.ocr_title_en)
-    : t('deptOcrTitle');
-  const deptOcrDesc = dynamicCms
-    ? (isNe ? dynamicCms.departments.ocr_desc_ne : dynamicCms.departments.ocr_desc_en)
-    : t('deptOcrDesc');
-  const deptLegalTitle = dynamicCms
-    ? (isNe ? dynamicCms.departments.legal_title_ne : dynamicCms.departments.legal_title_en)
-    : t('deptLegalTitle');
-  const deptLegalDesc = dynamicCms
-    ? (isNe ? dynamicCms.departments.legal_desc_ne : dynamicCms.departments.legal_desc_en)
-    : t('deptLegalDesc');
-
-  const workflowPreTitle = dynamicCms
-    ? (isNe ? dynamicCms.how_it_works.pre_title_ne : dynamicCms.how_it_works.pre_title_en)
-    : t('workflowPreTitle');
-  const workflowTitle = dynamicCms
-    ? (isNe ? dynamicCms.how_it_works.main_title_ne : dynamicCms.how_it_works.main_title_en)
-    : t('workflowTitle');
-  const workflowSubtitle = dynamicCms
-    ? (isNe ? dynamicCms.how_it_works.subtitle_ne : dynamicCms.how_it_works.subtitle_en)
-    : t('workflowSubtitle');
-  const workflowSteps = dynamicCms?.how_it_works?.steps?.length
-    ? dynamicCms.how_it_works.steps.map((st, i) => ({
-        num: isNe ? (i === 0 ? '१' : i === 1 ? '२' : '३') : String(st.step || i + 1),
-        title: isNe ? st.title_ne : st.title_en,
-        desc: isNe ? st.desc_ne : st.desc_en,
-        bg: i === 0 ? 'bg-[#123B5D] text-white' : i === 1 ? 'bg-[#18A999] text-white' : 'bg-[#F4B942] text-slate-900',
-      }))
-    : [
-        { num: isNe ? '१' : '1', title: t('step1Title'), desc: t('step1Desc'), bg: 'bg-[#123B5D] text-white' },
-        { num: isNe ? '२' : '2', title: t('step2Title'), desc: t('step2Desc'), bg: 'bg-[#18A999] text-white' },
-        { num: isNe ? '३' : '3', title: t('step3Title'), desc: t('step3Desc'), bg: 'bg-[#F4B942] text-slate-900' },
-      ];
-
-  const activeFaqs = dynamicCms?.faqs && dynamicCms.faqs.length > 0 ? dynamicCms.faqs : FAQS;
-
-  const ctaBadge = dynamicCms
-    ? (isNe ? dynamicCms.cta_banner.badge_ne : dynamicCms.cta_banner.badge_en)
-    : t('ctaBadge');
-  const ctaTitle = dynamicCms
-    ? (isNe ? dynamicCms.cta_banner.title_ne : dynamicCms.cta_banner.title_en)
-    : t('ctaTitle');
-  const ctaSubtitle = dynamicCms
-    ? (isNe ? dynamicCms.cta_banner.subtitle_ne : dynamicCms.cta_banner.subtitle_en)
-    : t('ctaSubtitle');
-  const ctaBtn1Text = dynamicCms
-    ? (isNe ? dynamicCms.cta_banner.btn1_text_ne : dynamicCms.cta_banner.btn1_text_en)
-    : t('ctaExploreBtn');
-  const ctaBtn1Link = dynamicCms?.cta_banner?.btn1_link || '/documents';
-  const ctaBtn2Text = dynamicCms
-    ? (isNe ? dynamicCms.cta_banner.btn2_text_ne : dynamicCms.cta_banner.btn2_text_en)
-    : t('ctaPanBtn');
-  const ctaBtn2Link = dynamicCms?.cta_banner?.btn2_link || '/documents/pan-registration-individual/form';
-
-  // Living Stats Values & Labels (strictly localized to Nepali or English)
-  const stat1Value = isNe
-    ? (dynamicSettings?.stats?.stat1_value_ne || dynamicSettings?.stats?.stat1_value || t('stat1Value'))
-    : (dynamicSettings?.stats?.stat1_value_en || toEnglishNumber(dynamicSettings?.stats?.stat1_value || t('stat1Value')));
-  const stat1Label = isNe
-    ? (dynamicSettings?.stats?.stat1_label_ne || t('stat1Label'))
-    : (dynamicSettings?.stats?.stat1_label_en || t('stat1Label'));
-
-  const stat2Value = isNe
-    ? (dynamicSettings?.stats?.stat2_value_ne || dynamicSettings?.stats?.stat2_value || t('stat2Value'))
-    : (dynamicSettings?.stats?.stat2_value_en || toEnglishNumber(dynamicSettings?.stats?.stat2_value || t('stat2Value')));
-  const stat2Label = isNe
-    ? (dynamicSettings?.stats?.stat2_label_ne || t('stat2Label'))
-    : (dynamicSettings?.stats?.stat2_label_en || t('stat2Label'));
-
-  const stat3Value = isNe
-    ? (dynamicSettings?.stats?.stat3_value_ne || dynamicSettings?.stats?.stat3_value || t('stat3Value'))
-    : (dynamicSettings?.stats?.stat3_value_en || toEnglishNumber(dynamicSettings?.stats?.stat3_value || t('stat3Value')));
-  const stat3Label = isNe
-    ? (dynamicSettings?.stats?.stat3_label_ne || t('stat3Label'))
-    : (dynamicSettings?.stats?.stat3_label_en || t('stat3Label'));
-
-  const stat4Value = isNe
-    ? (dynamicSettings?.stats?.stat4_value_ne || dynamicSettings?.stats?.stat4_value || t('stat4Value'))
-    : (dynamicSettings?.stats?.stat4_value_en || toEnglishNumber(dynamicSettings?.stats?.stat4_value || t('stat4Value')));
-  const stat4Label = isNe
-    ? (dynamicSettings?.stats?.stat4_label_ne || t('stat4Label'))
-    : (dynamicSettings?.stats?.stat4_label_en || t('stat4Label'));
+  const stat1Value = isNe ? '१५+' : '15+';
+  const stat1Label = isNe ? 'सरकारी ढाँचाहरू' : 'Official Templates';
+  const stat2Value = isNe ? '३-५ मिनेट' : '3-5 Mins';
+  const stat2Label = isNe ? 'औसत फारम भर्ने समय' : 'Avg. Completion Time';
+  const stat3Value = isNe ? '१००%' : '100%';
+  const stat3Label = isNe ? 'कालिमाटी युनिकोड A4' : 'Print-Ready Kalimati A4';
+  const stat4Value = isNe ? '०' : '0';
+  const stat4Label = isNe ? 'दलाल वा मध्यस्थकर्ता' : 'Zero Middleman Fees';
 
   return (
-    <div className="space-y-16 pb-20 overflow-hidden">
-      {/* ─── 1. Refined GovTech SaaS Hero Section ─── */}
-      <section className="relative overflow-hidden bg-[#071927] px-4 pt-16 pb-24 text-white sm:px-6 lg:px-8">
-        {/* Deep Architectural Mesh & Gradient Lighting */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_90%_at_50%_-15%,#164E7A_0%,#0C2740_45%,#071927_100%)]"></div>
-
-        {/* Ambient Glowing Aurora Blooms */}
-        <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[720px] sm:w-[980px] h-[360px] rounded-full bg-gradient-to-b from-teal-400/25 via-[#18A999]/15 to-transparent blur-3xl"></div>
-        <div className="pointer-events-none absolute -top-10 -left-20 w-[420px] h-[420px] rounded-full bg-sky-500/15 blur-3xl animate-pulse-soft"></div>
-        <div className="pointer-events-none absolute top-10 -right-20 w-[420px] h-[420px] rounded-full bg-amber-400/15 blur-3xl"></div>
-        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-slate-950/60 to-transparent"></div>
-
-        {/* Modern Engineering Blueprint Grid with Radial Falloff */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.16]"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px',
-            maskImage: 'radial-gradient(ellipse 75% 65% at 50% 35%, black 25%, transparent 85%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 75% 65% at 50% 35%, black 25%, transparent 85%)',
-          }}
-        />
-
-        {/* Subtle Concentric Alignment Rings */}
-        <div className="pointer-events-none absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 w-[720px] h-[720px] rounded-full border border-teal-300/[0.07] animate-pulse-soft"></div>
-        <div className="pointer-events-none absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 w-[1080px] h-[1080px] rounded-full border border-white/[0.03]"></div>
-
-        {/* Floating Glassmorphic Verification Badges (Desktop Flanks) */}
-        {/* Left Flank Card */}
-        <div className="animate-float-slow pointer-events-none hidden xl:flex absolute left-6 2xl:left-14 top-28 z-10 flex-col gap-2 rounded-2xl border border-white/15 bg-white/[0.08] p-3.5 shadow-2xl backdrop-blur-xl w-60">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shadow-xs">
-              <ShieldCheck className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-white leading-tight">
-                {isNe ? 'सरकारी ढाँचा प्रमाणित' : 'Government Verified'}
-              </div>
-              <div className="text-[10px] text-emerald-300 font-semibold flex items-center gap-1.5 mt-0.5">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span>{isNe ? 'आधिकारिक ढाँचा (Standard)' : 'IRD & OCR Standard'}</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between text-[10px] text-slate-300 border-t border-white/10 pt-2 font-mono">
-            <span>नेपाल सरकार ऐन, २०६३</span>
-            <span className="text-teal-300 font-bold">● Valid</span>
-          </div>
-        </div>
-
-        {/* Right Flank Card */}
-        <div className="animate-float-delayed pointer-events-none hidden xl:flex absolute right-6 2xl:right-14 top-36 z-10 flex-col gap-2 rounded-2xl border border-white/15 bg-white/[0.08] p-3.5 shadow-2xl backdrop-blur-xl w-60">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/20 text-teal-300 border border-teal-400/30 shadow-xs">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-white leading-tight">
-                {isNe ? 'तुरुन्त प्रिन्ट-तयार PDF' : 'Instant Print-Ready PDF'}
-              </div>
-              <div className="text-[10px] text-teal-300 font-semibold flex items-center gap-1 mt-0.5">
-                <Clock className="h-3 w-3 text-amber-300" />
-                <span>{isNe ? 'औसत ३ देखि ५ मिनेट' : 'Ready in 3-5 Mins'}</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between text-[10px] text-slate-300 border-t border-white/10 pt-2 font-mono">
-            <span>Kalimati Unicode</span>
-            <span className="text-amber-300 font-bold">A4 Print</span>
-          </div>
-        </div>
+    <div className="space-y-16 pb-24 overflow-hidden">
+      {/* ─── 1. Enhanced, Luminous & Appealing Hero Banner ─── */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-teal-50/40 via-white to-[#F8FAFC] px-4 pt-16 pb-16 text-slate-900 sm:px-6 lg:px-8 border-b border-slate-200/80">
+        {/* Soft, delicate backdrop ambient glow */}
+        <div className="pointer-events-none absolute -top-28 left-1/2 -translate-x-1/2 w-[850px] h-[400px] bg-gradient-to-b from-teal-100/50 via-teal-50/20 to-transparent blur-3xl rounded-full" />
+        <div className="pointer-events-none absolute top-1/2 right-10 w-[350px] h-[350px] bg-sky-100/30 blur-3xl rounded-full" />
 
         <div className="relative mx-auto max-w-4xl text-center z-10">
-          {/* Trust Badge Pill */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-teal-400/30 bg-teal-500/15 px-4 py-1.5 text-xs font-semibold text-[#E6F6F3] backdrop-blur-md shadow-inner transition hover:bg-teal-500/25">
-            <span className="text-base">🇳🇵</span>
-            <span>{heroTrustBadge}</span>
-            <span className="h-1.5 w-1.5 rounded-full bg-[#18A999] animate-pulse"></span>
+          {/* Subtle GovTech Trust Pill */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-teal-200 bg-teal-50/90 px-3.5 py-1.5 text-xs font-bold text-[#148C7E] shadow-2xs">
+            <span className="flex h-2 w-2 rounded-full bg-[#18A999] animate-pulse" />
+            <img
+              src="/assets/nepal-flag.gif"
+              alt="नेपालको झण्डा"
+              className="h-4 w-auto object-contain shrink-0 inline-block drop-shadow-2xs"
+            />
+            <span>{isNe ? 'नेपाल सरकार स्वीकृत आधिकारिक प्रारूप • १००% कानुनी मान्यता' : 'Official Nepal Statutory Standards • 100% Legally Valid'}</span>
           </div>
 
-          {/* Main Title with Clean Hierarchy */}
-          <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.15]">
-            {heroTitlePrefix}{' '}
-            <span className="bg-gradient-to-r from-teal-300 via-teal-200 to-amber-300 bg-clip-text text-transparent">
-              {heroTitleHighlight}
-            </span>{' '}
-            {heroTitleSuffix}
+          {/* Bold, Catchy & Engaging Headline */}
+          <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-[#123B5D] sm:text-5xl lg:text-6xl sm:leading-[1.15]">
+            {isNe ? 'सरकारी तथा कानुनी कागजातहरू' : 'Government & Legal Paperwork'} <br />
+            <span className="bg-gradient-to-r from-[#18A999] via-[#148C7E] to-[#123B5D] bg-clip-text text-transparent">
+              {isNe ? 'अब आफ्नै हातले सजिलै बनाउनुहोस्' : 'Prepared Easily Without Any Middlemen'}
+            </span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-200 sm:text-base">
-            {heroSubtitle}
+          {/* Clean, High-Clarity Citizen Subtitle */}
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base font-normal">
+            {isNe
+              ? 'दलाल र लेखापढीको महँगो शुल्क बिना—प्यान (PAN), कम्पनी दर्ता (MOA/AOA), घर बहाल सम्झौता र वडा सिफारिसहरू शुद्ध कालिमाटी युनिकोडमा ३ मिनेटमै तयार गरी प्रिन्ट-रेडी PDF डाउनलोड गर्नुहोस्।'
+              : 'Generate verified PAN forms, OCR company registration suites, and rent agreements in standard Kalimati Unicode within minutes—100% legal, print-ready, and middleman-free.'}
           </p>
 
-          {/* Clean Search Input with Ambient Glow */}
-          <div ref={searchContainerRef} className="relative mx-auto mt-8 max-w-2xl text-left group">
-            <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-teal-500/30 via-amber-400/20 to-teal-500/30 opacity-70 blur-xl pointer-events-none transition duration-500 group-hover:opacity-100"></div>
-            <div className="relative flex items-center rounded-2xl border border-white/25 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all focus-within:border-[#18A999] focus-within:ring-4 focus-within:ring-[#18A999]/30">
-              <span className="pl-4 text-slate-400">
-                <Search className="h-5 w-5 text-slate-400" />
+          {/* Clean, High-Contrast Floating Search Box */}
+          <div ref={searchContainerRef} className="relative mx-auto mt-8 max-w-2xl text-left">
+            <div className="relative flex items-center rounded-2xl border-2 border-slate-200/90 bg-white p-2 shadow-xl shadow-slate-200/60 transition-all focus-within:border-[#18A999] focus-within:ring-4 focus-within:ring-teal-100">
+              <span className="pl-3.5 text-slate-400">
+                <Search className="h-5 w-5 text-[#18A999]" />
               </span>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder={t('searchPlaceholder')}
-                className="w-full bg-transparent px-3 py-3 text-sm font-outfit text-[#17212B] placeholder-slate-400 focus:outline-none"
+                placeholder={isNe ? 'कुन फारम खोज्दै हुनुहुन्छ? (उदा: PAN, MOA, घर बहाल सम्झौता...)' : 'Search official forms (e.g. PAN, MOA, Rent Deed, Annual Return)...'}
+                className="w-full bg-transparent px-3 py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none font-medium"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="mr-2 rounded-lg p-1 text-xs font-bold text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+                  className="mr-2 rounded-lg p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+                  title="Clear search"
                 >
                   <X className="h-4 w-4" />
                 </button>
               )}
               <Link
-                href={`/documents${searchQuery ? `?search=${encodeURIComponent(searchQuery)}` : ''}`}
-                className="btn-shimmer shrink-0 rounded-xl bg-[#18A999] px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#148C7E] active:scale-95"
+                href={`#document-directory`}
+                onClick={() => {
+                  document.getElementById('document-directory')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="shrink-0 rounded-xl bg-gradient-to-r from-[#18A999] to-[#148C7E] px-6 py-3 text-xs font-bold text-white shadow-md shadow-teal-500/20 transition hover:from-[#148C7E] hover:to-[#0f6c61]"
               >
                 {t('searchButton')}
               </Link>
             </div>
 
-            {/* Quick search tags */}
-            <div className="mt-3.5 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-300">
-              <span className="text-slate-400 font-medium">{t('searchPopularLabel')}</span>
-              {(isNe
-                ? dynamicSettings?.popular_tags_ne || ['व्यक्तिगत PAN', 'कम्पनी MOA', 'VAT फारम', 'घर बहाल सम्झौता']
-                : dynamicSettings?.popular_tags_en || ['Personal PAN', 'Company MOA', 'VAT Form', 'Rent Agreement']
-              ).map(tag => (
+            {/* Quick Department Shortcuts */}
+            <div className="mt-3.5 flex flex-wrap items-center justify-center gap-2 text-xs">
+              <span className="text-[11px] font-bold text-slate-400">{isNe ? 'लोकप्रिय ढाँचाहरू:' : 'Popular:'}</span>
+              {[
+                { label: isNe ? 'व्यक्तिगत PAN' : 'Individual PAN', q: 'PAN', icon: <Landmark className="h-3 w-3 text-teal-600" /> },
+                { label: isNe ? 'कम्पनी MOA/AOA' : 'Company MOA/AOA', q: 'MOA', icon: <Building2 className="h-3 w-3 text-blue-600" /> },
+                { label: isNe ? 'घर बहाल सम्झौता' : 'Rent Deed', q: 'बहाल', icon: <FileText className="h-3 w-3 text-emerald-600" /> },
+                { label: isNe ? 'वार्षिक अनुपालन (४-इन-१)' : 'Annual Suite (4-in-1)', q: 'वार्षिक', icon: <Layers className="h-3 w-3 text-amber-600" /> },
+              ].map(tag => (
                 <button
                   type="button"
-                  key={tag}
-                  onClick={() => setSearchQuery(tag)}
-                  className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-slate-200 transition-all hover:bg-[#18A999] hover:text-white hover:border-[#18A999] active:scale-95"
+                  key={tag.label}
+                  onClick={() => {
+                    setSearchQuery(tag.q);
+                    document.getElementById('document-directory')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 shadow-2xs transition hover:border-[#18A999] hover:text-[#18A999] hover:bg-teal-50/50"
                 >
-                  {tag}
+                  {tag.icon}
+                  <span>{tag.label}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Living Key Metrics Counters (Now Truly Bilingual & Visually Enhanced) */}
-          <div className="mt-12 grid grid-cols-2 gap-3.5 sm:gap-4.5 border-t border-white/10 pt-8 sm:grid-cols-4">
-            {/* Stat 1 */}
-            <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.07] hover:bg-white/[0.12] hover:border-amber-400/40 p-4.5 backdrop-blur-xl transition-all duration-300 shadow-xl group hover:-translate-y-1">
-              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-400 to-amber-200 opacity-80" />
-              <p className="text-2xl font-extrabold text-[#F4B942] sm:text-3xl font-outfit tracking-tight">
-                {stat1Value}
-              </p>
-              <p className="mt-1.5 text-xs font-medium text-slate-200">
-                {stat1Label}
-              </p>
+          {/* 4 Key Platform Stats Banner */}
+          <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto pt-4 border-t border-slate-200/70">
+            <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-2xs text-center backdrop-blur-xs">
+              <span className="text-xl sm:text-2xl font-black text-[#123B5D] font-outfit">{stat1Value}</span>
+              <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{stat1Label}</p>
             </div>
-
-            {/* Stat 2 */}
-            <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.07] hover:bg-white/[0.12] hover:border-teal-400/40 p-4.5 backdrop-blur-xl transition-all duration-300 shadow-xl group hover:-translate-y-1">
-              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#18A999] to-teal-200 opacity-80" />
-              <p className="text-2xl font-extrabold text-[#2dd4bf] sm:text-3xl font-outfit tracking-tight">
-                {stat2Value}
-              </p>
-              <p className="mt-1.5 text-xs font-medium text-slate-200">
-                {stat2Label}
-              </p>
+            <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-2xs text-center backdrop-blur-xs">
+              <span className="text-xl sm:text-2xl font-black text-[#18A999] font-outfit">{stat2Value}</span>
+              <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{stat2Label}</p>
             </div>
-
-            {/* Stat 3 */}
-            <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.07] hover:bg-white/[0.12] hover:border-sky-400/40 p-4.5 backdrop-blur-xl transition-all duration-300 shadow-xl group hover:-translate-y-1">
-              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-sky-400 to-cyan-200 opacity-80" />
-              <p className="text-2xl font-extrabold text-white sm:text-3xl font-outfit tracking-tight">
-                {stat3Value}
-              </p>
-              <p className="mt-1.5 text-xs font-medium text-slate-200">
-                {stat3Label}
-              </p>
+            <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-2xs text-center backdrop-blur-xs">
+              <span className="text-xl sm:text-2xl font-black text-[#123B5D] font-outfit">{stat3Value}</span>
+              <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{stat3Label}</p>
             </div>
-
-            {/* Stat 4 */}
-            <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.07] hover:bg-white/[0.12] hover:border-amber-300/40 p-4.5 backdrop-blur-xl transition-all duration-300 shadow-xl group hover:-translate-y-1">
-              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-400 to-rose-300 opacity-80" />
-              <p className="text-2xl font-extrabold text-[#F4B942] sm:text-3xl font-outfit tracking-tight">
-                {stat4Value}
-              </p>
-              <p className="mt-1.5 text-xs font-medium text-slate-200">
-                {stat4Label}
-              </p>
+            <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-2xs text-center backdrop-blur-xs">
+              <span className="text-xl sm:text-2xl font-black text-emerald-600 font-outfit">{stat4Value}</span>
+              <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{stat4Label}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── 2. Real-Time Activity Ticker ─── */}
-      <div className="-mt-8 mx-auto max-w-6xl px-4 z-20 relative">
-        <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-3 shadow-md">
-          <div className="flex items-center gap-3">
-            <div className="shrink-0 flex items-center gap-2 rounded-xl bg-[#123B5D] px-3 py-1.5 text-xs font-bold text-white shadow-xs">
-              <Activity className="h-3.5 w-3.5 text-[#18A999] animate-pulse" />
-              <span>{isNe ? 'प्रत्यक्ष गतिविधि' : 'Live Activity'}</span>
-            </div>
-            <div className="overflow-hidden whitespace-nowrap mask-gradient flex-1">
-              <div className="animate-marquee gap-8 py-0.5 text-xs text-slate-600">
-                {(dynamicSettings?.live_activities || LIVE_ACTIVITIES)
-                  .concat(dynamicSettings?.live_activities || LIVE_ACTIVITIES)
-                  .map((item, idx) => (
-                  <div key={idx} className="inline-flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                    <span className="font-bold text-[#123B5D]">{isNe ? item.cityNe : item.cityEn}:</span>
-                    <span>{isNe ? item.docNe : item.docEn}</span>
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] text-slate-500 font-outfit">
-                      {isNe ? item.timeNe : item.timeEn}
-                    </span>
-                    <span className="text-slate-300 ml-3">•</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ─── 2.5. Curated Popular & Essential Documents Showcase (Above Department Cards) ─── */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+      {/* ─── 2. Unified, Clean Document Catalog ─── */}
+      <section id="document-directory" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-2">
+        {/* Section Header with Clean Filter Tabs */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-5">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#18A999]">
-              <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-              <span>{isNe ? 'अत्यावश्यक तथा लोकप्रिय कागजातहरू' : 'Popular & Essential Documents'}</span>
-            </div>
-            <h2 className="mt-1 text-2xl font-bold text-[#123B5D] sm:text-3xl">
-              {isNe ? 'सबैभन्दा धेरै प्रयोग गरिएका आधिकारिक ढाँचाहरू' : 'Most Popular Statutory Templates'}
+            <span className="text-xs font-bold uppercase tracking-wider text-[#18A999]">
+              {isNe ? 'कागजात निर्देशिका' : 'DOCUMENT DIRECTORY'}
+            </span>
+            <h2 className="mt-1 text-2xl font-extrabold text-[#123B5D] sm:text-3xl">
+              {isNe ? 'उपलब्ध आधिकारिक फारम तथा ढाँचाहरू' : 'Statutory Templates & Forms'}
             </h2>
-          </div>
-          <Link
-            href="/documents"
-            className="inline-flex items-center gap-1 text-xs font-bold text-[#18A999] hover:text-[#148C7E] transition group"
-          >
-            <span>{isNe ? 'सबै कागजातहरू हेर्नुहोस्' : 'Browse All Documents'}</span>
-            <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
-          </Link>
-        </div>
-
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {allDocs.filter(d => d.popular).slice(0, 4).map((doc) => {
-            const title = isNe ? doc.titleNe : doc.titleEn;
-            const desc = isNe ? doc.descriptionNe : doc.descriptionEn;
-            const fee = isNe ? doc.feeNe : doc.feeEn;
-            const badge = isNe ? doc.badgeNe : doc.badgeEn;
-            return (
-              <div
-                key={doc.id}
-                className="group relative flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs transition-all duration-200 hover:border-teal-300 hover:shadow-md"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="rounded-full bg-teal-50 border border-teal-100 px-2.5 py-0.5 text-[10px] font-bold text-[#148C7E]">
-                      {badge || (isNe ? 'लोकप्रिय' : 'Popular')}
-                    </span>
-                    <span className="text-xs font-bold text-[#123B5D] font-outfit">
-                      {fee}
-                    </span>
-                  </div>
-
-                  <Link href={`/documents/${doc.slug}/form`} className="block">
-                    <h3 className="text-sm font-bold text-[#123B5D] group-hover:text-[#18A999] transition leading-snug line-clamp-2">
-                      {title}
-                    </h3>
-                  </Link>
-
-                  <p className="mt-2 text-xs leading-relaxed text-slate-500 line-clamp-2">
-                    {desc}
-                  </p>
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    ⏱️ {isNe ? doc.estimatedTimeNe : doc.estimatedTimeEn}
-                  </span>
-                  <Link
-                    href={`/documents/${doc.slug}/form`}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#18A999] hover:text-[#148C7E] transition"
-                  >
-                    <span>{isNe ? 'फारम भर्नुहोस्' : 'Fill Form'}</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ─── 3. Government Department Cards with Interactive Hover Reaction ─── */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ScrollReveal animation="animate-slide-up" className="mb-8 text-center">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#18A999]">{deptPreTitle}</span>
-          <h2 className="mt-1 text-2xl font-bold text-[#123B5D] sm:text-3xl">{deptMainTitle}</h2>
-          <p className="mt-2 text-sm text-slate-600">{deptSubtitle}</p>
-        </ScrollReveal>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {/* Card 1: IRD */}
-          <ScrollReveal delay="delay-100" className="h-full">
-            <div
-              onClick={() => setSelectedCategory('ird')}
-              role="button"
-              className={`group card-elevate rounded-3xl border p-7 cursor-pointer bg-white transition-all duration-300 h-full flex flex-col justify-between ${
-                selectedCategory === 'ird'
-                  ? 'border-[#18A999] ring-2 ring-[#18A999] shadow-xl'
-                  : 'border-slate-200/90 hover:border-[#18A999]'
-              }`}
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#123B5D]/10 text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-[#123B5D] group-hover:text-white shadow-2xs">
-                    🏛️
-                  </div>
-                  <span className="rounded-full border border-teal-200/70 bg-teal-50/80 px-3 py-1 text-xs font-bold text-[#18A999] font-outfit transition-all duration-300 group-hover:bg-[#18A999] group-hover:text-white group-hover:scale-105 shadow-2xs">
-                    {allDocs.filter(d => d.category === 'ird').length} Forms
-                  </span>
-                </div>
-                <h3 className="mt-5 text-lg font-bold text-[#123B5D] group-hover:text-[#18A999] transition-colors duration-200">
-                  {deptIrdTitle}
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                  {deptIrdDesc}
-                </p>
-              </div>
-              <div className="mt-6 flex items-center justify-between text-xs font-bold text-[#18A999] border-t border-slate-50 pt-3">
-                <span className="transition-all group-hover:translate-x-1">{t('deptCardCta')}</span>
-                <span className="transition-transform duration-300 group-hover:translate-x-2 text-sm">&rarr;</span>
-              </div>
-            </div>
-          </ScrollReveal>
-
-          {/* Card 2: OCR */}
-          <ScrollReveal delay="delay-200" className="h-full">
-            <div
-              onClick={() => setSelectedCategory('ocr')}
-              role="button"
-              className={`group card-elevate rounded-3xl border p-7 cursor-pointer bg-white transition-all duration-300 h-full flex flex-col justify-between ${
-                selectedCategory === 'ocr'
-                  ? 'border-[#18A999] ring-2 ring-[#18A999] shadow-xl'
-                  : 'border-slate-200/90 hover:border-[#18A999]'
-              }`}
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#18A999]/10 text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-[#18A999] group-hover:text-white shadow-2xs">
-                    🏢
-                  </div>
-                  <span className="rounded-full border border-teal-200/70 bg-teal-50/80 px-3 py-1 text-xs font-bold text-[#18A999] font-outfit transition-all duration-300 group-hover:bg-[#18A999] group-hover:text-white group-hover:scale-105 shadow-2xs">
-                    {allDocs.filter(d => d.category === 'ocr').length} Forms
-                  </span>
-                </div>
-                <h3 className="mt-5 text-lg font-bold text-[#123B5D] group-hover:text-[#18A999] transition-colors duration-200">
-                  {deptOcrTitle}
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                  {deptOcrDesc}
-                </p>
-              </div>
-              <div className="mt-6 flex items-center justify-between text-xs font-bold text-[#18A999] border-t border-slate-50 pt-3">
-                <span className="transition-all group-hover:translate-x-1">{t('deptCardCta')}</span>
-                <span className="transition-transform duration-300 group-hover:translate-x-2 text-sm">&rarr;</span>
-              </div>
-            </div>
-          </ScrollReveal>
-
-          {/* Card 3: Legal & Contracts */}
-          <ScrollReveal delay="delay-300" className="h-full">
-            <div
-              onClick={() => setSelectedCategory('legal')}
-              role="button"
-              className={`group card-elevate rounded-3xl border p-7 cursor-pointer bg-white transition-all duration-300 h-full flex flex-col justify-between ${
-                selectedCategory === 'legal'
-                  ? 'border-[#18A999] ring-2 ring-[#18A999] shadow-xl'
-                  : 'border-slate-200/90 hover:border-[#18A999]'
-              }`}
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F4B942]/15 text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-[#F4B942] group-hover:text-slate-900 shadow-2xs">
-                    ⚖️
-                  </div>
-                  <span className="rounded-full border border-amber-200/70 bg-amber-50/80 px-3 py-1 text-xs font-bold text-[#DFA32B] font-outfit transition-all duration-300 group-hover:bg-[#DFA32B] group-hover:text-white group-hover:scale-105 shadow-2xs">
-                    {allDocs.filter(d => d.category === 'legal').length} Forms
-                  </span>
-                </div>
-                <h3 className="mt-5 text-lg font-bold text-[#123B5D] group-hover:text-[#18A999] transition-colors duration-200">
-                  {deptLegalTitle}
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                  {deptLegalDesc}
-                </p>
-              </div>
-              <div className="mt-6 flex items-center justify-between text-xs font-bold text-[#18A999] border-t border-slate-50 pt-3">
-                <span className="transition-all group-hover:translate-x-1">{t('deptCardCta')}</span>
-                <span className="transition-transform duration-300 group-hover:translate-x-2 text-sm">&rarr;</span>
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ─── 4. Reactive Filterable Document Directory ─── */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ScrollReveal animation="animate-fade-in" className="flex flex-col items-start justify-between gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-center">
-          <div>
-            <h2 className="text-xl font-bold text-[#123B5D] flex items-center gap-2">
-              <Layers className="h-5 w-5 text-[#18A999]" />
-              <span>{isNe ? 'उपलब्ध कागजात तथा फारमहरू' : 'Available Documents & Forms'}</span>
-            </h2>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="mt-1 text-xs text-slate-500">
               {isNe
-                ? `कुल ${filteredDocs.length} आधिकारिक फारमहरू उपलब्ध`
-                : `Showing ${filteredDocs.length} official templates`}
+                ? `नेपाल सरकारका विभिन्न निकायका लागि कुल ${filteredDocs.length} आधिकारिक फारमहरू उपलब्ध छन्।`
+                : `Showing ${filteredDocs.length} verified government-compliant statutory templates.`}
             </p>
           </div>
 
-          {/* Interactive Filter Pills */}
-          <div className="flex flex-wrap gap-2">
+          {/* Clean Segmented Category Tabs */}
+          <div className="flex flex-wrap gap-1.5">
             {[
-              { id: 'all', label: t('filterAll'), count: allDocs.length },
-              { id: 'ird', label: t('filterIrd'), count: allDocs.filter(d => d.category === 'ird').length },
-              { id: 'ocr', label: t('filterOcr'), count: allDocs.filter(d => d.category === 'ocr').length },
-              { id: 'legal', label: t('filterLegal'), count: allDocs.filter(d => d.category === 'legal').length },
+              { id: 'all', label: isNe ? 'सबै फारमहरू' : 'All Documents', count: allDocs.length, icon: <Layers className="h-3.5 w-3.5" /> },
+              { id: 'ocr', label: isNe ? 'कम्पनी दर्ता (OCR)' : 'Company (OCR)', count: allDocs.filter(d => d.category === 'ocr').length, icon: <Building2 className="h-3.5 w-3.5" /> },
+              { id: 'ird', label: isNe ? 'कर तथा प्यान (IRD)' : 'Tax (IRD)', count: allDocs.filter(d => d.category === 'ird').length, icon: <Landmark className="h-3.5 w-3.5" /> },
+              { id: 'legal', label: isNe ? 'करारनामा (Legal)' : 'Contracts', count: allDocs.filter(d => d.category === 'legal').length, icon: <Scale className="h-3.5 w-3.5" /> },
               ...(allDocs.some(d => d.category === 'ward')
-                ? [{ id: 'ward', label: isNe ? 'वडा सिफारिस' : 'Ward & Local', count: allDocs.filter(d => d.category === 'ward').length }]
+                ? [{ id: 'ward', label: isNe ? 'वडा सिफारिस' : 'Ward Office', count: allDocs.filter(d => d.category === 'ward').length, icon: <FileText className="h-3.5 w-3.5" /> }]
                 : []),
             ].map(tab => (
               <button
                 type="button"
                 key={tab.id}
                 onClick={() => setSelectedCategory(tab.id as any)}
-                className={`group widget-click inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-xs font-bold transition-all duration-300 ${
+                className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer ${
                   selectedCategory === tab.id
-                    ? 'bg-[#123B5D] text-white shadow-lg shadow-[#123B5D]/25 ring-2 ring-[#123B5D]/20 scale-105'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:border-[#18A999]/40 hover:bg-slate-50 hover:scale-[1.02]'
+                    ? 'bg-[#123B5D] text-white shadow-xs'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
+                {tab.icon}
                 <span>{tab.label}</span>
                 <span
-                  className={`rounded-full px-2 py-0.5 text-[11px] font-outfit font-bold transition-transform duration-300 group-hover:scale-110 ${
-                    selectedCategory === tab.id
-                      ? 'bg-white/20 text-white'
-                      : 'bg-slate-100 text-slate-600'
+                  className={`rounded-full px-1.5 py-0.2 text-[10px] font-outfit ${
+                    selectedCategory === tab.id ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
                   }`}
                 >
                   {tab.count}
@@ -1007,89 +601,120 @@ export default function HomePage() {
               </button>
             ))}
           </div>
-        </ScrollReveal>
+        </div>
 
-        {/* Documents Grid with Tactile Cards */}
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredDocs.map((doc, idx) => {
+        {/* Clean, Spacious Document Cards Grid (Limited to 2 rows = max 6 documents) */}
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredDocs.slice(0, 6).map((doc) => {
             const title = isNe ? doc.titleNe : doc.titleEn;
-            const categoryLabel = isNe ? doc.categoryLabelNe : doc.categoryLabelEn;
             const desc = isNe ? doc.descriptionNe : doc.descriptionEn;
             const fee = isNe ? doc.feeNe : doc.feeEn;
             const time = isNe ? doc.estimatedTimeNe : doc.estimatedTimeEn;
-            const badge = isNe ? doc.badgeNe : doc.badgeEn;
-            const staggerDelay = idx % 3 === 0 ? 'delay-100' : idx % 3 === 1 ? 'delay-200' : 'delay-300';
+            const isSuite = doc.slug.includes('suite');
 
             return (
-              <ScrollReveal key={doc.id} delay={staggerDelay as any} animation="animate-slide-up" className="h-full">
-                <div
-                  className="group card-elevate flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-7 shadow-xs hover:border-[#18A999]/50 h-full"
-                >
-                  <div>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="rounded-full badge-shimmer-teal border border-teal-200/70 px-3 py-1 text-xs font-bold text-[#18A999] font-outfit transition-transform duration-300 group-hover:scale-105 shadow-2xs">
-                        {categoryLabel}
-                      </span>
-                      {badge && (
-                        <span className="rounded-full animate-badge-pulse badge-shimmer-gold border border-amber-300/80 px-2.5 py-1 text-[11px] font-extrabold text-amber-800 flex items-center gap-1.5 shadow-2xs">
-                          <Sparkles className="h-3 w-3 text-amber-600" />
-                          <span>{badge}</span>
-                        </span>
+              <div
+                key={doc.id}
+                className={`group flex flex-col justify-between rounded-2xl bg-white p-5 transition-all duration-200 shadow-2xs hover:shadow-md hover:-translate-y-0.5 border ${
+                  isSuite
+                    ? 'border-teal-400 ring-2 ring-teal-100/70 bg-gradient-to-b from-teal-50/20 to-white'
+                    : 'border-slate-200/90 hover:border-[#18A999]/80'
+                }`}
+              >
+                <div>
+                  {/* Clean Top Meta: Icon + Time + Suite indicator */}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                      {doc.category === 'ocr' ? (
+                        <Building2 className="h-4 w-4 text-slate-400" />
+                      ) : doc.category === 'ird' ? (
+                        <Landmark className="h-4 w-4 text-slate-400" />
+                      ) : (
+                        <Scale className="h-4 w-4 text-slate-400" />
                       )}
+                      <span>{time}</span>
                     </div>
 
-                    <h3 className="mt-4 text-base font-bold text-[#123B5D] leading-snug group-hover:text-[#18A999] transition-colors duration-200">
+                    {isSuite && (
+                      <span className="rounded-md bg-amber-50 border border-amber-200/90 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                        {isNe ? 'संयुक्त प्याकेज' : 'Full Package'}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Title */}
+                  <Link href={`/documents/${doc.slug}/form`} className="block">
+                    <h3 className="text-base font-bold text-[#123B5D] group-hover:text-[#18A999] transition leading-snug line-clamp-2">
                       {title}
                     </h3>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-600 line-clamp-3">
-                      {desc}
-                    </p>
+                  </Link>
+
+                  {/* Short Description */}
+                  <p className="mt-2 text-xs leading-relaxed text-slate-500 line-clamp-2">
+                    {desc}
+                  </p>
+                </div>
+
+                {/* Bottom Metadata & Clean CTAs */}
+                <div className="mt-5 border-t border-slate-100 pt-3.5">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className={`text-base font-bold font-outfit ${fee.includes('निःशुल्क') || fee.toLowerCase().includes('free') ? 'text-emerald-600' : 'text-[#123B5D]'}`}>
+                      {fee}
+                    </span>
+                    <span className="text-[11px] font-medium text-slate-400">
+                      {isNe ? 'A4 ढाँचा' : 'A4 Print Ready'}
+                    </span>
                   </div>
 
-                  <div className="mt-6 border-t border-slate-100 pt-4">
-                    <div className="flex items-center justify-between text-xs text-slate-500 mb-3.5">
-                      <span className="flex items-center gap-1.5 font-medium group-hover:text-slate-700 transition-colors">
-                        <Clock className="h-3.5 w-3.5 text-slate-400 transition-transform duration-500 group-hover:rotate-45" />
-                        <span>{time}</span>
-                      </span>
-                      <span className="text-base font-extrabold text-[#123B5D] font-outfit group-hover:text-[#18A999] transition-colors">
-                        {fee}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      <button
-                        type="button"
-                        onClick={() => setPreviewDoc(doc)}
-                        className="group/btn widget-click inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50/80 py-2.5 text-xs font-bold text-slate-700 transition-all hover:bg-white hover:border-[#18A999] hover:text-[#18A999] hover:shadow-xs"
-                      >
-                        <Eye className="h-3.5 w-3.5 text-slate-400 transition-transform duration-300 group-hover/btn:scale-125 group-hover/btn:text-[#18A999]" />
-                        <span>{isNe ? 'पूर्वावलोकन' : 'Quick View'}</span>
-                      </button>
-                      <Link
-                        href={`/documents/${doc.slug}/form`}
-                        className="group/fill btn-shimmer widget-click inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-[#18A999] to-[#148C7E] py-2.5 text-xs font-bold text-white shadow-md shadow-teal-500/20 transition-all hover:shadow-lg hover:shadow-teal-500/30"
-                      >
-                        <span>{t('cardFormBtn')}</span>
-                        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/fill:translate-x-1.5" />
-                      </Link>
-                    </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewDoc(doc)}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2 text-xs font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-50 transition cursor-pointer"
+                    >
+                      <Eye className="h-3.5 w-3.5 text-slate-400" />
+                      <span>{isNe ? 'पूर्वावलोकन' : 'Quick View'}</span>
+                    </button>
+                    <Link
+                      href={`/documents/${doc.slug}/form`}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#123B5D] hover:bg-[#18A999] py-2 text-xs font-semibold text-white transition shadow-xs cursor-pointer group-hover:shadow-md"
+                    >
+                      <span>{isNe ? 'फारम भर्नुहोस्' : 'Fill Form'}</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
                   </div>
                 </div>
-              </ScrollReveal>
+              </div>
             );
           })}
         </div>
 
+        {/* Explore All Documents CTA Button (Keeps page clean at 2 rows) */}
+        {filteredDocs.length > 6 && (
+          <div className="mt-10 text-center">
+            <Link
+              href="/documents"
+              className="inline-flex items-center gap-2 rounded-2xl bg-white border-2 border-slate-200/90 hover:border-[#18A999] px-7 py-3.5 text-xs sm:text-sm font-bold text-[#123B5D] hover:text-[#18A999] shadow-sm hover:shadow-md transition-all duration-200 group"
+            >
+              <Layers className="h-4 w-4 text-[#18A999] group-hover:scale-110 transition" />
+              <span>
+                {isNe
+                  ? `सबै फारम तथा ढाँचाहरू हेर्नुहोस् (${filteredDocs.length}+)`
+                  : `Explore All Statutory Documents (${filteredDocs.length}+)`}
+              </span>
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+            </Link>
+          </div>
+        )}
+
         {filteredDocs.length === 0 && (
-          <div className="mt-12 rounded-2xl border border-dashed border-slate-300 bg-white/70 p-12 text-center">
-            <span className="text-4xl">📄</span>
-            <p className="mt-3 text-base font-semibold text-[#123B5D]">
+          <div className="mt-12 rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
+            <FileText className="h-10 w-10 text-slate-300 mx-auto" />
+            <p className="mt-3 text-base font-bold text-[#123B5D]">
               {isNe ? 'कुनै कागजात फेला परेन' : 'No documents found'}
             </p>
             <p className="text-xs text-slate-500 mt-1">
-              {isNe
-                ? 'खोजी शब्द फेरेर पुनः प्रयास गर्नुहोस् वा सबै कागजात सूची हेर्नुहोस्।'
-                : 'Try adjusting your search terms or filter.'}
+              {isNe ? 'कृपया अर्को शब्द फेरेर खोज्नुहोस् वा सबै कागजात सूची हेर्नुहोस्।' : 'Try searching for different terms or reset category filters.'}
             </p>
             <button
               type="button"
@@ -1097,7 +722,7 @@ export default function HomePage() {
                 setSearchQuery('');
                 setSelectedCategory('all');
               }}
-              className="mt-4 rounded-xl bg-[#123B5D] px-4 py-2 text-xs font-semibold text-white"
+              className="mt-4 rounded-xl bg-[#123B5D] px-4 py-2 text-xs font-bold text-white"
             >
               {isNe ? 'फिल्टर हटाउनुहोस्' : 'Reset Filters'}
             </button>
@@ -1105,147 +730,745 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* ─── 5. "How It Works" with Animated Connection Line & Stepper ─── */}
-      <section className="bg-white py-16 border-y border-slate-200/80">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal animation="animate-slide-up" className="text-center">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#18A999]">{workflowPreTitle}</span>
-            <h2 className="mt-1 text-2xl font-bold text-[#123B5D] sm:text-3xl">{workflowTitle}</h2>
-            <p className="mt-2 text-sm text-slate-600">{workflowSubtitle}</p>
-          </ScrollReveal>
+      {/* ─── 4. Live Statutory Document Sample Showcase (Clean GovTech Proof) ─── */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs">
+          <div className="grid lg:grid-cols-12 items-center">
+            {/* Left Narrative Column */}
+            <div className="p-8 sm:p-12 lg:col-span-6 lg:p-14">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-3 py-1 text-[11px] font-bold text-[#148C7E]">
+                <FileCheck className="h-3.5 w-3.5 text-[#148C7E]" />
+                <span>{isNe ? 'प्रमाणित नमुना प्रारूप' : 'OFFICIAL SAMPLE PREVIEW'}</span>
+              </span>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {workflowSteps.map((step, idx) => {
-              const delay = idx === 0 ? 'delay-100' : idx === 1 ? 'delay-200' : 'delay-300';
-              return (
-                <ScrollReveal key={idx} animation="animate-slide-up" delayClass={delay as any}>
-                  <div className="card-elevate relative rounded-3xl bg-[#E6F6F3]/50 p-8 text-center border border-teal-100/90 shadow-xs hover:border-[#18A999] h-full flex flex-col items-center">
-                    <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${step.bg} text-xl font-bold shadow-md transition group-hover:scale-110`}>
-                      {step.num}
-                    </div>
-                    <h3 className="mt-5 text-lg font-bold text-[#123B5D]">{step.title}</h3>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                      {step.desc}
+              <h2 className="mt-4 text-2xl font-bold tracking-tight text-[#123B5D] sm:text-3xl leading-snug">
+                {isNe
+                  ? 'सरकारी कार्यालयमा सिधै पेश गर्न मिल्ने छाप-योग्य A4 कागजात'
+                  : 'Official A4 Layouts Formatted for Immediate Government Submission'}
+              </h2>
+
+              <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                {isNe
+                  ? 'मेरो कागजबाट तयार हुने प्रत्येक फारम नेपाल सरकारका सम्बन्धित विभाग (IRD, OCR, वडा कार्यालय) द्वारा स्वीकृत कानुनी ढाँचा र शुद्ध कालिमाटी युनिकोडमा स्वचालित रूपमा तयार हुन्छ।'
+                  : 'Every document generated through Mero Kagaz adheres strictly to department-mandated statutory phrasing, standard margin guidelines, and verified Nepali Kalimati typography.'}
+              </p>
+
+              {/* Feature Highlights with Clean Icons */}
+              <div className="mt-6 space-y-3.5">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-[#148C7E]">
+                    <CheckCircle2 className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#123B5D]">
+                      {isNe ? 'प्रचलित ऐन र अनुसूची अनुसारको कानुनी भाषा' : 'Strict Statutory Language Compliance'}
+                    </h4>
+                    <p className="text-[11px] text-slate-500">
+                      {isNe ? 'मुलुकी देवानी संहिता तथा कम्पनी ऐनका आधिकारिक दफाहरू समावेश।' : 'Includes standard legal clauses, statutory disclaimers, and witness sections.'}
                     </p>
                   </div>
-                </ScrollReveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── 6. Interactive FAQ Section (Accordion) ─── */}
-      <section className="mx-auto max-w-4xl px-4 sm:px-6">
-        <ScrollReveal animation="animate-fade-in" className="text-center mb-10">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#18A999]">
-            {isNe ? 'प्रायः सोधिने प्रश्नहरू' : 'Frequently Asked Questions'}
-          </span>
-          <h2 className="mt-1 text-2xl font-bold text-[#123B5D] sm:text-3xl">
-            {isNe ? 'तपाईंका जिज्ञासा र स्पष्टीकरण' : 'Got Questions? We have answers.'}
-          </h2>
-        </ScrollReveal>
-
-        <div className="space-y-3">
-          {activeFaqs.map((faq, idx) => {
-            const isOpen = openFaqIndex === idx;
-            const delay = ((idx % 4) + 1) * 100;
-            return (
-              <ScrollReveal
-                key={idx}
-                animation="animate-slide-up"
-                delayClass={`delay-${delay}` as any}
-              >
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all shadow-xs hover:border-[#18A999]/50">
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="flex w-full items-center justify-between p-5 text-left text-sm font-bold text-[#123B5D] hover:text-[#18A999] transition"
-                  >
-                    <span>{isNe ? faq.qNe : faq.qEn}</span>
-                    <ChevronDown
-                      className={`h-4 w-4 shrink-0 text-slate-400 transition-transform duration-300 ${
-                        isOpen ? 'rotate-180 text-[#18A999]' : ''
-                      }`}
-                    />
-                  </button>
-                  {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs leading-relaxed text-slate-600 border-t border-slate-50 animate-in fade-in duration-200 whitespace-pre-line">
-                      {isNe ? faq.aNe : faq.aEn}
-                    </div>
-                  )}
                 </div>
-              </ScrollReveal>
-            );
-          })}
-        </div>
-      </section>
 
-      {/* ─── 7. Interactive Bottom CTA Banner ─── */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ScrollReveal animation="animate-slide-up" delayClass="delay-200">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#123B5D] via-[#0E2E4A] to-[#123B5D] p-8 sm:p-12 text-white shadow-2xl">
-            <div className="pointer-events-none absolute -bottom-10 -right-10 h-80 w-80 rounded-full bg-[#18A999]/30 blur-3xl animate-float-slow"></div>
-            <div className="pointer-events-none absolute -top-10 left-10 h-72 w-72 rounded-full bg-[#F4B942]/20 blur-3xl animate-float-delayed"></div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                    <Printer className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#123B5D]">
+                      {isNe ? 'शुद्ध कालिमाटी युनिकोड फन्ट (Font-Break Free)' : 'Flawless Kalimati Unicode Printing'}
+                    </h4>
+                    <p className="text-[11px] text-slate-500">
+                      {isNe ? 'प्रिती फन्ट कन्भर्टरको आवश्यकता छैन, कुनै पनि प्रिन्टरमा अक्षर नबिग्रिने।' : 'Zero font distortion or broken glyphs across all commercial and home printers.'}
+                    </p>
+                  </div>
+                </div>
 
-            <div className="relative z-10 max-w-2xl">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#18A999] px-3.5 py-1 text-xs font-semibold text-white shadow-xs">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>{ctaBadge}</span>
-              </span>
-              <h2 className="mt-4 text-2xl font-extrabold sm:text-4xl leading-tight">
-                {ctaTitle}
-              </h2>
-              <p className="mt-3 text-sm text-slate-300 leading-relaxed">
-                {ctaSubtitle}
-              </p>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                    <QrCode className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#123B5D]">
+                      {isNe ? 'डिजिटल रुजु तथा QR प्रमाणिकरण' : 'Digital Verification Barcode'}
+                    </h4>
+                    <p className="text-[11px] text-slate-500">
+                      {isNe ? 'कागजातको प्रामाणिकता जाँच गर्न डिजिटल ट्र्याकिङ कोड।' : 'Instant document authenticity tracking for administrative verification.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 flex items-center gap-3">
                 <Link
-                  href={ctaBtn1Link}
-                  className="btn-shimmer widget-click rounded-xl bg-[#18A999] px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#148C7E] flex items-center gap-2"
+                  href="/documents"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#123B5D] px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-[#0E2A47] transition"
                 >
-                  <span>{ctaBtn1Text}</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <span>{isNe ? 'फारम छान्नुहोस्' : 'Explore All Templates'}</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
-                <Link
-                  href={ctaBtn2Link}
-                  className="rounded-xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20"
-                >
-                  {ctaBtn2Text}
-                </Link>
+                <span className="text-xs text-slate-400">
+                  {isNe ? 'औसत ३ मिनेटमा तयार' : 'Ready in ~3 minutes'}
+                </span>
+              </div>
+            </div>
+
+            {/* Right Interactive/Visual Mock A4 Sheet */}
+            <div className="bg-slate-50/80 p-6 sm:p-10 lg:col-span-6 border-t lg:border-t-0 lg:border-l border-slate-200/80 flex items-center justify-center">
+              {/* Mock A4 Paper with High-Trust Details */}
+              <div className="relative w-full max-w-sm rounded-xl border border-slate-300/80 bg-white p-6 shadow-lg transition-transform hover:scale-[1.01]">
+                {/* Official Header */}
+                <div className="text-center border-b border-slate-200 pb-3">
+                  <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-red-50 text-red-700 text-sm mb-1">
+                    <Landmark className="h-4 w-4 text-red-700" />
+                  </div>
+                  <p className="text-[10px] font-bold text-slate-700">नेपाल सरकार • अर्थ मन्त्रालय</p>
+                  <p className="text-[11px] font-extrabold text-[#123B5D]">आन्तरिक राजस्व विभाग</p>
+                  <p className="text-[9px] text-slate-500">स्थायी लेखा नम्बर (PAN) दर्ता निवेदन फारम</p>
+                </div>
+
+                {/* Verified Stamp Badge Overlay */}
+                <div className="absolute top-4 right-4 rotate-12 rounded border border-emerald-600 bg-emerald-50 px-2 py-0.5 text-[9px] font-extrabold text-emerald-700 uppercase tracking-wider inline-flex items-center gap-1">
+                  <Check className="h-2.5 w-2.5 stroke-[3]" />
+                  <span>{isNe ? 'प्रमाणित ढाँचा' : 'VERIFIED FORMAT'}</span>
+                </div>
+
+                {/* Form Fields Simulation */}
+                <div className="mt-4 space-y-2 text-[10px]">
+                  <div className="flex justify-between border-b border-slate-100 pb-1">
+                    <span className="text-slate-400 font-medium">निवेदकको नाम:</span>
+                    <span className="font-bold text-slate-800">रमेश कुमार शर्मा</span>
+                  </div>
+                  <div className="flex justify-between border-b border-slate-100 pb-1">
+                    <span className="text-slate-400 font-medium">नागरिकता नं:</span>
+                    <span className="font-bold text-slate-800 font-mono">२७-०१-७५-०४३२१</span>
+                  </div>
+                  <div className="flex justify-between border-b border-slate-100 pb-1">
+                    <span className="text-slate-400 font-medium">स्थायी ठेगाना:</span>
+                    <span className="font-bold text-slate-800">काठमाडौं - ३२, बागमती</span>
+                  </div>
+                  <div className="flex justify-between border-b border-slate-100 pb-1">
+                    <span className="text-slate-400 font-medium">दर्ता प्रयोजन:</span>
+                    <span className="font-bold text-[#148C7E]">व्यक्तिगत रोजगार / व्यवसाय</span>
+                  </div>
+                </div>
+
+                {/* Legal Clause Dummy Lines */}
+                <div className="mt-4 rounded bg-slate-50 p-2 text-[9px] text-slate-500 leading-normal border border-slate-100">
+                  <p>
+                    &ldquo;माथि उल्लिखित सम्पूर्ण विवरण सत्य र तथ्यपरक छ। झुट्टा ठहरिए कानुन बमोजिम सजाय भोग्न मन्जुर छु।&rdquo;
+                  </p>
+                </div>
+
+                {/* Bottom Signature & QR Verification Bar */}
+                <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-[9px]">
+                  <div className="flex items-center gap-1.5">
+                    <div className="h-7 w-7 rounded bg-slate-100 border border-slate-200 flex items-center justify-center font-mono font-bold text-slate-700 text-[8px]">
+                      QR
+                    </div>
+                    <div>
+                      <p className="font-mono text-slate-600 text-[8px]">MK-PAN-2081-994</p>
+                      <p className="text-emerald-600 font-bold text-[8px]">डिजिटल रूपमा सुरक्षित</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="block border-b border-slate-300 w-16 mb-0.5"></span>
+                    <span className="text-slate-400 text-[8px]">निवेदकको दस्तखत</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </ScrollReveal>
+        </div>
       </section>
 
-      {/* ─── 8. Quick Preview Modal (Tactile Delight) ─── */}
+      {/* ─── 3. "How It Works" in 3 Interactive, Clear Steps ─── */}
+      <section id="how-it-works" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="rounded-3xl border border-slate-200/90 bg-white p-8 sm:p-12 shadow-xs">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-3.5 py-1 text-xs font-bold text-[#148C7E]">
+              <FileCheck className="h-3.5 w-3.5 text-[#18A999]" />
+              <span>{isNe ? 'सरल ३-चरण कार्यप्रणाली' : 'HOW IT WORKS IN 3 STEPS'}</span>
+            </span>
+            <h2 className="mt-3 text-2xl font-extrabold text-[#123B5D] sm:text-3xl">
+              {isNe ? '३ सरल चरणमा आधिकारिक कागजात तयार गर्नुहोस्' : '3 Easy Steps to Generate Documents'}
+            </h2>
+            <p className="mt-2 text-xs text-slate-500 leading-relaxed">
+              {isNe
+                ? 'कुनै प्राविधिक वा कानुनी ज्ञान नभए पनि तपाईं आफैले घरमै बसेर सरकारी फारम ३ मिनेटमै तयार गर्न सक्नुहुन्छ।'
+                : 'No legal expertise required. Anyone can generate compliant forms in minutes.'}
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3 relative">
+            {/* Step 1 */}
+            <div className="relative rounded-3xl border border-slate-200/90 bg-gradient-to-b from-slate-50/60 to-white p-7 text-center shadow-2xs hover:shadow-md hover:border-teal-300 transition-all duration-300 group">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#123B5D] text-xl font-black text-white shadow-md shadow-sky-950/20 group-hover:scale-105 transition-transform">
+                {isNe ? '१' : '1'}
+              </div>
+              <div className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-sky-700 bg-sky-50 border border-sky-200/80 px-2.5 py-0.5 rounded-full">
+                <FileText className="h-3 w-3" />
+                <span>{isNe ? 'चरण १' : 'Step 1'}</span>
+              </div>
+              <h3 className="mt-3 text-base font-bold text-[#123B5D]">
+                {isNe ? '१. कागजात छान्नुहोस्' : '1. Select Template'}
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                {isNe
+                  ? 'प्यान, भ्याट, कम्पनी दर्ता (MOA/AOA) वा घर बहाल सम्झौता जस्ता आवश्यक फारमहरूको सूचीबाट छान्नुहोस्।'
+                  : 'Choose from official templates like PAN, Company MOA/AOA, or Rent Agreement.'}
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative rounded-3xl border border-teal-200/90 bg-gradient-to-b from-teal-50/30 to-white p-7 text-center shadow-2xs hover:shadow-md hover:border-[#18A999] transition-all duration-300 group">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#18A999] text-xl font-black text-white shadow-md shadow-teal-500/25 group-hover:scale-105 transition-transform">
+                {isNe ? '२' : '2'}
+              </div>
+              <div className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-[#148C7E] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full">
+                <FileEdit className="h-3 w-3" />
+                <span>{isNe ? 'चरण २' : 'Step 2'}</span>
+              </div>
+              <h3 className="mt-3 text-base font-bold text-[#123B5D]">
+                {isNe ? '२. विवरण भर्नुहोस्' : '2. Fill Details'}
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                {isNe
+                  ? 'सरल प्रश्नोत्तर फारममा आफ्नो नाम, ठेगाना र विवरणहरू नेपाली वा अंग्रेजीमा प्रविष्ट गर्नुहोस्। नेपाली युनिकोड स्वतः अनुवाद हुन्छ।'
+                  : 'Enter basic details with easy guidance and live Nepali Unicode typing support.'}
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative rounded-3xl border border-slate-200/90 bg-gradient-to-b from-slate-50/60 to-white p-7 text-center shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all duration-300 group">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-600 text-xl font-black text-white shadow-md shadow-emerald-600/25 group-hover:scale-105 transition-transform">
+                {isNe ? '३' : '3'}
+              </div>
+              <div className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                <Download className="h-3 w-3" />
+                <span>{isNe ? 'चरण ३' : 'Step 3'}</span>
+              </div>
+              <h3 className="mt-3 text-base font-bold text-[#123B5D]">
+                {isNe ? '३. तत्काल PDF डाउनलोड' : '3. Instant Download'}
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                {isNe
+                  ? 'कालिमाटी फन्टमा पूर्ण रूपमा तयार भएको प्रिन्ट-रेडी A4 PDF सिधै डाउनलोड गर्नुहोस् र सरकारी कार्यालयमा पेश गर्नुहोस्।'
+                  : 'Download a clean, verified PDF rendered with proper typography, ready for office submission.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 4. Platform Guarantees (Clean Details, Zero Clutter) ─── */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs hover:shadow-sm hover:border-teal-300 transition-all">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-50 border border-teal-200 text-[#148C7E] mb-3.5">
+              <Landmark className="h-5 w-5" />
+            </div>
+            <h4 className="text-sm font-bold text-[#123B5D]">
+              {isNe ? 'सरकारी ढाँचाको प्रत्याभूति' : 'Statutory Compliance'}
+            </h4>
+            <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+              {isNe ? 'नेपाल सरकारका प्रचलित ऐन, नियम र निर्देशिका बमोजिम १००% आधिकारिक प्रारूप।' : 'Compliant with Nepal Companies Act and Inland Revenue Department guidelines.'}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs hover:shadow-sm hover:border-blue-300 transition-all">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 border border-blue-200 text-blue-600 mb-3.5">
+              <Printer className="h-5 w-5" />
+            </div>
+            <h4 className="text-sm font-bold text-[#123B5D]">
+              {isNe ? 'कालिमाटी युनिकोड लेआउट' : 'Kalimati Typography'}
+            </h4>
+            <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+              {isNe ? 'फन्ट नबिग्रिने गरी सरकारी ढाँचामा स्पष्ट प्रिन्ट गर्न मिल्ने A4 PDF।' : 'Crisp A4 print layouts formatted for direct government office submission.'}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs hover:shadow-sm hover:border-emerald-300 transition-all">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-600 mb-3.5">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <h4 className="text-sm font-bold text-[#123B5D]">
+              {isNe ? 'गोपनीयता तथा सुरक्षा' : 'Data Privacy'}
+            </h4>
+            <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+              {isNe ? 'तपाईंका कागजात र व्यक्तिगत विवरण २५६-बिट इन्क्रिप्सनबाट पूर्ण सुरक्षित।' : '256-bit encryption ensuring strict data isolation and confidentiality.'}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs hover:shadow-sm hover:border-purple-300 transition-all">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 border border-purple-200 text-purple-600 mb-3.5">
+              <CreditCard className="h-5 w-5" />
+            </div>
+            <h4 className="text-sm font-bold text-[#123B5D]">
+              {isNe ? 'पारदर्शी डिजिटल भुक्तानी' : 'Digital Payment'}
+            </h4>
+            <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+              {isNe ? 'eSewa, Khalti र ConnectIPS मार्फत तत्काल र पारदर्शी भुक्तानी।' : 'Direct integration with Nepal top digital payment gateways for seamless checkout.'}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 5. Modern & Animated Visual Comparison (Mero Kagaz vs Traditional Middlemen) ─── */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-4xl mx-auto mb-10">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-3.5 py-1 text-xs font-bold text-[#148C7E] shadow-2xs">
+            <Scale className="h-3.5 w-3.5 text-[#18A999]" />
+            <span>{isNe ? 'प्रत्यक्ष तुलना • किन मेरो कागज?' : 'SIDE-BY-SIDE COMPARISON'}</span>
+          </span>
+          <h2 className="mt-3 text-2xl font-extrabold text-[#123B5D] sm:text-3xl lg:text-4xl tracking-tight whitespace-normal md:whitespace-nowrap">
+            {isNe ? 'दलालको झन्झट छोड्नुहोस्, ३ मिनेटमै आफै बनाउनुहोस्' : 'Ditch Middleman Delays — Generate in 3 Minutes'}
+          </h2>
+          <p className="mt-2 text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl mx-auto">
+            {isNe
+              ? 'किन हजारौं नेपाली नागरिक तथा व्यवसायीहरू पुरानो ढर्रा छोडेर मेरो कागज रोज्छन्? प्रत्यक्ष भिन्नता हेर्नुहोस्:'
+              : 'See why thousands across Nepal choose Mero Kagaz over traditional brokers, delays, and queuing.'}
+          </p>
+        </div>
+
+        {/* Side-by-Side Visual Animated Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-11 gap-6 items-center">
+          {/* 1. The Frustrating Old Way (Traditional Lekhapadi / Dalal) */}
+          <div className="lg:col-span-5 rounded-3xl border-2 border-rose-200/80 bg-gradient-to-b from-rose-50/50 via-white to-rose-50/20 p-6 sm:p-7 shadow-xs hover:border-rose-300 transition-all">
+            <div className="flex items-center justify-between border-b border-rose-100 pb-4 mb-5">
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-100 text-rose-600 shadow-2xs">
+                  <AlertCircle className="h-6 w-6" />
+                </span>
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-rose-600 block">
+                    {isNe ? 'पुरानो झन्झटिलो बाटो' : 'THE OLD PAINFUL WAY'}
+                  </span>
+                  <h3 className="text-base font-bold text-slate-800">
+                    {isNe ? 'लेखापढी तथा दलाल (बिचौलिया)' : 'Traditional Brokers & Dalal'}
+                  </h3>
+                </div>
+              </div>
+              <span className="rounded-full bg-rose-100 border border-rose-200 px-2.5 py-0.5 text-[10px] font-bold text-rose-700">
+                {isNe ? 'महँगो र ढिलो' : 'Slow & Costly'}
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/80 border border-rose-100/80 shadow-2xs">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600 font-bold text-xs mt-0.5">
+                  <X className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-800">
+                    {isNe ? '२ देखि ५ दिन धाउनुपर्ने (समय बर्बाद)' : '2 to 5 Days Delay & Queuing'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? 'सरकारी कार्यालय र लेखापढीको चक्कर काट्दा हप्तौं खेर जाने।' : 'Wasting entire workdays queuing outside government gates.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/80 border border-rose-100/80 shadow-2xs">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600 font-bold text-xs mt-0.5">
+                  <X className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-800">
+                    {isNe ? 'रू २,००० देखि १५,००० सम्म महँगो शुल्क' : 'Expensive Fees (NPR 2,000 - 15,000+)'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? 'सामान्य फारमका लागि पनि मनपरी रकम असुल्ने बिचौलिया।' : 'Arbitrary charges and hidden broker markups for basic documents.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/80 border border-rose-100/80 shadow-2xs">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600 font-bold text-xs mt-0.5">
+                  <X className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-800">
+                    {isNe ? 'अपरिचितलाई नागरिकता दिनुपर्ने जोखिम' : 'Data Privacy & Security Risks'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? 'व्यक्तिगत नागरिकता र कागजातको दुरुपयोग हुने उच्च खतरा।' : 'Handing personal identification documents to unknown physical agents.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/80 border border-rose-100/80 shadow-2xs">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600 font-bold text-xs mt-0.5">
+                  <X className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-800">
+                    {isNe ? 'टाइपराइटर वा बिग्रिने प्रिती फन्ट' : 'Font Distortion & Typo Rejections'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? 'अक्षर नमिलेर सरकारी फाँटबाट फारम फिर्ता हुने चिन्ता।' : 'Frequent font breaks and spelling mistakes causing office rejection.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/80 border border-rose-100/80 shadow-2xs">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600 font-bold text-xs mt-0.5">
+                  <X className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-800">
+                    {isNe ? 'कार्यालय समयमै लाइन बस्नुपर्ने' : 'Limited Hours & Bureaucratic Chaos'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? 'आफ्नो काम छोडेर दिनभर सरकारी लाइनमा उभिनुपर्ने।' : 'Must take leave from work during strict 10-5 government hours.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Animated VS Badge in the center */}
+          <div className="lg:col-span-1 flex items-center justify-center -my-2 lg:my-0">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-tr from-[#123B5D] to-[#18A999] text-white font-black text-sm shadow-xl ring-4 ring-white animate-pulse">
+              VS
+            </div>
+          </div>
+
+          {/* 2. The Empowering Mero Kagaz Way (Modern Digital Experience) */}
+          <div className="lg:col-span-5 relative rounded-3xl border-2 border-teal-400 bg-gradient-to-b from-teal-50/50 via-white to-teal-50/20 p-6 sm:p-7 shadow-xl ring-4 ring-teal-100/60 hover:-translate-y-1 transition-all duration-300">
+            {/* Top Recommended Ribbon */}
+            <div className="absolute -top-3.5 right-6 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#18A999] to-[#148C7E] px-3.5 py-1 text-[11px] font-black text-white shadow-md shadow-teal-500/25">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping" />
+              <span>{isNe ? 'सिफारिस गरिएको • नागरिक रोजाइ' : 'RECOMMENDED • CITIZEN CHOICE'}</span>
+            </div>
+
+            <div className="flex items-center justify-between border-b border-teal-100 pb-4 mb-5">
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-500 text-white shadow-md shadow-teal-500/25">
+                  <CheckCircle2 className="h-6 w-6" />
+                </span>
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#148C7E] block">
+                    {isNe ? 'आधुनिक डिजिटल समाधान' : 'THE MODERN MERO KAGAZ WAY'}
+                  </span>
+                  <h3 className="text-base font-bold text-[#123B5D]">
+                    {isNe ? 'मेरो कागज (Mero Kagaz)' : 'Mero Kagaz (Instant Digital)'}
+                  </h3>
+                </div>
+              </div>
+              <span className="rounded-full bg-teal-100 border border-teal-200 px-2.5 py-0.5 text-[10px] font-bold text-[#148C7E]">
+                {isNe ? '३ मिनेटमै तयार' : '3 Mins Ready'}
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white border border-teal-200/80 shadow-2xs hover:border-teal-400 transition-all">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#18A999] text-white font-bold text-xs mt-0.5 shadow-2xs">
+                  <Check className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-[#123B5D]">
+                    {isNe ? '३ देखि ५ मिनेटमै तत्काल A4 PDF' : '3 to 5 Minutes Instant A4 PDF'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? 'कुनै लाइन बस्नु नपर्ने, तुरुन्तै हातमा छाप-योग्य आधिकारिक फारम।' : 'Instant download formatted directly for official department filing.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white border border-teal-200/80 shadow-2xs hover:border-teal-400 transition-all">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#18A999] text-white font-bold text-xs mt-0.5 shadow-2xs">
+                  <Check className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-[#123B5D]">
+                    {isNe ? 'निःशुल्क वा न्यूनतम (रू १०० देखि ५०० मात्र)' : 'Free or Minimal (NPR 100 - 500 Only)'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? '९५% सम्म पैसा बचत! eSewa, Khalti, ConnectIPS बाट पारदर्शी भुक्तानी।' : 'Save up to 95% on legal drafting fees with transparent payment.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white border border-teal-200/80 shadow-2xs hover:border-teal-400 transition-all">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#18A999] text-white font-bold text-xs mt-0.5 shadow-2xs">
+                  <Check className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-[#123B5D]">
+                    {isNe ? '१००% आफ्नै नियन्त्रणमा सुरक्षित' : '100% Private in Your Complete Control'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? '२५६-बिट आधुनिक इन्क्रिप्सन, विवरण तेस्रो व्यक्तिलाई कहिल्यै साझा हुँदैन।' : 'Bank-grade 256-bit encryption; data is never shared with third parties.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white border border-teal-200/80 shadow-2xs hover:border-teal-400 transition-all">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#18A999] text-white font-bold text-xs mt-0.5 shadow-2xs">
+                  <Check className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-[#123B5D]">
+                    {isNe ? 'शुद्ध कालिमाटी युनिकोड लेआउट' : 'Standard Kalimati Unicode Typography'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? 'सरकारी निकाय (IRD/OCR) द्वारा १००% स्वीकृत मानक कानुनी प्रारूप।' : 'Compliant with statutory laws, approved font rules, and A4 margins.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl bg-white border border-teal-200/80 shadow-2xs hover:border-teal-400 transition-all">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#18A999] text-white font-bold text-xs mt-0.5 shadow-2xs">
+                  <Check className="h-4 w-4 stroke-[3]" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-[#123B5D]">
+                    {isNe ? '२४/७ घरमै बसेर मोबाइलबाटै' : '24/7 Access from Home or Mobile'}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {isNe ? 'आफ्नै सहजतामा, जहाँसुकैबाट कागजात तयार गर्नुहोस्।' : 'Create and download official documents anywhere, anytime.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Action Button */}
+            <div className="mt-5 pt-4 border-t border-teal-100">
+              <Link
+                href="/documents"
+                className="inline-flex items-center justify-center gap-2 w-full rounded-2xl bg-gradient-to-r from-[#18A999] to-[#148C7E] hover:from-[#148C7E] hover:to-[#0f6c61] py-3 text-xs font-bold text-white shadow-md shadow-teal-500/25 transition cursor-pointer"
+              >
+                <span>{isNe ? 'अहिले नै आफ्नो फारम बनाउन सुरु गर्नुहोस्' : 'Start Creating Your Document Now'}</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* 3 Savings Highlight Counters */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          <div className="rounded-2xl border border-teal-200/90 bg-teal-50/70 p-4 text-center shadow-2xs">
+            <span className="text-2xl font-black text-[#148C7E] font-outfit">⚡ ९५%</span>
+            <p className="text-xs font-bold text-[#123B5D] mt-0.5">{isNe ? 'समय बचत' : 'Time Saved'}</p>
+            <p className="text-[10px] text-slate-500">{isNe ? '५ दिनबाट ३ मिनेटमा' : 'From 5 days down to 3 mins'}</p>
+          </div>
+          <div className="rounded-2xl border border-emerald-200/90 bg-emerald-50/70 p-4 text-center shadow-2xs">
+            <span className="text-2xl font-black text-emerald-700 font-outfit">💰 १०x</span>
+            <p className="text-xs font-bold text-[#123B5D] mt-0.5">{isNe ? 'पैसा बचत' : 'Money Saved'}</p>
+            <p className="text-[10px] text-slate-500">{isNe ? 'दलालको चर्को शुल्कबाट मुक्ति' : 'Save thousands on broker fees'}</p>
+          </div>
+          <div className="rounded-2xl border border-sky-200/90 bg-sky-50/70 p-4 text-center shadow-2xs">
+            <span className="text-2xl font-black text-sky-700 font-outfit">📜 १००%</span>
+            <p className="text-xs font-bold text-[#123B5D] mt-0.5">{isNe ? 'कानुनी मान्यता' : 'Legal Compliance'}</p>
+            <p className="text-[10px] text-slate-500">{isNe ? 'नेपाल सरकार स्वीकृत ढाँचा' : 'Nepal Government verified format'}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 6. Modern, Interactive 2-Column FAQ Section ─── */}
+      <section id="faq" className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-4xl mx-auto mb-10">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-3.5 py-1 text-xs font-bold text-[#148C7E] shadow-2xs">
+            <HelpCircle className="h-3.5 w-3.5 text-[#18A999]" />
+            <span>{isNe ? 'जिज्ञासा र स्पष्टीकरण' : 'COMMON QUESTIONS & ANSWERS'}</span>
+          </span>
+          <h2 className="mt-3 text-2xl font-extrabold text-[#123B5D] sm:text-3xl lg:text-4xl tracking-tight whitespace-normal md:whitespace-nowrap">
+            {isNe ? 'प्रायः सोधिने प्रश्नहरू (FAQ)' : 'Frequently Asked Questions'}
+          </h2>
+          <p className="mt-2 text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl mx-auto">
+            {isNe
+              ? 'मेरो कागज प्रयोग गर्दा नागरिक तथा व्यवसायीहरूले धेरै सोध्ने मुख्य प्रश्नहरू र तिनका आधिकारिक जवाफहरू:'
+              : 'Everything you need to know about preparing official statutory documents on Mero Kagaz.'}
+          </p>
+        </div>
+
+        {/* 2-Column Responsive Interactive Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {FAQS.map((faq, idx) => {
+            const isOpen = openFaqIndex === idx;
+            const nepaliDigits = ['१', '२', '३', '४', '५', '६', '७', '८', '९'];
+            const qNum = isNe ? (nepaliDigits[idx] || String(idx + 1)) : `Q${idx + 1}`;
+
+            const iconMap: Record<string, React.ReactNode> = {
+              legal: <ShieldCheck className="h-4 w-4 text-[#18A999]" />,
+              time: <Clock className="h-4 w-4 text-blue-600" />,
+              payment: <CreditCard className="h-4 w-4 text-purple-600" />,
+              middlemen: <UserCheck className="h-4 w-4 text-amber-600" />,
+              privacy: <Lock className="h-4 w-4 text-emerald-600" />,
+              edit: <FileEdit className="h-4 w-4 text-teal-600" />,
+            };
+
+            return (
+              <div
+                key={faq.id || idx}
+                className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
+                  isOpen
+                    ? 'border-teal-400 bg-gradient-to-b from-teal-50/25 via-white to-white ring-2 ring-teal-100 shadow-md'
+                    : 'border-slate-200/90 bg-white shadow-2xs hover:border-teal-300 hover:shadow-xs'
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                  className="flex w-full items-start justify-between gap-3 p-5 text-left transition cursor-pointer group"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-xl text-xs font-bold transition-all mt-0.5 ${
+                      isOpen
+                        ? 'bg-teal-500 text-white shadow-2xs'
+                        : 'bg-slate-100 text-slate-600 group-hover:bg-teal-50 group-hover:text-[#148C7E]'
+                    }`}>
+                      {qNum}
+                    </span>
+                    <div>
+                      <span className="text-xs sm:text-sm font-bold text-[#123B5D] group-hover:text-[#18A999] transition leading-snug block">
+                        {isNe ? faq.qNe : faq.qEn}
+                      </span>
+                    </div>
+                  </div>
+
+                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
+                    isOpen
+                      ? 'bg-[#18A999] text-white rotate-180 shadow-2xs'
+                      : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700'
+                  }`}>
+                    <ChevronDown className="h-4 w-4" />
+                  </span>
+                </button>
+
+                {isOpen && (
+                  <div className="px-5 pb-5 pt-1 text-xs sm:text-[13px] leading-relaxed text-slate-600 border-t border-slate-100/90 animate-in fade-in duration-200">
+                    <p className="font-medium text-slate-700">
+                      {isNe ? faq.aNe : faq.aEn}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Support Reassurance Banner - Clean, Modern & Animated */}
+        <div className="mt-10 relative overflow-hidden rounded-2xl border border-teal-200/90 bg-gradient-to-r from-teal-50/80 via-white to-sky-50/70 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-sm">
+          <div className="flex items-center gap-4 z-10">
+            <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#18A999] to-[#148C7E] text-white shadow-md shadow-teal-600/20">
+              <HelpCircle className="h-6 w-6" />
+              <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-white"></span>
+              </span>
+            </span>
+            <div>
+              <h4 className="text-sm sm:text-base font-bold text-[#123B5D]">
+                {isNe ? 'अझै केही जिज्ञासा वा सहयोग आवश्यक छ?' : 'Still have questions or need assistance?'}
+              </h4>
+              <p className="text-xs text-slate-500 mt-0.5">
+                {isNe
+                  ? 'हाम्रो नागरिक सहायता केन्द्र तपाईंलाई आधिकारिक ढाँचा छनोट गर्न सघाउन तयार छ।'
+                  : 'Our dedicated support team is available to help you navigate statutory documents.'}
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/documents"
+            className="group z-10 inline-flex items-center gap-2 shrink-0 rounded-xl bg-white border-2 border-teal-300 hover:border-[#18A999] px-5 py-2.5 text-xs sm:text-sm font-bold text-[#148C7E] hover:text-[#0f6c61] hover:bg-teal-50/60 transition-all duration-200 shadow-2xs hover:shadow-sm"
+          >
+            <span>{isNe ? 'सबै कागजात हेर्नुहोस्' : 'Browse All Documents'}</span>
+            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+          </Link>
+        </div>
+      </section>
+
+      {/* ─── 7. High-Converting Animated Bottom Call-to-Action ─── */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#071524] via-[#0F3554] to-[#0A2238] p-8 sm:p-12 lg:p-14 text-white shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8 border border-white/10 group">
+          {/* Animated Ambient Light Spheres */}
+          <div className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 rounded-full bg-teal-400/20 blur-3xl animate-pulse" />
+          <div className="pointer-events-none absolute -left-16 -bottom-16 h-72 w-72 rounded-full bg-sky-400/20 blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(24,169,153,0.12),transparent_60%)]" />
+
+          {/* Left Hero Narrative */}
+          <div className="max-w-2xl text-center lg:text-left z-10">
+            <span className="inline-flex items-center gap-2 rounded-full bg-teal-400/15 border border-teal-400/30 px-3.5 py-1 text-xs font-bold text-teal-300 mb-4 shadow-2xs backdrop-blur-xs">
+              <span className="flex h-2 w-2 rounded-full bg-teal-400 animate-ping" />
+              <FileCheck className="h-3.5 w-3.5 text-teal-300" />
+              <span>{isNe ? 'प्रमाणित छाप-योग्य A4 कागजात' : 'Official Print-Ready A4 Document'}</span>
+            </span>
+
+            <h2 className="text-2xl font-extrabold sm:text-3xl lg:text-4xl leading-tight text-white tracking-tight whitespace-normal lg:whitespace-nowrap">
+              {isNe ? 'अहिले नै आफ्नो आधिकारिक फारम तयार गर्नुहोस्' : 'Ready to prepare your official document?'}
+            </h2>
+
+            <p className="mt-3 text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
+              {isNe
+                ? 'कुनै सरकारी कार्यालय धाउनु नपर्ने, कुनै मध्यस्थकर्ता बिना ३ मिनेटमै आफ्नो कागजात तयार गरी प्रिन्ट-रेडी PDF डाउनलोड गर्नुहोस्।'
+                : 'Eliminate costly middleman fees and paperwork delays. Generate your verified statutory forms directly in minutes.'}
+            </p>
+
+            {/* Micro Trust Points under subtitle */}
+            <div className="mt-5 flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 text-xs font-medium text-slate-200">
+              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-lg px-2.5 py-1 backdrop-blur-xs">
+                <Check className="h-3.5 w-3.5 text-teal-400 stroke-[3]" />
+                <span>{isNe ? '१००% कानुनी मान्यता' : '100% Legally Valid'}</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-lg px-2.5 py-1 backdrop-blur-xs">
+                <Check className="h-3.5 w-3.5 text-teal-400 stroke-[3]" />
+                <span>{isNe ? 'दलाल बिना ३ मिनेटमै' : 'Zero Middleman Fees'}</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-lg px-2.5 py-1 backdrop-blur-xs">
+                <Check className="h-3.5 w-3.5 text-teal-400 stroke-[3]" />
+                <span>{isNe ? 'शुद्ध कालिमाटी युनिकोड' : 'Kalimati Unicode A4'}</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Right Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-center gap-3.5 z-10 w-full lg:w-auto shrink-0">
+            <Link
+              href="/documents"
+              className="relative group/btn w-full sm:w-auto justify-center rounded-2xl bg-gradient-to-r from-[#18A999] via-[#148C7E] to-[#117065] px-7 py-3.5 text-xs sm:text-sm font-bold text-white transition-all duration-200 flex items-center gap-2 shadow-xl shadow-teal-500/30 hover:shadow-teal-500/50 hover:scale-[1.02] active:scale-95 cursor-pointer overflow-hidden"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                <span>{isNe ? 'कागजात सूची हेर्नुहोस्' : 'Browse All Documents'}</span>
+                <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition" />
+              </span>
+            </Link>
+
+            <Link
+              href="/register"
+              className="w-full sm:w-auto justify-center rounded-2xl border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-xs px-6 py-3.5 text-xs sm:text-sm font-bold text-white transition-all duration-200 flex items-center gap-2 shadow-xs hover:scale-[1.02] active:scale-95 cursor-pointer"
+            >
+              <UserCheck className="h-4 w-4 text-teal-300" />
+              <span>{isNe ? 'निःशुल्क खाता खोल्नुहोस्' : 'Create Account'}</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 8. Quick Preview Modal ─── */}
       {previewDoc && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl transition-all">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="relative w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
             <button
               type="button"
               onClick={() => setPreviewDoc(null)}
-              className="absolute top-5 right-5 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
+              className="absolute top-4 right-4 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
+              title="Close"
             >
               <X className="h-5 w-5" />
             </button>
 
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[#E6F6F3] px-3 py-0.5 text-xs font-semibold text-[#18A999]">
-                {isNe ? previewDoc.categoryLabelNe : previewDoc.categoryLabelEn}
-              </span>
-              <span className="text-xs text-slate-400 font-outfit">
-                ⏱️ {isNe ? previewDoc.estimatedTimeNe : previewDoc.estimatedTimeEn}
-              </span>
-            </div>
+            <span className="rounded-md bg-slate-100 border border-slate-200 px-2.5 py-0.5 text-[11px] font-bold text-slate-700">
+              {isNe ? previewDoc.categoryLabelNe : previewDoc.categoryLabelEn}
+            </span>
 
-            <h3 className="mt-3 text-lg font-bold text-[#123B5D]">
+            <h3 className="mt-3 text-base font-bold text-[#123B5D]">
               {isNe ? previewDoc.titleNe : previewDoc.titleEn}
             </h3>
 
-            <p className="mt-1 text-xs text-slate-500 font-medium">
-              🏛️ {isNe ? previewDoc.departmentNe : previewDoc.departmentEn}
+            <p className="mt-1 text-xs text-slate-500 font-medium inline-flex items-center gap-1.5">
+              <Landmark className="h-3.5 w-3.5 text-slate-400" />
+              <span>{isNe ? previewDoc.departmentNe : previewDoc.departmentEn}</span>
             </p>
 
             <p className="mt-3 text-xs leading-relaxed text-slate-600">
@@ -1253,10 +1476,10 @@ export default function HomePage() {
             </p>
 
             {/* Checklist of requirements */}
-            <div className="mt-4 rounded-2xl bg-[#F7F9FC] p-4 border border-slate-100">
+            <div className="mt-4 rounded-xl bg-slate-50 p-3.5 border border-slate-100">
               <p className="text-xs font-bold text-[#123B5D] mb-2 flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4 text-[#18A999]" />
-                <span>{isNe ? 'आवश्यक विवरणहरू' : 'Key Requirements:'}</span>
+                <span>{isNe ? 'आवश्यक विवरणहरू' : 'Required Information:'}</span>
               </p>
               <ul className="space-y-1.5 text-xs text-slate-600">
                 {(isNe ? previewDoc.requirementsNe : previewDoc.requirementsEn)?.map((req, i) => (
@@ -1274,9 +1497,9 @@ export default function HomePage() {
             </div>
 
             {/* Pricing & Actions */}
-            <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
+            <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
               <div>
-                <p className="text-[10px] text-slate-400 uppercase font-semibold">{isNe ? 'लागत' : 'Cost'}</p>
+                <p className="text-[10px] text-slate-400 font-semibold uppercase">{isNe ? 'शुल्क' : 'Fee'}</p>
                 <p className="text-base font-bold text-[#123B5D] font-outfit">
                   {isNe ? previewDoc.feeNe : previewDoc.feeEn}
                 </p>
@@ -1286,14 +1509,14 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setPreviewDoc(null)}
-                  className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                  className="rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
                 >
-                  {isNe ? 'बन्द गर्नुहोस्' : 'Close'}
+                  {isNe ? 'बन्द' : 'Close'}
                 </button>
                 <Link
                   href={`/documents/${previewDoc.slug}/form`}
                   onClick={() => setPreviewDoc(null)}
-                  className="btn-shimmer inline-flex items-center gap-1.5 rounded-xl bg-[#18A999] px-5 py-2 text-xs font-semibold text-white shadow-md hover:bg-[#148C7E]"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#18A999] px-4 py-2 text-xs font-semibold text-white hover:bg-[#148C7E] transition shadow-xs"
                 >
                   <span>{isNe ? 'फारम भर्नुहोस्' : 'Fill Form'}</span>
                   <ArrowRight className="h-3.5 w-3.5" />

@@ -21,6 +21,7 @@ import {
   ExternalLink,
   Edit3,
 } from 'lucide-react';
+import { EsewaLogo, KhaltiLogo, ConnectIpsLogo } from '@/components/PaymentLogos';
 
 function CheckoutContent() {
   const params = useSearchParams();
@@ -291,25 +292,25 @@ function CheckoutContent() {
             {/* Option 1: eSewa */}
             <button
               type="button"
-              className="widget-click flex w-full items-center justify-between rounded-2xl border-2 border-emerald-500/40 bg-emerald-50/50 p-3.5 text-xs font-bold text-emerald-800 transition hover:bg-emerald-100/60 shadow-2xs cursor-pointer"
+              className="widget-click flex w-full items-center justify-between rounded-2xl border-2 border-emerald-500/40 bg-emerald-50/40 p-3.5 text-xs font-bold text-emerald-800 transition hover:bg-emerald-100/60 hover:border-emerald-500 shadow-2xs cursor-pointer"
             >
-              <div className="flex items-center gap-2.5">
-                <span className="text-base">🟢</span>
-                <span>{isNe ? 'eSewa मार्फत भुक्तानी' : 'Pay with eSewa'}</span>
+              <div className="flex items-center gap-3">
+                <EsewaLogo variant="icon" className="h-6.5 w-20" />
+                <span className="text-sm font-bold text-slate-800">{isNe ? 'eSewa मार्फत भुक्तानी' : 'Pay with eSewa'}</span>
               </div>
-              <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] text-white font-outfit">Instant</span>
+              <span className="rounded-full bg-emerald-600 px-2.5 py-0.5 text-[10px] text-white font-outfit">Instant</span>
             </button>
 
             {/* Option 2: Khalti */}
             <button
               type="button"
-              className="widget-click flex w-full items-center justify-between rounded-2xl border-2 border-purple-500/40 bg-purple-50/50 p-3.5 text-xs font-bold text-purple-800 transition hover:bg-purple-100/60 shadow-2xs cursor-pointer"
+              className="widget-click flex w-full items-center justify-between rounded-2xl border-2 border-purple-500/40 bg-purple-50/40 p-3.5 text-xs font-bold text-purple-800 transition hover:bg-purple-100/60 hover:border-purple-500 shadow-2xs cursor-pointer"
             >
-              <div className="flex items-center gap-2.5">
-                <span className="text-base">🟣</span>
-                <span>{isNe ? 'Khalti मार्फत भुक्तानी' : 'Pay with Khalti'}</span>
+              <div className="flex items-center gap-3">
+                <KhaltiLogo variant="icon" className="h-6.5 w-16" />
+                <span className="text-sm font-bold text-slate-800">{isNe ? 'Khalti मार्फत भुक्तानी' : 'Pay with Khalti'}</span>
               </div>
-              <span className="rounded-full bg-purple-600 px-2 py-0.5 text-[10px] text-white font-outfit">Instant</span>
+              <span className="rounded-full bg-purple-600 px-2.5 py-0.5 text-[10px] text-white font-outfit">Instant</span>
             </button>
 
             {/* Divider */}

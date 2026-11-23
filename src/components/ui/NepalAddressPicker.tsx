@@ -311,21 +311,23 @@ export default function NepalAddressPicker({
 
   return (
     <div
-      className={`rounded-2xl border bg-gradient-to-b from-white to-slate-50/50 p-4 transition-all ${
-        hasError ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200 shadow-2xs'
+      className={`rounded-2xl border bg-slate-50/60 p-4 sm:p-5 transition-all space-y-4 ${
+        hasError ? 'border-rose-400 ring-3 ring-rose-100 bg-rose-50/10' : 'border-slate-300/90 shadow-2xs'
       }`}
     >
       {/* Header with Mode Toggle */}
-      <div className="mb-3.5 flex items-center justify-between border-b border-slate-100 pb-2.5">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-[#123B5D]">
-          <MapPin className="h-3.5 w-3.5 text-[#18A999]" />
-          <span>{isNe ? 'नेपालको आधिकारिक ठेगाना छनोट' : 'Official Nepal Address Hierarchy'}</span>
+      <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+        <div className="flex items-center gap-2 text-xs font-bold text-[#123B5D]">
+          <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-teal-50 border border-teal-200 text-[#18A999]">
+            <MapPin className="h-3.5 w-3.5" />
+          </span>
+          <span>{isNe ? 'नेपालको आधिकारिक ठेगाना संरचना' : 'Official Administrative Address'}</span>
         </div>
 
         <button
           type="button"
           onClick={() => setIsManualMode(!isManualMode)}
-          className="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-200 transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:text-[#18A999] hover:border-teal-300 shadow-2xs transition cursor-pointer"
         >
           <Edit3 className="h-3 w-3" />
           <span>{isManualMode ? (isNe ? 'ड्रपडाउनबाट छान्नुहोस्' : 'Use Cascading Dropdowns') : (isNe ? 'सीधा लेख्नुहोस् (Manual)' : 'Type Directly')}</span>
@@ -344,13 +346,13 @@ export default function NepalAddressPicker({
           />
         </div>
       ) : (
-        <div className="space-y-3.5">
+        <div className="space-y-4">
           {/* Cascading 4-step Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {/* Step 1: Province */}
-            <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-600">
-                १. {isNe ? 'प्रदेश' : 'Province'} <span className="text-rose-500">*</span>
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700">
+                {isNe ? '१. प्रदेश' : '1. Province'} <span className="text-rose-500 font-bold">*</span>
               </label>
               <CustomSelect
                 value={selectedProvinceCode}
@@ -363,9 +365,9 @@ export default function NepalAddressPicker({
             </div>
 
             {/* Step 2: District */}
-            <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-600">
-                २. {isNe ? 'जिल्ला' : 'District'} <span className="text-rose-500">*</span>
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700">
+                {isNe ? '२. जिल्ला' : '2. District'} <span className="text-rose-500 font-bold">*</span>
               </label>
               <CustomSelect
                 value={selectedDistrictName}
@@ -387,10 +389,10 @@ export default function NepalAddressPicker({
             </div>
 
             {/* Step 3: Municipality / Local Level */}
-            <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-600">
-                ३. {isNe ? 'नगरपालिका / गाउँपालिका' : 'Local Level (Mun / RM)'}{' '}
-                <span className="text-rose-500">*</span>
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700">
+                {isNe ? '३. नगरपालिका / गाउँपालिका' : '3. Local Level (Mun / RM)'}{' '}
+                <span className="text-rose-500 font-bold">*</span>
               </label>
               <CustomSelect
                 value={selectedMuniName}
@@ -412,9 +414,9 @@ export default function NepalAddressPicker({
             </div>
 
             {/* Step 4: Ward No */}
-            <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-600">
-                ४. {isNe ? 'वडा नम्बर' : 'Ward Number'} <span className="text-rose-500">*</span>
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700">
+                {isNe ? '४. वडा नम्बर' : '4. Ward Number'} <span className="text-rose-500 font-bold">*</span>
               </label>
               <CustomSelect
                 value={selectedWard}
@@ -429,14 +431,14 @@ export default function NepalAddressPicker({
           </div>
 
           {/* Step 5: Tole / Street / House No with English-to-Nepali transliteration */}
-          <div className="space-y-1 pt-1 border-t border-slate-100">
-            <label className="text-[11px] font-bold text-slate-600 block">
-              ५. {isNe ? 'टोल / मार्ग / घर नम्बर' : 'Tole / Street / House No.'}
+          <div className="space-y-1.5 pt-2 border-t border-slate-200/80">
+            <label className="block text-xs font-bold text-slate-700">
+              {isNe ? '५. टोल / सडक / घर नम्बर' : '5. Tole / Street / House No.'}
             </label>
             <NepaliInput
               value={toleStreet}
               onChange={(val) => setToleStreet(val)}
-              placeholder={isNe ? 'नयाँ बानेश्वर, शान्तिमार्ग' : 'Naya Baneshwor, Shanti Marga'}
+              placeholder={isNe ? 'उदा: नयाँ बानेश्वर, शान्तिमार्ग' : 'e.g. Naya Baneshwor, Shanti Marga'}
               isNe={isNe}
               enableTransliteration={true}
             />
@@ -444,13 +446,13 @@ export default function NepalAddressPicker({
 
           {/* Live Compiled Address Display */}
           {value && (
-            <div className="rounded-xl bg-teal-50/70 p-2.5 border border-teal-200/70 text-xs text-[#123B5D] flex items-start gap-2">
+            <div className="rounded-xl bg-teal-50/90 p-3 border border-teal-200/90 text-xs text-[#123B5D] flex items-start gap-2.5 shadow-2xs">
               <Check className="h-4 w-4 shrink-0 text-[#18A999] mt-0.5" />
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#148C7E] block">
-                  {isNe ? 'कागजातमा समावेश हुने ठेगाना:' : 'Formatted Document Address:'}
+                  {isNe ? 'कागजातमा समावेश हुने प्रमाणित ठेगाना:' : 'Formatted Document Address:'}
                 </span>
-                <span className="font-semibold">{value}</span>
+                <span className="font-semibold text-slate-900">{value}</span>
               </div>
             </div>
           )}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Languages, Sparkles, Keyboard } from 'lucide-react';
+import { Languages, Keyboard } from 'lucide-react';
 import {
   transliterateWord,
   transliterateSentence,
@@ -229,10 +229,10 @@ export default function NepaliInput({
             setTimeout(() => setSuggestions([]), 250);
           }}
           placeholder={placeholder}
-          className={`w-full rounded-xl border bg-[#F7F9FC] ${
+          className={`w-full rounded-xl border border-slate-300 bg-white ${
             icon ? 'pl-9' : 'pl-3.5'
-          } pr-36 py-2.5 text-xs font-outfit text-slate-800 placeholder-slate-400 transition focus:border-[#18A999] focus:bg-white focus:outline-hidden ${
-            hasError ? 'border-rose-300 ring-2 ring-rose-100' : 'border-slate-200'
+          } ${enableTransliteration ? (isNepaliMode && /[a-zA-Z]/.test(value) ? 'pr-28' : 'pr-18') : 'pr-3.5'} py-2.5 text-xs sm:text-sm font-outfit text-slate-900 placeholder:text-slate-400 placeholder:font-normal shadow-2xs transition-all hover:border-slate-400 focus:border-[#18A999] focus:bg-white focus:outline-none focus:ring-3 focus:ring-[#18A999]/15 ${
+            hasError ? 'border-rose-400 ring-3 ring-rose-100 bg-rose-50/20' : ''
           } ${className}`}
           {...rest}
           autoComplete="off"
@@ -255,7 +255,7 @@ export default function NepaliInput({
                 title={isNe ? 'नेपालीमा रूपान्तरण गर्नुहोस्' : 'Convert Roman to Nepali'}
                 className="flex items-center gap-1 h-7 rounded-lg bg-teal-50 px-2 text-[10px] font-bold text-[#148C7E] hover:bg-teal-100 transition border border-teal-200/80 cursor-pointer shadow-2xs leading-none"
               >
-                <Sparkles className="h-2.5 w-2.5 text-[#18A999]" />
+                <Languages className="h-3 w-3 text-[#148C7E]" />
                 <span className="text-[9px]">अनुवाद</span>
               </button>
             )}

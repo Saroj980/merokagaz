@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 36" fill="none">
+  <rect x="2" y="3" width="30" height="30" rx="9" fill="#5C2D91"/>
+  <path d="M10 8H13.5V23H10V8Z" fill="#FFFFFF"/>
+  <path d="M22 8H17L13 14.5L18 23H23L16.8 14.2L22 8Z" fill="#F7941D"/>
+  <path d="M16 13.5L13 18.5V14L16 13.5Z" fill="#FFFFFF"/>
+  <text x="38" y="24" font-family="'Outfit', system-ui, sans-serif" font-weight="800" font-size="19" fill="#5C2D91" letter-spacing="-0.5">khalti</text>
+</svg>
+
