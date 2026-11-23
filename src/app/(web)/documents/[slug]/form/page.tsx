@@ -2755,8 +2755,8 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                 </div>
 
                 {/* Connected Stepper Flow */}
-                <div className="overflow-x-auto no-scrollbar py-1">
-                  <div className="flex items-start justify-between min-w-[500px] sm:min-w-0 sm:w-full">
+                <div className="overflow-x-auto no-scrollbar py-1 -mx-2 px-2 sm:mx-0 sm:px-0">
+                  <div className="flex items-start justify-between min-w-[380px] sm:min-w-0 sm:w-full gap-1">
                     {fieldGroups.map((group, idx) => {
                       const isActive = activeTabIndex === idx;
                       const isPast = idx < activeTabIndex;

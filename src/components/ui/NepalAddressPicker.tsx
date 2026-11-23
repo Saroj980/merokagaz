@@ -316,12 +316,12 @@ export default function NepalAddressPicker({
       }`}
     >
       {/* Header with Mode Toggle */}
-      <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
         <div className="flex items-center gap-2 text-xs font-bold text-[#123B5D]">
           <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-teal-50 border border-teal-200 text-[#18A999]">
             <MapPin className="h-3.5 w-3.5" />
           </span>
-          <span>{isNe ? 'नेपालको आधिकारिक ठेगाना संरचना' : 'Official Administrative Address'}</span>
+          <span className="truncate">{isNe ? 'नेपालको आधिकारिक ठेगाना संरचना' : 'Official Administrative Address'}</span>
         </div>
 
         <button
@@ -330,7 +330,7 @@ export default function NepalAddressPicker({
           className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:text-[#18A999] hover:border-teal-300 shadow-2xs transition cursor-pointer"
         >
           <Edit3 className="h-3 w-3" />
-          <span>{isManualMode ? (isNe ? 'ड्रपडाउनबाट छान्नुहोस्' : 'Use Cascading Dropdowns') : (isNe ? 'सीधा लेख्नुहोस् (Manual)' : 'Type Directly')}</span>
+          <span>{isManualMode ? (isNe ? 'ड्रपडाउनबाट छान्नुहोस्' : 'Use Dropdowns') : (isNe ? 'सीधा लेख्नुहोस् (Manual)' : 'Type Directly')}</span>
         </button>
       </div>
 

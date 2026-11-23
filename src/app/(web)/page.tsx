@@ -435,12 +435,12 @@ export default function HomePage() {
   const stat4Label = isNe ? 'दलाल वा मध्यस्थकर्ता' : 'Zero Middleman Fees';
 
   return (
-    <div className="space-y-16 pb-24 overflow-hidden">
+    <div className="space-y-16 pb-24 overflow-x-hidden max-w-full">
       {/* ─── 1. Enhanced, Luminous & Appealing Hero Banner ─── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-teal-50/40 via-white to-[#F8FAFC] px-4 pt-16 pb-16 text-slate-900 sm:px-6 lg:px-8 border-b border-slate-200/80">
         {/* Soft, delicate backdrop ambient glow */}
-        <div className="pointer-events-none absolute -top-28 left-1/2 -translate-x-1/2 w-[850px] h-[400px] bg-gradient-to-b from-teal-100/50 via-teal-50/20 to-transparent blur-3xl rounded-full" />
-        <div className="pointer-events-none absolute top-1/2 right-10 w-[350px] h-[350px] bg-sky-100/30 blur-3xl rounded-full" />
+        <div className="pointer-events-none absolute -top-28 left-1/2 -translate-x-1/2 w-full max-w-[850px] h-[400px] bg-gradient-to-b from-teal-100/50 via-teal-50/20 to-transparent blur-3xl rounded-full" />
+        <div className="pointer-events-none absolute top-1/2 -right-10 w-[280px] sm:w-[350px] h-[350px] bg-sky-100/30 blur-3xl rounded-full" />
 
         <div className="relative mx-auto max-w-4xl text-center z-10">
           {/* Subtle GovTech Trust Pill */}

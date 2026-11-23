@@ -18,6 +18,8 @@ import {
   CheckCircle2,
   Phone,
   Mail,
+  Menu,
+  X,
 } from 'lucide-react';
 import { EsewaLogo, KhaltiLogo, ConnectIpsLogo } from '@/components/PaymentLogos';
 
@@ -30,6 +32,7 @@ export default function WebLayout({ children }: { children: React.ReactNode }) {
   const { user, isLoggedIn, isAdmin, logout } = useAuth();
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [cms, setCms] = useState<CmsContent | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     api.settings.get().then(s => setSettings(s)).catch(() => {});
@@ -43,32 +46,34 @@ export default function WebLayout({ children }: { children: React.ReactNode }) {
   const bannerLink = settings?.notice_banner_link || '/documents';
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F8FAFC] text-slate-900 font-sans antialiased">
-      {/* Top Banner Notice - Clean, single-line announcement */}
-      <div className="h-0.5 w-full bg-gradient-to-r from-[#DC2626] via-[#123B5D] to-[#18A999]"></div>
-      <div className="border-b border-slate-200/70 bg-slate-50/90 px-4 py-1.5 text-center text-xs text-slate-700">
-        <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 text-[11px] sm:text-xs">
-          <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 border border-teal-200 px-2 py-0.5 text-[10px] font-bold text-[#148C7E]">
-            <ShieldCheck className="h-3 w-3 text-[#148C7E]" />
-            <span>{lang === 'ne' ? 'आधिकारिक प्रारूप' : 'Official Portal'}</span>
-          </span>
-          <span className="text-slate-600 font-medium">
-            {lang === 'ne'
-              ? 'आन्तरिक राजस्व (IRD), कम्पनी रजिष्ट्रार (OCR) तथा वडा कार्यालय मान्य'
-              : 'Statutory document formats accepted across Nepal Government offices'}
-          </span>
-          <Link href="/documents" className="font-semibold text-[#18A999] hover:underline ml-1">
-            {lang === 'ne' ? 'हेर्नुहोस् →' : 'Browse →'}
-          </Link>
+    <div className="flex min-h-screen flex-col bg-[#F8FAFC] text-slate-900 font-sans antialiased overflow-x-hidden max-w-full">
+      {/* Top Banner Notice - Hidden on mobile, shown on tablet/desktop */}
+      <div className="hidden sm:block">
+        <div className="h-0.5 w-full bg-gradient-to-r from-[#DC2626] via-[#123B5D] to-[#18A999]"></div>
+        <div className="border-b border-slate-200/70 bg-slate-50/90 px-3 py-1.5 text-center text-xs text-slate-700">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
+            <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 border border-teal-200 px-2 py-0.5 text-[10px] font-bold text-[#148C7E] shrink-0">
+              <ShieldCheck className="h-3 w-3 text-[#148C7E]" />
+              <span>{lang === 'ne' ? 'आधिकारिक प्रारूप' : 'Official Portal'}</span>
+            </span>
+            <span className="text-slate-600 font-medium text-center">
+              {lang === 'ne'
+                ? 'आन्तरिक राजस्व (IRD), कम्पनी रजिष्ट्रार (OCR) तथा वडा कार्यालय मान्य'
+                : 'Statutory document formats accepted across Nepal Government offices'}
+            </span>
+            <Link href="/documents" className="font-semibold text-[#18A999] hover:underline whitespace-nowrap">
+              {lang === 'ne' ? 'हेर्नुहोस् →' : 'Browse →'}
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* Main Navbar - Prominent Logo & Essential Clean Navigation */}
-      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-xs transition-all">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-xs transition-all w-full max-w-full overflow-hidden">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5 gap-2">
           {/* Prominent, Sharp Brand Logo */}
-          <Link href="/" className="group flex items-center transition">
-            <div className="relative h-13 w-48 sm:h-15 sm:w-56 md:h-16 md:w-60">
+          <Link href="/" className="group flex items-center transition shrink min-w-0">
+            <div className="relative h-10 w-28 xs:w-34 sm:h-14 sm:w-48 md:h-16 md:w-60">
               <Image
                 src="/assets/logo.png"
                 alt="Mero Kagaz मेरो कागज"
@@ -114,16 +119,16 @@ export default function WebLayout({ children }: { children: React.ReactNode }) {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {/* Language Toggle */}
             <LanguageToggle />
 
-            {/* User Account / Login State */}
+            {/* User Account / Login State for Desktop / Tablet */}
             {isLoggedIn ? (
               <div className="relative group">
                 <button
                   type="button"
-                  className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-[#123B5D] shadow-xs hover:border-[#18A999] transition-all"
+                  className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-slate-200 bg-white px-2 sm:px-3 py-1.5 text-xs font-bold text-[#123B5D] shadow-xs hover:border-[#18A999] transition-all"
                 >
                   <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#123B5D] text-white text-[11px] font-black">
                     {user?.name?.charAt(0).toUpperCase()}
@@ -190,23 +195,118 @@ export default function WebLayout({ children }: { children: React.ReactNode }) {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2 sm:gap-3">
+              <div className="hidden sm:flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:text-[#18A999]"
+                  className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:text-[#18A999]"
                 >
                   {lang === 'ne' ? 'लगइन' : 'Sign In'}
                 </Link>
                 <Link
                   href="/documents"
-                  className="rounded-xl bg-[#18A999] px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-[#148C7E]"
+                  className="rounded-xl bg-[#18A999] px-3.5 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-[#148C7E]"
                 >
                   {lang === 'ne' ? 'सुरु गर्नुहोस्' : 'Get Started'}
                 </Link>
               </div>
             )}
+
+            {/* Mobile Menu Hamburger Button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition shrink-0"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="h-4 w-4 sm:h-5 sm:w-5" /> : <Menu className="h-4 w-4 sm:h-5 sm:w-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-slate-200/80 bg-white px-4 py-4 space-y-3 animate-in fade-in duration-150">
+            <div className="flex flex-col space-y-1">
+              <Link
+                href="/documents"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-[#18A999] transition"
+              >
+                {lang === 'ne' ? 'सबै कागजातहरू' : 'All Documents'}
+              </Link>
+              <Link
+                href="/documents?category=ocr"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-[#18A999] transition"
+              >
+                {lang === 'ne' ? 'कम्पनी दर्ता (OCR)' : 'Company OCR'}
+              </Link>
+              <Link
+                href="/documents?category=ird"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-[#18A999] transition"
+              >
+                {lang === 'ne' ? 'कर तथा PAN' : 'Tax & PAN'}
+              </Link>
+              <Link
+                href="/documents?category=ward"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-[#18A999] transition"
+              >
+                {lang === 'ne' ? 'वडा तथा सम्झौता' : 'Ward & Deeds'}
+              </Link>
+              <Link
+                href="/#how-it-works"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-[#18A999] transition"
+              >
+                {lang === 'ne' ? 'कसरी काम गर्छ?' : 'How It Works'}
+              </Link>
+            </div>
+
+            {/* Mobile Auth Actions */}
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    href="/user/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 text-center rounded-xl bg-slate-100 px-3 py-2 text-xs font-bold text-[#123B5D]"
+                  >
+                    {lang === 'ne' ? 'मेरा कागजातहरू' : 'My Documents'}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="rounded-xl bg-rose-50 px-3 py-2 text-xs font-bold text-rose-600"
+                  >
+                    {lang === 'ne' ? 'लगआउट' : 'Sign Out'}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 text-center rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700"
+                  >
+                    {lang === 'ne' ? 'लगइन' : 'Sign In'}
+                  </Link>
+                  <Link
+                    href="/documents"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 text-center rounded-xl bg-[#18A999] px-3 py-2 text-xs font-bold text-white shadow-xs"
+                  >
+                    {lang === 'ne' ? 'सुरु गर्नुहोस्' : 'Get Started'}
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Content Area */}
