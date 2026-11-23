@@ -2727,36 +2727,87 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
           <form ref={formSectionRef} onSubmit={handleSubmit} autoComplete="off" className="space-y-6 scroll-mt-24">
             {/* Multi-Step Form Stepper */}
             {fieldGroups.length > 1 && (
-              <div className="rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-xs">
-                {/* Top Status Header */}
-                <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-4">
-                  <div className="flex items-center gap-2.5">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 text-[11px] font-bold text-[#148C7E]">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#18A999] animate-pulse" />
-                      {isNe
-                        ? `चरण ${toDevanagariDigits(activeTabIndex + 1)} / ${toDevanagariDigits(fieldGroups.length)}`
-                        : `Step ${activeTabIndex + 1} of ${fieldGroups.length}`}
-                    </span>
-                    <span className="text-xs sm:text-sm font-bold text-[#123B5D] truncate max-w-[200px] sm:max-w-md">
-                      {isNe ? fieldGroups[activeTabIndex]?.titleNe : fieldGroups[activeTabIndex]?.titleEn}
+              <div className="rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-5 shadow-xs">
+                {/* Mobile-Optimized Stepper Bar (Clean, App-like segmented bar for phones) */}
+                <div className="block sm:hidden space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#123B5D] text-white font-bold text-xs shadow-2xs">
+                        {isNe ? toDevanagariDigits(activeTabIndex + 1) : activeTabIndex + 1}
+                      </span>
+                      <div>
+                        <span className="text-[10px] font-bold text-[#148C7E] uppercase tracking-wider block leading-none">
+                          {isNe ? `चरण ${toDevanagariDigits(activeTabIndex + 1)} / ${toDevanagariDigits(fieldGroups.length)}` : `Step ${activeTabIndex + 1} of ${fieldGroups.length}`}
+                        </span>
+                        <h3 className="text-xs font-bold text-[#123B5D] leading-tight truncate max-w-[200px] mt-0.5">
+                          {isNe ? fieldGroups[activeTabIndex]?.titleNe : fieldGroups[activeTabIndex]?.titleEn}
+                        </h3>
+                      </div>
+                    </div>
+                    <span className="text-xs font-bold text-slate-500 font-outfit">
+                      {Math.round(((activeTabIndex + 1) / fieldGroups.length) * 100)}%
                     </span>
                   </div>
-                  <div className="flex items-center gap-2.5 shrink-0">
-                    <span className="text-xs font-bold text-slate-600 font-outfit">
-                      {Math.round(((activeTabIndex + 1) / fieldGroups.length) * 100)}% {isNe ? 'सकियो' : 'Completed'}
-                    </span>
-                    <div className="w-16 sm:w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-teal-500 to-[#18A999] transition-all duration-300 rounded-full"
-                        style={{ width: `${((activeTabIndex + 1) / fieldGroups.length) * 100}%` }}
-                      />
-                    </div>
+
+                  {/* Segmented Progress Track */}
+                  <div className="flex items-center gap-1.5 w-full">
+                    {fieldGroups.map((group, idx) => {
+                      const isActive = activeTabIndex === idx;
+                      const isPast = idx < activeTabIndex;
+                      const hasErr = group.fields.some(f => fieldErrors[f.key]);
+
+                      return (
+                        <button
+                          key={group.id}
+                          type="button"
+                          onClick={() => setActiveTabIndex(idx)}
+                          className="flex-1 h-2 rounded-full transition-all cursor-pointer focus:outline-none"
+                          style={{
+                            backgroundColor: hasErr
+                              ? '#F43F5E'
+                              : isActive
+                              ? '#123B5D'
+                              : isPast
+                              ? '#18A999'
+                              : '#E2E8F0',
+                          }}
+                          aria-label={group.titleEn}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* Connected Stepper Flow */}
-                <div className="overflow-x-auto no-scrollbar py-1 -mx-2 px-2 sm:mx-0 sm:px-0">
-                  <div className="flex items-start justify-between min-w-[380px] sm:min-w-0 sm:w-full gap-1">
+                {/* Tablet / Desktop Connected Stepper Flow */}
+                <div className="hidden sm:block">
+                  {/* Top Status Header */}
+                  <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-4">
+                    <div className="flex items-center gap-2.5">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 text-[11px] font-bold text-[#148C7E]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#18A999] animate-pulse" />
+                        {isNe
+                          ? `चरण ${toDevanagariDigits(activeTabIndex + 1)} / ${toDevanagariDigits(fieldGroups.length)}`
+                          : `Step ${activeTabIndex + 1} of ${fieldGroups.length}`}
+                      </span>
+                      <span className="text-xs sm:text-sm font-bold text-[#123B5D] truncate max-w-md">
+                        {isNe ? fieldGroups[activeTabIndex]?.titleNe : fieldGroups[activeTabIndex]?.titleEn}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2.5 shrink-0">
+                      <span className="text-xs font-bold text-slate-600 font-outfit">
+                        {Math.round(((activeTabIndex + 1) / fieldGroups.length) * 100)}% {isNe ? 'सकियो' : 'Completed'}
+                      </span>
+                      <div className="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-teal-500 to-[#18A999] transition-all duration-300 rounded-full"
+                          style={{ width: `${((activeTabIndex + 1) / fieldGroups.length) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Desktop Step Flow */}
+                  <div className="flex items-start justify-between w-full">
                     {fieldGroups.map((group, idx) => {
                       const isActive = activeTabIndex === idx;
                       const isPast = idx < activeTabIndex;
@@ -2767,9 +2818,7 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                         <div key={group.id} className="flex items-start flex-1 last:flex-none">
                           <button
                             type="button"
-                            onClick={() => {
-                              setActiveTabIndex(idx);
-                            }}
+                            onClick={() => setActiveTabIndex(idx)}
                             className="flex flex-col items-center text-center group cursor-pointer focus:outline-none w-full max-w-[130px] transition-all"
                           >
                             {/* Step Circle */}
@@ -2826,7 +2875,7 @@ function DocumentFormContent({ params }: { params: Promise<{ slug: string }> }) 
                               <div
                                 className={`h-full transition-all duration-300 ${
                                   isComplete || isPast ? 'bg-[#18A999]' : 'bg-transparent'
-                                }`}
+                                  }`}
                               />
                             </div>
                           )}
